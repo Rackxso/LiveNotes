@@ -17,26 +17,29 @@
             <input type="text" id="tiempo"><br>
             <label for="">Importancia</label>
             <div class="importanciaRadios">
-                <input type="radio" name="importancia" id="0">
-                <input type="radio" name="importancia" id="1">
-                <input type="radio" name="importancia" id="2">
-                <input type="radio" name="importancia" id="3">
+                <input type="radio" name="importancia" value="0">
+                <input type="radio" name="importancia" value="1">
+                <input type="radio" name="importancia" value="2">
+                <input type="radio" name="importancia" value="3">
             </div>
             <div class="dificultadRadios">
-                <input type="radio" name="dificultad" id="0">
-                <input type="radio" name="dificultad" id="1">
-                <input type="radio" name="dificultad" id="2">
-                <input type="radio" name="dificultad" id="3">
-                <input type="radio" name="dificultad" id="4">
-                <input type="radio" name="dificultad" id="5">
+                <input type="radio" name="dificultad" value="0">
+                <input type="radio" name="dificultad" value="1">
+                <input type="radio" name="dificultad" value="2">
+                <input type="radio" name="dificultad" value="3">
+                <input type="radio" name="dificultad" value="4">
+                <input type="radio" name="dificultad" value="5">
             </div>
             <button id="crearTarea">Crear Tarea</button>
         </form>
+        <br>
+        <button id="ordenar">Ordenar las tareas</button>
     </div>
     <div id="tareasField">
 
     </div>
     <script type="module" src="./js/app-ordenacion.js"></script>
+    <script type="module" src="./js/generadorTareas.js"></script>
+    <script type="module" src="./js/algoritmosOrdenacion.js"></script>
 </body>
-
 </html>
