@@ -1,5 +1,11 @@
+<script setup lang="ts">
+import CustomHeader from '@/components/custom-header.vue';
+
+</script>
+
 <template>
   <div class="about">
+    <CustomHeader/>
     <h1>This is an about page</h1>
   </div>
 </template>
