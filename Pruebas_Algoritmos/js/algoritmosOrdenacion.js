@@ -53,7 +53,7 @@ export const JumpingCat = () => {
     return [...tareasOrdenadas, ...tareasRestantes];
 };
 
-exportconst BalancedFlow = () => {
+export const BalancedFlow = () => {
     const tareasOrdenadas = [];
     let energiaMental = 100; // Simula la energía mental del estudiante
 
