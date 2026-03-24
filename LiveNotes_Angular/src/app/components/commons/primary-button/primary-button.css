@@ -1,0 +1,21 @@
+button {
+    padding-inline: 15px;
+    padding-block: 7px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--background-color);
+    background-color: var(--primary-color);
+    z-index: 1;
+    box-shadow: var(--shadow-button);
+    border: none;
+
+    text-decoration: none;
+
+    font-family: "Outfit", sans-serif;
+    transition: all 0.2s ease-in-out;
+
+    
+    &.active {
+        border: 2px solid red;
+    }
+}
