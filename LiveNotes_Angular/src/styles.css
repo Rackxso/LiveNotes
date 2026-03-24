@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+    --text-color: #2E1F12;
+    --text-subcolor: #4A2E18;
+    --accent-color: #7A5238;
+    --accent-subcolor: #8B5E3C;
+    --primary-color: #D4956A;
+    --primary-subcolor: #D9C4A8;
+    --secondary-background-color: #EBD8C4;
+    --background-subcolor: #F5EDE0;
+    --background-color: #FDF8F2;
+
+    --shadow-soket: inset 0px 3px 2px 0px color-mix(in srgb, var(--text-subcolor) 25%, transparent);
+    --shadow-button: 0px 3px 2px 0px color-mix(in srgb, var(--accent-subcolor) 25%, transparent);
+}
+
+.dark-theme {
+    --text-color: #E8D9C4;
+    --text-subcolor: #907060;
+    --accent-color: #D4A870;
+    --accent-subcolor: #A87D55;
+    --primary-color: #3A2D20;
+    --secondary-background-color: #2A1F15;
+    --background-subcolor: #1E1710;
+    --background-color: #13100D;
+}
+
+body{
+    margin: 0;
+}

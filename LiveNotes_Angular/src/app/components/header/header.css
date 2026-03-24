@@ -1,0 +1,62 @@
+#cabecera{
+    display: grid;
+    grid-template-columns: 1fr auto 2fr;
+    align-items: center;
+    background-color: var(--background-color);
+    padding-inline: 1rem;
+}
+
+.titulo{
+    font-family: "Fraunces", serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    color: var(--text-subcolor);
+}
+
+.menu{
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 5px;
+    background-color: var(--background-subcolor);
+    padding: 7px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-soket);
+    font-family: "Outfit", sans-serif;
+    transition: all 0.2s ease-in-out;
+
+    & div:not(.highlight){
+        padding-inline: 15px;
+        padding-block: 7px;
+        border-radius: 10px;
+        color: var(--text-color);
+        cursor: pointer;
+        background: var(--background-subcolor);
+        anchor-name: --menu-item;
+
+        &.active{
+            anchor-name: --active-item;
+            color: var(--background-color);
+            background-color: transparent;
+            z-index: 1;
+        }
+
+        &:hover:not(.active){
+            background: var(--secondary-background-color);
+            box-shadow: var(--shadow-button);
+        }
+    }
+    & .highlight{
+        position: absolute;
+        grid-column: 1 / -1;
+        background: var(--primary-color);
+        box-shadow: var(--shadow-button);
+        position-anchor: --active-item;
+        border-radius: 10px;
+        top: anchor(top);
+        left: anchor(left);
+        right: anchor(right);
+        bottom: anchor(bottom);
+        transition: all 0.2s ease-in-out;
+        z-index: 0;
+    }
+}
