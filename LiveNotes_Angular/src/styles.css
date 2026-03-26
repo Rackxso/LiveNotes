@@ -12,6 +12,9 @@
 
     --shadow-soket: inset 0px 3px 2px 0px color-mix(in srgb, var(--text-subcolor) 25%, transparent);
     --shadow-button: 0px 3px 2px 0px color-mix(in srgb, var(--accent-subcolor) 25%, transparent);
+
+    --fuente-texto: "Outfit", sans-serif;
+    --fuente-titulo: "Fraunces", sans-serif;
 }
 
 .dark-theme {
@@ -27,4 +30,13 @@
 
 body{
     margin: 0;
+}
+
+html{
+    height: 100%;
+}
+
+p{
+    color: var(--text-color);
+    font-family: var(--fuente-texto);
 }

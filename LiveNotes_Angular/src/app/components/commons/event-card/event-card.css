@@ -1,0 +1,28 @@
+.nota{
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+    width: 80%;
+    margin: auto;
+    border-radius: 10px;
+    border-left: 5px solid var(--primary-color);
+    padding-inline: 20px;
+    padding-block: 10px;
+    background-color: var(--background-color);
+    gap: 15px;
+    & .slot1{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        
+        h4, p{
+            margin: 0;
+            font-family: var(--fuente-titulo);
+            color: var(--text-color);
+        }
+        p{
+            text-align: center;
+            font-family: var(--fuente-texto);
+        }
+    }
+
+    
+}

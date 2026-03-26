@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     {
-        path: "",
-        loadComponent: () => import('./pages/calendar/calendar').then(m => m.Calendar)
+        path: "calendar",
+        loadComponent: () => import('./pages/calendarPage/calendarPage').then(m => m.CalendarPage)
     },
     {
         path: "finance",

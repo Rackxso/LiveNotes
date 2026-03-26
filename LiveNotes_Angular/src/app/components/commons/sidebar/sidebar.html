@@ -1,0 +1,43 @@
+<aside class="sidebar" [class.expanded]="expanded()">
+
+    <!-- Toggle -->
+    <button class="toggle-btn" (click)="toggle()">
+        <i class="fa-solid fa-angles-right"></i>
+    </button>
+
+    <!-- Logo -->
+    <div class="logo-area">
+        <div class="logo-mark"><i class="fa-brands fa-bity"></i></div>
+        <div class="logo-text">Live Notes</div>
+    </div>
+
+    <!-- Nav principal -->
+    <nav class="nav-section">
+
+        <a *ngFor="let item of mainNav" class="nav-item" [routerLink]="item.route" routerLinkActive="active">
+            <i [class]="item.icon"></i>
+            <span class="nav-label">{{ item.label }}</span>
+            <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
+        </a>
+
+        <div class="divider"></div>
+
+        <a *ngFor="let item of secondaryNav" class="nav-item" [routerLink]="item.route" routerLinkActive="active">
+            <i [class]="item.icon"></i>
+            <span class="nav-label">{{ item.label }}</span>
+        </a>
+
+    </nav>
+
+    <!-- Usuario -->
+    <div class="user-area">
+        <div class="user-card">
+            <div class="avatar">A</div>
+            <div class="user-info">
+                <div class="user-name">Ana García</div>
+                <div class="user-role">Personal</div>
+            </div>
+        </div>
+    </div>
+
+</aside>

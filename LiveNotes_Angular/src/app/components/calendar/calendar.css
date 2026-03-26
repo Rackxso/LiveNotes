@@ -1,0 +1,29 @@
+.mes{
+    background-color: var(--background-subcolor);
+    padding-block: 10px;
+    border: 1px solid var(--primary-subcolor);
+    & h3{
+        margin: 0;
+        text-align: center;
+        font-family: var(--fuente-titulo);
+        font-size: 28px;
+        color: var(--text-color);
+    }
+}
+
+.semana{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-family: var(--fuente-texto);
+    border: 1px solid var(--primary-subcolor);
+    border-top:none;
+    & .diaSemana{
+        background: var(--background-subcolor);
+        text-align: center;
+        font-size: 14px;
+        color: var(--text-color);
+        padding-block: 5px;
+    }
+}
+
+ /* 84px */

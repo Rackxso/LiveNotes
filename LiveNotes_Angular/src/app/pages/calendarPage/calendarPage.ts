@@ -1,13 +1,17 @@
 import { Component, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
+import { Calendar } from '../../components/calendar/calendar';
+import { Eventos } from '../../components/eventos/eventos';
 
 @Component({
-  selector: 'app-calendar',
-  imports: [Header],
-  templateUrl: './calendar.html',
-  styleUrl: './calendar.css',
+  selector: 'app-calendar-page',
+  imports: [Header, Calendar, Eventos],
+  templateUrl: './calendarPage.html',
+  styleUrl: './calendarPage.css',
 })
-export class Calendar {
+
+
+export class CalendarPage {
   public vistasPage = signal<string[]>(['Month', 'Week', 'Day']);
   public vistaActual = signal<string>('Month');
 

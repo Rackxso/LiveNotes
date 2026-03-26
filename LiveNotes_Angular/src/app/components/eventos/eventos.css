@@ -1,0 +1,38 @@
+.header {
+    max-height: 84px;
+    height: 83px;
+    display: grid;
+    background-color: var(--background-subcolor);
+    border: 1px solid var(--primary-subcolor);
+
+    .texto {
+        width: fit-content;
+        justify-self: center;
+        align-self: center;
+
+    }
+
+    h4,
+    p {
+        margin: 0;
+    }
+
+    h4 {
+        font-size: 24px;
+        font-family: var(--fuente-titulo);
+    }
+
+    p {
+        font-family: var(--fuente-texto);
+    }
+
+}
+
+.cuerpo {
+    background: var(--background-subcolor);
+    
+    h4,
+    p {
+        margin: 0;
+    }
+}
