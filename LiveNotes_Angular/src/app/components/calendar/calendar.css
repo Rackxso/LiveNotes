@@ -1,8 +1,9 @@
-.mes{
+.mes {
     background-color: var(--background-subcolor);
     padding-block: 10px;
     border: 1px solid var(--primary-subcolor);
-    & h3{
+
+    & h3 {
         margin: 0;
         text-align: center;
         font-family: var(--fuente-titulo);
@@ -11,13 +12,14 @@
     }
 }
 
-.semana{
+.semana {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     font-family: var(--fuente-texto);
     border: 1px solid var(--primary-subcolor);
-    border-top:none;
-    & .diaSemana{
+    border-top: none;
+
+    & .diaSemana {
         background: var(--background-subcolor);
         text-align: center;
         font-size: 14px;
@@ -26,4 +28,15 @@
     }
 }
 
- /* 84px */
+.dias {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+}
+
+.dia{
+    width: 200px;
+    height: 150px;
+    background-color: var(--background-subcolor);
+    border: 1px solid var(--primary-subcolor);
+}

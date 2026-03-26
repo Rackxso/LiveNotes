@@ -20,6 +20,8 @@ export class CalendarPage {
     url: '#'
   });
 
+  public nombreVista = signal<string>("Calendar");
+
   public veces = 0;
 
   public secondaryButton = signal<{ texto: string; url: string }>({

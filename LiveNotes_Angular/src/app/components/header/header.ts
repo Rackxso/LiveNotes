@@ -19,6 +19,8 @@ export class Header {
   @Input() secondaryButton: { texto: string; url: string } = { texto: '', url: '' };
   @Output() secondaryClicked = new EventEmitter<void>();
 
+  @Input() name: string;
+
   onVistaSeleccionada(vista: string): void {
     this.vistaSeleccionada.emit(vista);
   }

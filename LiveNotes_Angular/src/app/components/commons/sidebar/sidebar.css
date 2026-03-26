@@ -8,8 +8,13 @@
 }
 
 @keyframes appear {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* ── SIDEBAR SHELL ───────────────────────────────────────── */
@@ -23,14 +28,69 @@
     display: flex;
     flex-direction: column;
     border-radius: 0 16px 16px 0;
+
+
+    .logo-area {
+        display: grid;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-top: 10px;
+        justify-content: center;
+        .logo-text {
+            font-family: var(--fuente-titulo);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+            display: none;
+            overflow: hidden;
+            transition: opacity 0.2s var(--ease), width 0.4s var(--ease);
+            white-space: nowrap;
+        }
+    }
+
+
+
+    &.expanded {
+        width: var(--sidebar-w);
+
+        .toggle-btn i {
+            transform: rotate(180deg);
+        }
+
+        .logo-area {
+            .logo-text {
+                display: block;
+            }
+        }
+    }
+
 }
 
-.sidebar.expanded {
-    width: var(--sidebar-w);
+
+/* ── LOGO ────────────────────────────────────────────────── */
+
+
+.sidebar.expanded .logo-area {
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
 }
 
-.sidebar.expanded .toggle-btn i {
-    transform: rotate(180deg);
+.logo-mark {
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--text-color);
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+}
+
+
+
+.sidebar.expanded .logo-text {
+    opacity: 1;
+    width: auto;
+    animation: appear 0.25s var(--ease) 0.15s both;
 }
 
 /* ── TOGGLE BUTTON ───────────────────────────────────────── */
@@ -49,70 +109,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &:hover {
+        background: var(--primary-subcolor);
+    }
+
+    i {
+        transition: transform 0.4s var(--ease);
+        font-size: 12px;
+    }
 }
 
-.toggle-btn:hover {
-    background: var(--primary-subcolor);
-}
 
-.toggle-btn i {
-    transition: transform 0.4s var(--ease);
-    font-size: 12px;
-}
 
-/* ── LOGO ────────────────────────────────────────────────── */
-.logo-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 18px 0 24px;
-    padding: 0 11px;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.sidebar.expanded .logo-area {
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-}
-
-.logo-mark {
-    font-weight: 600;
-    font-size: 26px;
-    color: var(--text-color);
-    flex-shrink: 0;
-    width: 28px;
-    text-align: center;
-}
-
-.logo-text {
-    font-family: var(--fuente-titulo);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-color);
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-    transition: opacity 0.2s var(--ease), width 0.4s var(--ease);
-    white-space: nowrap;
-}
-
-.sidebar.expanded .logo-text {
-    opacity: 1;
-    width: auto;
-    animation: appear 0.25s var(--ease) 0.15s both;
-}
 
 /* ── NAV SECTION ─────────────────────────────────────────── */
 .nav-section {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(auto, 4);
     gap: 4px;
     padding: 0 10px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     scrollbar-width: none;
 }
 
@@ -126,7 +145,7 @@
     align-items: center;
     gap: 10px;
     padding-block: 10px;
-    
+
     border-radius: 10px;
     cursor: pointer;
     color: var(--text-color);
@@ -149,8 +168,7 @@
 .nav-item i {
     font-size: 15px;
     width: 20px;
-    text-align: center;
-    flex-shrink: 0;
+
 }
 
 .nav-label {

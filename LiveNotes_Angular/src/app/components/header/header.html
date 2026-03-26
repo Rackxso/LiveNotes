@@ -1,5 +1,5 @@
 <div id="cabecera">
-    <h1 class="titulo">Calendar</h1>
+    <h1 class="titulo">{{name}}</h1>
     <app-selector [vistas]="vistasPage" (vistaSeleccionada)="onVistaSeleccionada($event)"></app-selector>
     <div id="buttons">
         <app-secondary-button [config]="secondaryButton" (clicked)="secondaryClicked.emit()">
