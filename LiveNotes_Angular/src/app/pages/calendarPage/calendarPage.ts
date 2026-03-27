@@ -29,6 +29,8 @@ export class CalendarPage {
     url: '#'
   });
 
+  public buttons = signal<boolean>(true);
+
     onVistaSeleccionada(vista: string): void {
       this.vistaActual.set(vista);
     }

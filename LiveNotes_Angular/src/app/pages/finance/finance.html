@@ -1,1 +1,6 @@
-<app-header [vistasPage]="vistasPage()" (vistaSeleccionada)="onVistaSeleccionada($event)"></app-header>
+<app-header [name]="nombreVista()" [vistasPage]="vistasPage()" (vistaSeleccionada)="onVistaSeleccionada($event)"
+    [buttons]="false"></app-header>
+<div class="cards">
+    <app-money-card />
+    
+</div>

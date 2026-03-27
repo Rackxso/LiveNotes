@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LiveNotes — Homepage Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #f5f0e8;
+    --cream-dark: #ede7d9;
+    --warm-brown: #c17a45;
+    --warm-brown-light: #d4956a;
+    --deep-brown: #4a2e1a;
+    --text-dark: #2c1a0e;
+    --text-mid: #6b4c35;
+    --text-light: #9b7a5e;
+    --green: #4a7c59;
+    --red-expense: #b85450;
+    --blue-saving: #4a6fa5;
+    --sidebar: #c17a45;
+    --card-bg: #faf7f2;
+    --border: #e8dfd0;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+  }
+
+  /* ─── NAVIGATION ─── */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    background: #f0e8da;
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--border);
+  }
+  .nav-tabs button {
+    padding: 6px 16px;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-mid);
+    border-radius: 9px;
+    transition: all 0.2s;
+  }
+  .nav-tabs button.active {
+    background: var(--warm-brown);
+    color: white;
+    font-weight: 500;
+  }
+
+  /* ─── PAGE SELECTOR ─── */
+  .page-selector {
+    display: flex;
+    gap: 12px;
+    padding: 24px 40px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .page-selector span {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 500;
+  }
+  .page-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-mid);
+    transition: all 0.2s;
+  }
+  .page-btn.active { background: var(--warm-brown); color: white; border-color: var(--warm-brown); }
+  .page-btn:hover:not(.active) { border-color: var(--warm-brown); color: var(--warm-brown); }
+
+  /* ─── PAGES ─── */
+  .page { display: none; }
+  .page.active { display: flex; }
+
+  /* ════════════════════════════════════════════
+     OPCIÓN A — Tu idea: 4 cuartos
+  ════════════════════════════════════════════ */
+  #optA {
+    height: calc(100vh - 80px);
+    overflow: hidden;
+    flex-direction: row;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 60px;
+    background: var(--sidebar);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 18px; font-weight: 700;
+  }
+  .sidebar-bottom {
+    margin-top: auto;
+    display: flex; flex-direction: column; gap: 16px; align-items: center;
+  }
+  .sidebar-icon {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: white;
+  }
+
+  /* Main content */
+  .main-a {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    overflow: hidden;
+  }
+
+  .quadrant {
+    background: var(--card-bg);
+    padding: 28px 32px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Q1 — Saludo */
+  .q1 {
+    background: linear-gradient(135deg, #fdf8f0 0%, #f5ede0 100%);
+  }
+  .greeting-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--warm-brown);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+  .greeting-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    line-height: 1.1;
+    color: var(--deep-brown);
+    margin-bottom: 6px;
+  }
+  .greeting-name em { font-style: italic; color: var(--warm-brown); }
+  .greeting-sub {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+
+  .quick-stats {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+  }
+  .qs-pill {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+  .qs-pill .label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; }
+  .qs-pill .val { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--deep-brown); margin-top: 2px; }
+  .qs-pill .val.green { color: var(--green); }
+  .qs-pill .val.red { color: var(--red-expense); }
+  .qs-pill .change { font-size: 11px; color: var(--green); margin-top: 2px; }
+
+  .today-chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+    background: white;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .chip-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+
+  /* Q2 — Calendario */
+  .q2 { background: var(--card-bg); }
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .q-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--deep-brown);
+  }
+  .q-link {
+    font-size: 12px;
+    color: var(--warm-brown);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .q-link:hover { text-decoration: underline; }
+
+  .cal-mini {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .events-count-big {
+    text-align: center;
+    background: var(--warm-brown);
+    color: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    min-width: 72px;
+  }
+  .events-count-big .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .events-count-big .lbl { font-size: 10px; opacity: 0.85; margin-top: 3px; }
+
+  .mini-calendar {
+    flex: 1;
+  }
+  .mini-cal-header {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .mini-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .cal-day-lbl {
+    font-size: 9px;
+    text-align: center;
+    color: var(--text-light);
+    padding-bottom: 3px;
+    font-weight: 600;
+  }
+  .cal-day {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .cal-day:hover { background: var(--cream-dark); }
+  .cal-day.today { background: var(--warm-brown); color: white; font-weight: 600; }
+  .cal-day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--warm-brown-light);
+  }
+  .cal-day.today.has-event::after { background: rgba(255,255,255,0.7); }
+  .cal-day.other-month { color: var(--border); }
+
+  .mini-events {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .mini-event {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-mid);
+  }
+  .mini-event-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--warm-brown);
+    flex-shrink: 0;
+  }
+  .mini-event-time { color: var(--text-light); font-size: 11px; margin-left: auto; }
+
+  .habit-mood-strip {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .hm-card {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+  .hm-card .hm-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .habit-dots { display: flex; gap: 5px; }
+  .habit-dot-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .habit-dot-item span { font-size: 9px; color: var(--text-light); }
+  .habit-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--border);
+  }
+  .habit-dot.done { background: var(--warm-brown); }
+  .mood-emoji { font-size: 22px; }
+  .mood-text { font-size: 12px; color: var(--text-mid); font-weight: 500; }
+
+  /* Q3 — Finanzas */
+  .q3 { background: var(--card-bg); }
+
+  .finance-cards {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .fin-card {
+    flex: 1;
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+  .fin-card.balance { border-color: #c5d9c0; background: #f2f7f1; }
+  .fin-card.expense { border-color: #d9c0c0; background: #f7f2f1; }
+  .fin-card .fc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .fin-card.balance .fc-label { color: var(--green); }
+  .fin-card.expense .fc-label { color: var(--red-expense); }
+  .fin-card .fc-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-top: 3px;
+  }
+  .fin-card.balance .fc-val { color: var(--green); }
+  .fin-card.expense .fc-val { color: var(--red-expense); }
+  .fin-card .fc-change { font-size: 11px; margin-top: 2px; color: var(--text-light); }
+
+  /* Radial budget */
+  .budget-radial {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .radial-chart {
+    width: 80px; height: 80px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .radial-center-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .radial-center-text .pct { font-family: 'Playfair Display', serif; font-size: 14px; color: var(--deep-brown); }
+  .radial-center-text .lbl { font-size: 8px; color: var(--text-light); }
+  .budget-legend { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .bleg-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-mid); }
+  .bleg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .bleg-bar-wrap { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .bleg-bar { height: 100%; border-radius: 3px; }
+  .bleg-pct { font-size: 10px; color: var(--text-light); min-width: 28px; text-align: right; }
+
+  .recent-moves { flex: 1; overflow: hidden; }
+  .rm-row {
+    display: flex;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 10px;
+    font-size: 12px;
+  }
+  .rm-row:last-child { border-bottom: none; }
+  .rm-name { flex: 1; color: var(--text-dark); font-weight: 500; }
+  .rm-cat {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .rm-cat.ent { background: #e8e0f5; color: #6b5aaa; }
+  .rm-cat.hou { background: #deeaf5; color: #4a6fa5; }
+  .rm-cat.job { background: #e0f0e8; color: #4a7c59; }
+  .rm-amt { font-weight: 600; min-width: 55px; text-align: right; }
+  .rm-amt.neg { color: var(--red-expense); }
+  .rm-amt.pos { color: var(--green); }
+
+  /* Q4 — Notes & Todos */
+  .q4 { background: var(--card-bg); }
+  .q4-split { display: flex; gap: 20px; flex: 1; overflow: hidden; }
+  .q4-col { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .q4-col-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .note-item {
+    background: white;
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    border-left: 3px solid var(--border);
+  }
+  .note-item:hover { border-color: var(--warm-brown-light); }
+  .note-item.work { border-left-color: #4a6fa5; }
+  .note-item.personal { border-left-color: #6b5aaa; }
+  .note-item.health { border-left-color: #4a7c59; }
+  .note-cat { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+  .note-cat.work { color: #4a6fa5; }
+  .note-cat.personal { color: #6b5aaa; }
+  .note-cat.health { color: #4a7c59; }
+  .note-title-text { font-size: 13px; color: var(--text-dark); }
+
+  .todo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-check {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    border: 1.5px solid var(--warm-brown);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .todo-check.done { background: var(--warm-brown); }
+  .todo-check.done::after { content: '✓'; color: white; font-size: 10px; }
+  .todo-text { flex: 1; color: var(--text-dark); }
+  .todo-text.done { text-decoration: line-through; color: var(--text-light); }
+  .todo-when { font-size: 10px; color: var(--text-light); }
+
+
+  /* ════════════════════════════════════════════
+     OPCIÓN B — Vertical Streams / Columnas
+  ════════════════════════════════════════════ */
+  #optB {
+    height: calc(100vh - 80px);
+    overflow: hidden;
+  }
+
+  .b-layout {
+    display: flex;
+    height: 100%;
+  }
+  .b-sidebar { width: 60px; background: var(--sidebar); flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; display: flex; flex-shrink: 0; }
+
+  .b-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .b-col {
+    flex: 1;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .b-col:last-child { border-right: none; }
+
+  .b-col-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    background: white;
+    flex-shrink: 0;
+  }
+  .b-col-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--deep-brown);
+  }
+  .b-col-sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+  .b-col-body {
+    flex: 1;
+    padding: 20px 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Hero greeting col */
+  .b-greeting-big {
+    background: linear-gradient(180deg, #f9f4ec 0%, #f0e8d8 100%);
+    padding: 32px 24px 24px;
+    flex-shrink: 0;
+  }
+  .b-date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--warm-brown);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .b-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    line-height: 1.15;
+    color: var(--deep-brown);
+  }
+  .b-name em { font-style: italic; color: var(--warm-brown); }
+
+  .b-streak {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .b-streak-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--warm-brown);
+    line-height: 1;
+  }
+  .b-streak-label { font-size: 12px; color: var(--text-mid); }
+  .b-streak-sub { font-size: 11px; color: var(--text-light); }
+
+  .b-fin-summary {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+  .b-fin-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .b-fin-row:last-child { border-bottom: none; }
+  .b-fin-key { color: var(--text-light); }
+  .b-fin-val { font-weight: 600; }
+  .b-fin-val.green { color: var(--green); }
+  .b-fin-val.red { color: var(--red-expense); }
+
+  /* cal col B */
+  .b-mini-month {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+  .b-cal-title { font-size: 13px; font-weight: 600; color: var(--deep-brown); margin-bottom: 10px; }
+  .b-today-block {
+    background: var(--warm-brown);
+    color: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .b-today-date { font-family: 'Playfair Display', serif; font-size: 48px; line-height: 1; }
+  .b-today-label { font-size: 12px; opacity: 0.8; }
+
+  .b-event-list { display: flex; flex-direction: column; gap: 8px; }
+  .b-event {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .b-event-bar { width: 3px; height: 28px; border-radius: 2px; flex-shrink: 0; }
+  .b-event-name { flex: 1; font-weight: 500; color: var(--text-dark); }
+  .b-event-time { color: var(--text-light); font-size: 11px; }
+
+  /* notes/todo col B */
+  .b-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+
+
+  /* ════════════════════════════════════════════
+     OPCIÓN C — Dashboard Card Grid (Bento)
+  ════════════════════════════════════════════ */
+  #optC {
+    height: calc(100vh - 80px);
+    overflow: hidden;
+  }
+
+  .c-layout {
+    display: flex;
+    height: 100%;
+  }
+  .c-sidebar { width: 60px; background: var(--sidebar); flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; display: flex; flex-shrink: 0; }
+
+  .c-main {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .c-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .c-greeting {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--deep-brown);
+  }
+  .c-greeting em { font-style: italic; color: var(--warm-brown); }
+  .c-date-text { font-size: 13px; color: var(--text-light); }
+  .c-top-right { display: flex; gap: 8px; align-items: center; }
+  .c-mood-pill {
+    display: flex; align-items: center; gap: 6px;
+    background: white; border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; color: var(--text-mid);
+  }
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 14px;
+    flex: 1;
+  }
+
+  .bento {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    overflow: hidden;
+  }
+  .bento-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-light);
+    margin-bottom: 14px;
+  }
+
+  /* Balance big */
+  .bento.b-balance { grid-column: span 3; background: linear-gradient(135deg, #3a5a3c, #4a7c59); color: white; }
+  .bento.b-balance .bento-title { color: rgba(255,255,255,0.6); }
+  .b-balance-num { font-family: 'Playfair Display', serif; font-size: 28px; color: white; }
+  .b-balance-label { font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+  .b-balance-change { font-size: 12px; color: #a8d5b0; }
+
+  .bento.b-expense { grid-column: span 3; background: linear-gradient(135deg, #6b2e2e, #b85450); color: white; }
+  .bento.b-expense .bento-title { color: rgba(255,255,255,0.6); }
+  .b-expense-num { font-family: 'Playfair Display', serif; font-size: 28px; color: white; }
+
+  .bento.b-habits { grid-column: span 3; }
+  .bento.b-mood { grid-column: span 3; }
+
+  .bento.b-calendar { grid-column: span 5; grid-row: span 2; }
+  .bento.b-notes { grid-column: span 4; }
+  .bento.b-todos { grid-column: span 3; }
+  .bento.b-movements { grid-column: span 5; }
+  .bento.b-budget-bars { grid-column: span 4; }
+
+  .habit-row-c { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .habit-name-c { font-size: 12px; color: var(--text-mid); width: 70px; flex-shrink: 0; }
+  .habit-dots-c { display: flex; gap: 4px; }
+  .hdc { width: 12px; height: 12px; border-radius: 50%; background: var(--border); }
+  .hdc.done { background: var(--warm-brown); }
+
+  .mood-big { font-size: 48px; text-align: center; margin: 8px 0 4px; }
+  .mood-big-text { text-align: center; font-size: 13px; color: var(--text-mid); }
+  .mood-streak { text-align: center; font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+  .c-note-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .c-note-pill:last-child { border-bottom: none; }
+  .c-note-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .budget-bar-item { margin-bottom: 10px; }
+  .bb-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-mid); margin-bottom: 5px; }
+  .bb-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .bb-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+  .c-todo-item { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; font-size: 12px; border-bottom: 1px solid var(--border); }
+  .c-todo-item:last-child { border-bottom: none; }
+  .c-cb { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--warm-brown); flex-shrink: 0; margin-top: 1px; }
+  .c-cb.done { background: var(--warm-brown); display: flex; align-items: center; justify-content: center; }
+  .c-cb.done::after { content: '✓'; color: white; font-size: 9px; }
+
+  /* Bento calendar mini */
+  .bento-cal-month { font-size: 13px; font-weight: 600; color: var(--deep-brown); margin-bottom: 12px; }
+  .bento-events-today { margin-bottom: 16px; }
+  .bet-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 8px; }
+  .bet-item {
+    display: flex; gap: 10px; align-items: center;
+    padding: 8px 10px; background: white;
+    border-radius: 8px; border: 1px solid var(--border);
+    margin-bottom: 6px; font-size: 12px;
+  }
+  .bet-color { width: 3px; height: 24px; border-radius: 2px; flex-shrink: 0; }
+  .bet-name { flex: 1; font-weight: 500; color: var(--text-dark); }
+  .bet-time { color: var(--text-light); font-size: 11px; }
+
+  /* ════════════════════════════════════════════
+     OPCIÓN D — Full-width Horizontal Scroll / Timeline feel
+  ════════════════════════════════════════════ */
+  #optD {
+    height: calc(100vh - 80px);
+    overflow: hidden;
+  }
+
+  .d-layout { display: flex; height: 100%; }
+  .d-sidebar { width: 60px; background: var(--sidebar); flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; display: flex; flex-shrink: 0; }
+
+  .d-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .d-hero {
+    background: linear-gradient(135deg, #3a2010 0%, #6b3d1e 50%, #c17a45 100%);
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-shrink: 0;
+  }
+  .d-hero-text { flex: 1; }
+  .d-hero-welcome { font-size: 12px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .d-hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: white;
+    line-height: 1.1;
+  }
+  .d-hero-name em { font-style: italic; opacity: 0.8; }
+  .d-hero-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+
+  .d-hero-stats {
+    display: flex;
+    gap: 20px;
+  }
+  .d-stat-block {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 16px 20px;
+    backdrop-filter: blur(4px);
+    min-width: 100px;
+  }
+  .d-stat-num { font-family: 'Playfair Display', serif; font-size: 28px; color: white; }
+  .d-stat-label { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+  .d-stat-change { font-size: 11px; color: #a8d5b0; margin-top: 2px; }
+
+  .d-content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .d-stream {
+    flex: 1;
+    padding: 24px 24px 24px 32px;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .d-stream:last-child { border-right: none; }
+
+  .d-stream-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .d-stream-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--deep-brown);
+  }
+  .d-stream-count {
+    background: var(--warm-brown);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .d-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    transition: border-color 0.15s, transform 0.15s;
+    cursor: pointer;
+  }
+  .d-card:hover { border-color: var(--warm-brown-light); transform: translateY(-1px); }
+
+  .d-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .d-card-title { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .d-card-badge { font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 500; }
+  .d-card-badge.work { background: #deeaf5; color: #4a6fa5; }
+  .d-card-badge.personal { background: #ede0f5; color: #6b5aaa; }
+  .d-card-badge.health { background: #e0f0e8; color: #4a7c59; }
+  .d-card-body { font-size: 12px; color: var(--text-light); }
+
+  .d-event-card {
+    display: flex; align-items: center; gap: 12px;
+    background: white; border-radius: 12px;
+    border: 1px solid var(--border); padding: 12px 14px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .d-event-card:hover { border-color: var(--warm-brown-light); transform: translateY(-1px); }
+  .d-event-time-block {
+    background: var(--cream-dark);
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: center;
+    min-width: 52px;
+  }
+  .d-event-time-block .time { font-size: 14px; font-weight: 600; color: var(--deep-brown); }
+  .d-event-time-block .ampm { font-size: 9px; color: var(--text-light); }
+  .d-event-info { flex: 1; }
+  .d-event-name { font-size: 13px; font-weight: 500; color: var(--text-dark); }
+  .d-event-desc { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+  .d-fin-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .d-fin-row:last-child { border-bottom: none; }
+  .d-fin-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--cream-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .d-fin-detail { flex: 1; }
+  .d-fin-name { font-weight: 500; color: var(--text-dark); }
+  .d-fin-date { font-size: 11px; color: var(--text-light); }
+  .d-fin-amt { font-weight: 600; }
+  .d-fin-amt.neg { color: var(--red-expense); }
+  .d-fin-amt.pos { color: var(--green); }
+
+  .d-habit-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .d-habit-row:last-child { border-bottom: none; }
+  .d-habit-icon { font-size: 20px; width: 32px; text-align: center; }
+  .d-habit-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text-dark); }
+  .d-habit-dots-row { display: flex; gap: 4px; }
+  .dhd { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+  .dhd.done { background: var(--warm-brown); }
+  .d-todo-row { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .d-todo-row:last-child { border-bottom: none; }
+  .d-todo-cb { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--warm-brown); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .d-todo-cb.done { background: var(--warm-brown); }
+  .d-todo-cb.done::after { content: '✓'; color: white; font-size: 10px; }
+  .d-todo-text { flex: 1; color: var(--text-dark); }
+  .d-todo-text.done { text-decoration: line-through; color: var(--text-light); }
+  .d-todo-when { font-size: 11px; color: var(--text-light); }
+
+  /* ─── SHARED UTILS ─── */
+  svg { display: block; }
+  .mt-auto { margin-top: auto; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--warm-brown-light); }
+</style>
+</head>
+<body>
+
+<!-- PAGE SELECTOR -->
+<div class="page-selector">
+  <span>Opciones de Homepage:</span>
+  <button class="page-btn active" onclick="showPage('optA')">A — 4 Cuartos (tu idea)</button>
+  <button class="page-btn" onclick="showPage('optB')">B — Columnas verticales</button>
+  <button class="page-btn" onclick="showPage('optC')">C — Bento Grid</button>
+  <button class="page-btn" onclick="showPage('optD')">D — Streams + Hero</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     OPCIÓN A — 4 Cuartos
+══════════════════════════════════════ -->
+<div id="optA" class="page active">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">U</div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-icon">⚙</div>
+      <div class="sidebar-icon">👤</div>
+    </div>
+  </div>
+
+  <div class="main-a">
+    <!-- Q1: Saludo -->
+    <div class="quadrant q1">
+      <div class="greeting-tag">Viernes, 27 de marzo</div>
+      <div class="greeting-name">Hola,<br><em>María</em> 👋</div>
+      <div class="greeting-sub">Tienes 3 eventos hoy y tu racha de hábitos es de 18 días.</div>
+
+      <div class="today-chips">
+        <div class="chip"><div class="chip-dot" style="background:#4a7c59"></div>Entrenamiento ✓</div>
+        <div class="chip"><div class="chip-dot" style="background:#c17a45"></div>Meditar pendiente</div>
+        <div class="chip"><div class="chip-dot" style="background:#b85450"></div>Mood: 😊 Feliz</div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="qs-pill">
+          <div class="label">Balance</div>
+          <div class="val green">€2.442</div>
+          <div class="change">▲ 3,7%</div>
+        </div>
+        <div class="qs-pill">
+          <div class="label">Gastos</div>
+          <div class="val red">€457</div>
+          <div class="change" style="color:var(--red-expense)">▲ 1,2%</div>
+        </div>
+        <div class="qs-pill">
+          <div class="label">Racha</div>
+          <div class="val">18d</div>
+          <div class="change">🔥 Buena racha</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2: Calendario -->
+    <div class="quadrant q2">
+      <div class="q-header">
+        <div class="q-title">Calendario</div>
+        <a class="q-link" onclick="">Ver todo →</a>
+      </div>
+
+      <div class="cal-mini">
+        <div class="events-count-big">
+          <div class="num">3</div>
+          <div class="lbl">eventos<br>hoy</div>
+        </div>
+        <div class="mini-calendar">
+          <div class="mini-cal-header">Marzo 2026</div>
+          <div class="mini-cal-grid">
+            <div class="cal-day-lbl">L</div><div class="cal-day-lbl">M</div><div class="cal-day-lbl">X</div>
+            <div class="cal-day-lbl">J</div><div class="cal-day-lbl">V</div><div class="cal-day-lbl">S</div><div class="cal-day-lbl">D</div>
+            <div class="cal-day other-month">24</div><div class="cal-day other-month">25</div><div class="cal-day other-month">26</div>
+            <div class="cal-day other-month">27</div><div class="cal-day other-month">28</div>
+            <div class="cal-day">1</div><div class="cal-day">2</div>
+            <div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day has-event">5</div>
+            <div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div>
+            <div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day has-event today">12</div>
+            <div class="cal-day has-event">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div>
+            <div class="cal-day">17</div><div class="cal-day has-event">18</div><div class="cal-day">19</div>
+            <div class="cal-day has-event">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
+            <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div>
+            <div class="cal-day has-event">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div>
+            <div class="cal-day">31</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini-events">
+        <div class="mini-event">
+          <div class="mini-event-dot"></div>
+          Movie night
+          <span class="mini-event-time">21:00</span>
+        </div>
+        <div class="mini-event">
+          <div class="mini-event-dot" style="background:#4a6fa5"></div>
+          Pharma meeting
+          <span class="mini-event-time">mañana 11:00</span>
+        </div>
+        <div class="mini-event">
+          <div class="mini-event-dot" style="background:#4a7c59"></div>
+          Dentista
+          <span class="mini-event-time">mañana 16:00</span>
+        </div>
+      </div>
+
+      <div class="habit-mood-strip">
+        <div class="hm-card" style="flex:1.4">
+          <div class="hm-label">Hábitos hoy</div>
+          <div class="habit-dots">
+            <div class="habit-dot-item">
+              <div class="habit-dot done"></div>
+              <span>Gym</span>
+            </div>
+            <div class="habit-dot-item">
+              <div class="habit-dot"></div>
+              <span>Medi.</span>
+            </div>
+            <div class="habit-dot-item">
+              <div class="habit-dot done"></div>
+              <span>Leer</span>
+            </div>
+          </div>
+        </div>
+        <div class="hm-card" style="flex:1">
+          <div class="hm-label">Mood</div>
+          <div class="mood-emoji">😊</div>
+          <div class="mood-text" style="font-size:11px;color:var(--text-light)">Feliz</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3: Finanzas -->
+    <div class="quadrant q3">
+      <div class="q-header">
+        <div class="q-title">Finanzas</div>
+        <a class="q-link">Ver todo →</a>
+      </div>
+
+      <div class="finance-cards">
+        <div class="fin-card balance">
+          <div class="fc-label">Balance</div>
+          <div class="fc-val">€2.442,13</div>
+          <div class="fc-change">▲ 3,7% vs mes ant.</div>
+        </div>
+        <div class="fin-card expense">
+          <div class="fc-label">Gastos</div>
+          <div class="fc-val">€457,87</div>
+          <div class="fc-change">▲ 1,2% vs mes ant.</div>
+        </div>
+      </div>
+
+      <!-- Radial budget chart -->
+      <div class="budget-radial">
+        <div class="radial-chart">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <!-- Alimentación 141% over = red -->
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#e8dfd0" stroke-width="8"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#b85450" stroke-width="8"
+              stroke-dasharray="201 0" stroke-dashoffset="50" stroke-linecap="round" opacity="0.6"/>
+            <!-- Housing 98% -->
+            <circle cx="40" cy="40" r="23" fill="none" stroke="#e8dfd0" stroke-width="7"/>
+            <circle cx="40" cy="40" r="23" fill="none" stroke="#4a6fa5" stroke-width="7"
+              stroke-dasharray="141 6" stroke-dashoffset="36" stroke-linecap="round"/>
+            <!-- Entertainment 40% -->
+            <circle cx="40" cy="40" r="14" fill="none" stroke="#e8dfd0" stroke-width="7"/>
+            <circle cx="40" cy="40" r="14" fill="none" stroke="#6b5aaa" stroke-width="7"
+              stroke-dasharray="35 53" stroke-dashoffset="22" stroke-linecap="round"/>
+          </svg>
+          <div class="radial-center-text">
+            <div class="pct">3</div>
+            <div class="lbl">categ.</div>
+          </div>
+        </div>
+        <div class="budget-legend">
+          <div class="bleg-item">
+            <div class="bleg-dot" style="background:#b85450"></div>
+            <span style="flex:1;font-size:11px">Alimentación</span>
+            <div class="bleg-bar-wrap"><div class="bleg-bar" style="width:100%;background:#b85450"></div></div>
+            <div class="bleg-pct">141%</div>
+          </div>
+          <div class="bleg-item">
+            <div class="bleg-dot" style="background:#4a6fa5"></div>
+            <span style="flex:1;font-size:11px">Vivienda</span>
+            <div class="bleg-bar-wrap"><div class="bleg-bar" style="width:98%;background:#4a6fa5"></div></div>
+            <div class="bleg-pct">98%</div>
+          </div>
+          <div class="bleg-item">
+            <div class="bleg-dot" style="background:#6b5aaa"></div>
+            <span style="flex:1;font-size:11px">Ocio</span>
+            <div class="bleg-bar-wrap"><div class="bleg-bar" style="width:40%;background:#6b5aaa"></div></div>
+            <div class="bleg-pct">40%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recent-moves">
+        <div class="rm-row">
+          <span class="rm-name">Spotify</span>
+          <span class="rm-cat ent">Ocio</span>
+          <span class="rm-amt neg">-10€</span>
+        </div>
+        <div class="rm-row">
+          <span class="rm-name">Alquiler</span>
+          <span class="rm-cat hou">Vivienda</span>
+          <span class="rm-amt neg">-400€</span>
+        </div>
+        <div class="rm-row">
+          <span class="rm-name">Nómina</span>
+          <span class="rm-cat job">Trabajo</span>
+          <span class="rm-amt pos">+3250€</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4: Notes & Todos -->
+    <div class="quadrant q4">
+      <div class="q-header">
+        <div class="q-title">Notas & Tareas</div>
+        <a class="q-link">Ver todo →</a>
+      </div>
+      <div class="q4-split">
+        <div class="q4-col">
+          <div class="q4-col-title">Notas</div>
+          <div class="note-item work">
+            <div class="note-cat work">Trabajo</div>
+            <div class="note-title-text">Reunión con el cliente</div>
+          </div>
+          <div class="note-item personal">
+            <div class="note-cat personal">Personal</div>
+            <div class="note-title-text">Ideas para el aniversario</div>
+          </div>
+          <div class="note-item health">
+            <div class="note-cat health">Salud</div>
+            <div class="note-title-text">Cita médica 20/3</div>
+          </div>
+          <div class="note-item work">
+            <div class="note-cat work">Trabajo</div>
+            <div class="note-title-text">Restaurantes para la cena de empresa</div>
+          </div>
+        </div>
+        <div class="q4-col">
+          <div class="q4-col-title">Pendientes</div>
+          <div class="todo-item">
+            <div class="todo-check"></div>
+            <div class="todo-text">Revisar propuesta del cliente</div>
+            <div class="todo-when">Mañana</div>
+          </div>
+          <div class="todo-item">
+            <div class="todo-check"></div>
+            <div class="todo-text">Hacer gráficos de finanzas</div>
+            <div class="todo-when">Hoy</div>
+          </div>
+          <div class="todo-item">
+            <div class="todo-check done"></div>
+            <div class="todo-text done">Actualizar portfolio</div>
+            <div class="todo-when">Hoy</div>
+          </div>
+          <div class="todo-item">
+            <div class="todo-check"></div>
+            <div class="todo-text">Revisar propuesta del cliente</div>
+            <div class="todo-when">Mañana</div>
+          </div>
+          <div class="todo-item">
+            <div class="todo-check done"></div>
+            <div class="todo-text done">Actualizar portfolio</div>
+            <div class="todo-when">Hoy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     OPCIÓN B — Columnas verticales
+══════════════════════════════════════ -->
+<div id="optB" class="page">
+  <div class="b-layout">
+    <div class="b-sidebar">
+      <div class="sidebar-logo">U</div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-icon">⚙</div>
+        <div class="sidebar-icon">👤</div>
+      </div>
+    </div>
+
+    <div class="b-main">
+      <!-- Col 1: Resumen personal -->
+      <div class="b-col">
+        <div class="b-greeting-big">
+          <div class="b-date-badge">📅 Viernes, 27 marzo</div>
+          <div class="b-name">Hola,<br><em>María</em> 👋</div>
+          <div style="font-size:13px;color:var(--text-mid);margin-top:8px">Un día con 3 eventos.</div>
+        </div>
+        <div class="b-col-body">
+          <div class="b-streak">
+            <div>
+              <div class="b-streak-num">18</div>
+              <div class="b-streak-label" style="font-size:11px;font-weight:600">días de racha</div>
+              <div class="b-streak-sub">🔥 ¡Sigue así!</div>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:11px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Hábitos hoy</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--warm-brown)"></div>
+                  <span>Entrenamiento ✓</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-light)">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--border)"></div>
+                  <span>Meditar (pendiente)</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--warm-brown)"></div>
+                  <span>Leer ✓</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <div style="font-size:32px">😊</div>
+              <div>
+                <div style="font-size:14px;font-weight:600;color:var(--deep-brown)">Feliz</div>
+                <div style="font-size:11px;color:var(--text-light)">Tu mood de hoy</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b-fin-summary">
+            <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Resumen financiero</div>
+            <div class="b-fin-row">
+              <span class="b-fin-key">Balance</span>
+              <span class="b-fin-val green">€2.442,13</span>
+            </div>
+            <div class="b-fin-row">
+              <span class="b-fin-key">Gastos</span>
+              <span class="b-fin-val red">€457,87</span>
+            </div>
+            <div class="b-fin-row">
+              <span class="b-fin-key">Ingresos</span>
+              <span class="b-fin-val green">€3.250,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col 2: Calendario -->
+      <div class="b-col">
+        <div class="b-col-header">
+          <div class="b-col-title">Calendario</div>
+          <div class="b-col-sub">3 eventos hoy · 5 esta semana</div>
+        </div>
+        <div class="b-col-body">
+          <div class="b-today-block">
+            <div class="b-today-label">Hoy</div>
+            <div class="b-today-date">27</div>
+            <div class="b-today-label">Viernes · marzo 2026</div>
+          </div>
+
+          <div class="b-section-title">Hoy</div>
+          <div class="b-event-list">
+            <div class="b-event">
+              <div class="b-event-bar" style="background:var(--warm-brown)"></div>
+              <div style="flex:1">
+                <div class="b-event-name">Movie night</div>
+                <div class="b-event-time">Comprar snacks</div>
+              </div>
+              <div class="b-event-time">21:00</div>
+            </div>
+          </div>
+
+          <div class="b-section-title" style="margin-top:8px">Esta semana</div>
+          <div class="b-event-list">
+            <div class="b-event">
+              <div class="b-event-bar" style="background:#4a6fa5"></div>
+              <div style="flex:1"><div class="b-event-name">Pharma Meeting</div></div>
+              <div class="b-event-time">Sáb 11:00</div>
+            </div>
+            <div class="b-event">
+              <div class="b-event-bar" style="background:#4a7c59"></div>
+              <div style="flex:1"><div class="b-event-name">Dentista</div></div>
+              <div class="b-event-time">Sáb 16:00</div>
+            </div>
+          </div>
+
+          <div class="b-section-title" style="margin-top:8px">Este mes</div>
+          <div class="b-event-list">
+            <div class="b-event">
+              <div class="b-event-bar" style="background:#6b5aaa"></div>
+              <div style="flex:1"><div class="b-event-name">Client meeting</div></div>
+              <div class="b-event-time">18 · 10:00</div>
+            </div>
+            <div class="b-event">
+              <div class="b-event-bar" style="background:var(--warm-brown)"></div>
+              <div style="flex:1"><div class="b-event-name">Cena de empresa</div></div>
+              <div class="b-event-time">27 · 19:00</div>
+            </div>
+          </div>
+
+          <div class="b-mini-month">
+            <div class="b-cal-title">Marzo 2026</div>
+            <div class="mini-cal-grid">
+              <div class="cal-day-lbl">L</div><div class="cal-day-lbl">M</div><div class="cal-day-lbl">X</div>
+              <div class="cal-day-lbl">J</div><div class="cal-day-lbl">V</div><div class="cal-day-lbl">S</div><div class="cal-day-lbl">D</div>
+              <div class="cal-day other-month">24</div><div class="cal-day other-month">25</div><div class="cal-day other-month">26</div>
+              <div class="cal-day other-month">27</div><div class="cal-day other-month">28</div>
+              <div class="cal-day">1</div><div class="cal-day">2</div>
+              <div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day has-event">5</div>
+              <div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div>
+              <div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day has-event today">12</div>
+              <div class="cal-day has-event">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div>
+              <div class="cal-day">17</div><div class="cal-day has-event">18</div><div class="cal-day">19</div>
+              <div class="cal-day has-event">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
+              <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div>
+              <div class="cal-day has-event">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div>
+              <div class="cal-day">31</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col 3: Notas & Tareas -->
+      <div class="b-col">
+        <div class="b-col-header">
+          <div class="b-col-title">Notas & Tareas</div>
+          <div class="b-col-sub">4 notas · 5 pendientes</div>
+        </div>
+        <div class="b-col-body">
+          <div class="b-section-title">Notas recientes</div>
+          <div class="note-item work" style="margin-bottom:8px">
+            <div class="note-cat work">Trabajo</div>
+            <div class="note-title-text">Reunión con el cliente</div>
+          </div>
+          <div class="note-item personal" style="margin-bottom:8px">
+            <div class="note-cat personal">Personal</div>
+            <div class="note-title-text">Ideas para el aniversario</div>
+          </div>
+          <div class="note-item health" style="margin-bottom:8px">
+            <div class="note-cat health">Salud</div>
+            <div class="note-title-text">Cita médica 20/3</div>
+          </div>
+
+          <div class="b-section-title" style="margin-top:4px">Tareas pendientes</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:14px">
+            <div class="todo-item" style="padding:6px 0">
+              <div class="todo-check"></div>
+              <div style="flex:1;font-size:13px;color:var(--text-dark)">Revisar propuesta del cliente</div>
+              <div style="font-size:11px;color:var(--text-light)">Mañana</div>
+            </div>
+            <div class="todo-item" style="padding:6px 0">
+              <div class="todo-check"></div>
+              <div style="flex:1;font-size:13px;color:var(--text-dark)">Hacer gráficos de finanzas</div>
+              <div style="font-size:11px;color:var(--text-light)">Hoy</div>
+            </div>
+            <div class="todo-item" style="padding:6px 0">
+              <div class="todo-check done"></div>
+              <div style="flex:1;font-size:13px;text-decoration:line-through;color:var(--text-light)">Actualizar portfolio</div>
+              <div style="font-size:11px;color:var(--text-light)">Hoy</div>
+            </div>
+            <div class="todo-item" style="padding:6px 0;border-bottom:none">
+              <div class="todo-check"></div>
+              <div style="flex:1;font-size:13px;color:var(--text-dark)">Revisar propuesta cliente</div>
+              <div style="font-size:11px;color:var(--text-light)">Mañana</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     OPCIÓN C — Bento Grid
+══════════════════════════════════════ -->
+<div id="optC" class="page">
+  <div class="c-layout">
+    <div class="c-sidebar">
+      <div class="sidebar-logo">U</div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-icon">⚙</div>
+        <div class="sidebar-icon">👤</div>
+      </div>
+    </div>
+    <div class="c-main">
+      <div class="c-top-bar">
+        <div>
+          <div class="c-greeting">Buenos días, <em>María</em> 👋</div>
+          <div class="c-date-text">Viernes, 27 de marzo de 2026</div>
+        </div>
+        <div class="c-top-right">
+          <div class="c-mood-pill">😊 Feliz hoy</div>
+          <div class="c-mood-pill">🔥 18 días de racha</div>
+        </div>
+      </div>
+
+      <div class="bento-grid">
+
+        <!-- Balance -->
+        <div class="bento b-balance">
+          <div class="bento-title">Balance</div>
+          <div class="b-balance-label">Total actual</div>
+          <div class="b-balance-num">€2.442,13</div>
+          <div class="b-balance-change">▲ 3,7% vs mes anterior</div>
+        </div>
+
+        <!-- Expense -->
+        <div class="bento b-expense">
+          <div class="bento-title">Gastos</div>
+          <div class="b-balance-label">Este mes</div>
+          <div class="b-expense-num">€457,87</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.6)">▲ 1,2%</div>
+        </div>
+
+        <!-- Habits -->
+        <div class="bento b-habits">
+          <div class="bento-title">Hábitos hoy</div>
+          <div class="habit-row-c">
+            <div class="habit-name-c">Entrenamiento</div>
+            <div class="habit-dots-c">
+              <div class="hdc done"></div><div class="hdc done"></div><div class="hdc done"></div>
+              <div class="hdc done"></div><div class="hdc"></div><div class="hdc"></div><div class="hdc"></div>
+            </div>
+          </div>
+          <div class="habit-row-c">
+            <div class="habit-name-c">Meditar</div>
+            <div class="habit-dots-c">
+              <div class="hdc done"></div><div class="hdc done"></div><div class="hdc"></div>
+              <div class="hdc done"></div><div class="hdc"></div><div class="hdc"></div><div class="hdc"></div>
+            </div>
+          </div>
+          <div class="habit-row-c">
+            <div class="habit-name-c">Leer</div>
+            <div class="habit-dots-c">
+              <div class="hdc done"></div><div class="hdc"></div><div class="hdc"></div>
+              <div class="hdc"></div><div class="hdc"></div><div class="hdc"></div><div class="hdc"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mood -->
+        <div class="bento b-mood">
+          <div class="bento-title">Mood tracker</div>
+          <div class="mood-big">😊</div>
+          <div class="mood-big-text">Feliz</div>
+          <div class="mood-streak">18 días de racha 🔥</div>
+        </div>
+
+        <!-- Calendar (tall) -->
+        <div class="bento b-calendar">
+          <div class="bento-title">Calendario — Marzo</div>
+          <div class="mini-cal-grid" style="margin-bottom:12px">
+            <div class="cal-day-lbl">L</div><div class="cal-day-lbl">M</div><div class="cal-day-lbl">X</div>
+            <div class="cal-day-lbl">J</div><div class="cal-day-lbl">V</div><div class="cal-day-lbl">S</div><div class="cal-day-lbl">D</div>
+            <div class="cal-day other-month">24</div><div class="cal-day other-month">25</div><div class="cal-day other-month">26</div>
+            <div class="cal-day other-month">27</div><div class="cal-day other-month">28</div>
+            <div class="cal-day">1</div><div class="cal-day">2</div>
+            <div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day has-event">5</div>
+            <div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div>
+            <div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day has-event today">12</div>
+            <div class="cal-day has-event">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div>
+            <div class="cal-day">17</div><div class="cal-day has-event">18</div><div class="cal-day">19</div>
+            <div class="cal-day has-event">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
+            <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div>
+            <div class="cal-day has-event">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div>
+            <div class="cal-day">31</div>
+          </div>
+          <div class="bento-events-today">
+            <div class="bet-label">Hoy — 3 eventos</div>
+            <div class="bet-item">
+              <div class="bet-color" style="background:var(--warm-brown)"></div>
+              <div class="bet-name">Movie night</div>
+              <div class="bet-time">21:00</div>
+            </div>
+          </div>
+          <div class="bet-label">Esta semana</div>
+          <div class="bet-item">
+            <div class="bet-color" style="background:#4a6fa5"></div>
+            <div class="bet-name">Pharma Meeting</div>
+            <div class="bet-time">Sáb · 11:00</div>
+          </div>
+          <div class="bet-item">
+            <div class="bet-color" style="background:#4a7c59"></div>
+            <div class="bet-name">Dentista</div>
+            <div class="bet-time">Sáb · 16:00</div>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="bento b-notes">
+          <div class="bento-title">Notas recientes</div>
+          <div class="c-note-pill">
+            <div class="c-note-dot" style="background:#4a6fa5"></div>
+            <span style="font-size:10px;color:#4a6fa5;font-weight:600;min-width:55px">TRABAJO</span>
+            <span style="font-size:13px;color:var(--text-dark)">Reunión con el cliente</span>
+          </div>
+          <div class="c-note-pill">
+            <div class="c-note-dot" style="background:#6b5aaa"></div>
+            <span style="font-size:10px;color:#6b5aaa;font-weight:600;min-width:55px">PERSONAL</span>
+            <span style="font-size:13px;color:var(--text-dark)">Ideas para el aniversario</span>
+          </div>
+          <div class="c-note-pill">
+            <div class="c-note-dot" style="background:#4a7c59"></div>
+            <span style="font-size:10px;color:#4a7c59;font-weight:600;min-width:55px">SALUD</span>
+            <span style="font-size:13px;color:var(--text-dark)">Cita médica 20/3</span>
+          </div>
+          <div class="c-note-pill">
+            <div class="c-note-dot" style="background:#4a6fa5"></div>
+            <span style="font-size:10px;color:#4a6fa5;font-weight:600;min-width:55px">TRABAJO</span>
+            <span style="font-size:13px;color:var(--text-dark)">Restaurantes cena empresa</span>
+          </div>
+        </div>
+
+        <!-- Todos -->
+        <div class="bento b-todos">
+          <div class="bento-title">Tareas</div>
+          <div class="c-todo-item">
+            <div class="c-cb"></div>
+            <span style="flex:1;color:var(--text-dark)">Revisar propuesta del cliente</span>
+          </div>
+          <div class="c-todo-item">
+            <div class="c-cb"></div>
+            <span style="flex:1;color:var(--text-dark)">Hacer gráficos de finanzas</span>
+          </div>
+          <div class="c-todo-item">
+            <div class="c-cb done"></div>
+            <span style="flex:1;text-decoration:line-through;color:var(--text-light)">Actualizar portfolio</span>
+          </div>
+          <div class="c-todo-item">
+            <div class="c-cb"></div>
+            <span style="flex:1;color:var(--text-dark)">Revisar propuesta cliente</span>
+          </div>
+        </div>
+
+        <!-- Movements -->
+        <div class="bento b-movements">
+          <div class="bento-title">Últimos movimientos</div>
+          <div class="rm-row">
+            <span class="rm-name">Spotify</span>
+            <span class="rm-cat ent">Ocio</span>
+            <span style="font-size:11px;color:var(--text-light)">7 mar</span>
+            <span class="rm-amt neg">-10€</span>
+          </div>
+          <div class="rm-row">
+            <span class="rm-name">Alquiler</span>
+            <span class="rm-cat hou">Vivienda</span>
+            <span style="font-size:11px;color:var(--text-light)">8 mar</span>
+            <span class="rm-amt neg">-400€</span>
+          </div>
+          <div class="rm-row">
+            <span class="rm-name">Cena anoche</span>
+            <span class="rm-cat hou">Vivienda</span>
+            <span style="font-size:11px;color:var(--text-light)">8 mar</span>
+            <span class="rm-amt neg">-16,8€</span>
+          </div>
+          <div class="rm-row">
+            <span class="rm-name">Nómina</span>
+            <span class="rm-cat job">Trabajo</span>
+            <span style="font-size:11px;color:var(--text-light)">3 mar</span>
+            <span class="rm-amt pos">+3.250€</span>
+          </div>
+        </div>
+
+        <!-- Budget bars -->
+        <div class="bento b-budget-bars">
+          <div class="bento-title">Presupuestos</div>
+          <div class="budget-bar-item">
+            <div class="bb-header"><span>🧺 Alimentación</span><span style="color:var(--red-expense)">424€ / 300€</span></div>
+            <div class="bb-track"><div class="bb-fill" style="width:100%;background:var(--red-expense)"></div></div>
+          </div>
+          <div class="budget-bar-item">
+            <div class="bb-header"><span>🏠 Vivienda</span><span style="color:#4a6fa5">590€ / 600€</span></div>
+            <div class="bb-track"><div class="bb-fill" style="width:98%;background:#4a6fa5"></div></div>
+          </div>
+          <div class="budget-bar-item">
+            <div class="bb-header"><span>🎮 Ocio</span><span style="color:#6b5aaa">40€ / 100€</span></div>
+            <div class="bb-track"><div class="bb-fill" style="width:40%;background:#6b5aaa"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     OPCIÓN D — Streams + Hero
+══════════════════════════════════════ -->
+<div id="optD" class="page">
+  <div class="d-layout">
+    <div class="d-sidebar">
+      <div class="sidebar-logo">U</div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-icon">⚙</div>
+        <div class="sidebar-icon">👤</div>
+      </div>
+    </div>
+    <div class="d-main">
+      <!-- Hero strip -->
+      <div class="d-hero">
+        <div class="d-hero-text">
+          <div class="d-hero-welcome">Buenos días</div>
+          <div class="d-hero-name">María <em>González</em> 👋</div>
+          <div class="d-hero-sub">Viernes, 27 de marzo · 3 eventos hoy · 🔥 18 días de racha</div>
+        </div>
+        <div class="d-hero-stats">
+          <div class="d-stat-block">
+            <div class="d-stat-num">€2.442</div>
+            <div class="d-stat-label">Balance</div>
+            <div class="d-stat-change">▲ 3,7%</div>
+          </div>
+          <div class="d-stat-block">
+            <div class="d-stat-num">€457</div>
+            <div class="d-stat-label">Gastos</div>
+            <div style="font-size:11px;color:#ffb3b3;margin-top:2px">▲ 1,2%</div>
+          </div>
+          <div class="d-stat-block">
+            <div class="d-stat-num">3</div>
+            <div class="d-stat-label">Eventos hoy</div>
+            <div class="d-stat-change">2 esta semana más</div>
+          </div>
+          <div class="d-stat-block">
+            <div style="font-size:36px">😊</div>
+            <div class="d-stat-label">Mood</div>
+            <div class="d-stat-change">Feliz</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content streams -->
+      <div class="d-content">
+
+        <!-- Stream 1: Calendario -->
+        <div class="d-stream">
+          <div class="d-stream-header">
+            <div class="d-stream-title">📅 Calendario</div>
+            <div class="d-stream-count">3 hoy</div>
+          </div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:6px">Hoy</div>
+          <div class="d-event-card">
+            <div class="d-event-time-block"><div class="time">21:00</div><div class="ampm">PM</div></div>
+            <div class="d-event-info">
+              <div class="d-event-name">Movie night</div>
+              <div class="d-event-desc">Comprar snacks en casa</div>
+            </div>
+          </div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:6px;margin-top:8px">Esta semana</div>
+          <div class="d-event-card">
+            <div class="d-event-time-block" style="background:#deeaf5"><div class="time" style="color:#4a6fa5">11:00</div><div class="ampm">Sáb</div></div>
+            <div class="d-event-info">
+              <div class="d-event-name">Pharma Meeting</div>
+            </div>
+          </div>
+          <div class="d-event-card">
+            <div class="d-event-time-block" style="background:#e0f0e8"><div class="time" style="color:#4a7c59">16:00</div><div class="ampm">Sáb</div></div>
+            <div class="d-event-info">
+              <div class="d-event-name">Dentista</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stream 2: Notas -->
+        <div class="d-stream">
+          <div class="d-stream-header">
+            <div class="d-stream-title">📝 Notas</div>
+            <div class="d-stream-count">4</div>
+          </div>
+          <div class="d-card">
+            <div class="d-card-top">
+              <div class="d-card-title">Reunión con el cliente</div>
+              <div class="d-card-badge work">Trabajo</div>
+            </div>
+            <div class="d-card-body">Notas sobre la reunión del martes...</div>
+          </div>
+          <div class="d-card">
+            <div class="d-card-top">
+              <div class="d-card-title">Ideas para el aniversario</div>
+              <div class="d-card-badge personal">Personal</div>
+            </div>
+            <div class="d-card-body">Lista de ideas para celebrar...</div>
+          </div>
+          <div class="d-card">
+            <div class="d-card-top">
+              <div class="d-card-title">Cita médica 20/3</div>
+              <div class="d-card-badge health">Salud</div>
+            </div>
+            <div class="d-card-body"></div>
+          </div>
+          <div class="d-card">
+            <div class="d-card-top">
+              <div class="d-card-title">Restaurantes cena empresa</div>
+              <div class="d-card-badge work">Trabajo</div>
+            </div>
+            <div class="d-card-body">Opciones para el viernes...</div>
+          </div>
+        </div>
+
+        <!-- Stream 3: Tareas & Hábitos -->
+        <div class="d-stream">
+          <div class="d-stream-header">
+            <div class="d-stream-title">✅ Tareas</div>
+            <div class="d-stream-count">4</div>
+          </div>
+          <div class="d-todo-row">
+            <div class="d-todo-cb"></div>
+            <div class="d-todo-text">Revisar propuesta del cliente</div>
+            <div class="d-todo-when">Mañana</div>
+          </div>
+          <div class="d-todo-row">
+            <div class="d-todo-cb"></div>
+            <div class="d-todo-text">Hacer gráficos de finanzas</div>
+            <div class="d-todo-when">Hoy</div>
+          </div>
+          <div class="d-todo-row">
+            <div class="d-todo-cb done"></div>
+            <div class="d-todo-text done">Actualizar portfolio</div>
+            <div class="d-todo-when">Hoy</div>
+          </div>
+          <div class="d-todo-row" style="border-bottom:none;margin-bottom:16px">
+            <div class="d-todo-cb"></div>
+            <div class="d-todo-text">Revisar propuesta cliente</div>
+            <div class="d-todo-when">Mañana</div>
+          </div>
+
+          <div class="d-stream-header" style="margin-top:8px">
+            <div class="d-stream-title">💪 Hábitos</div>
+          </div>
+          <div class="d-habit-row">
+            <div class="d-habit-icon">🏋️</div>
+            <div class="d-habit-name">Entrenamiento</div>
+            <div class="d-habit-dots-row">
+              <div class="dhd done"></div><div class="dhd done"></div><div class="dhd done"></div><div class="dhd done"></div><div class="dhd"></div><div class="dhd"></div><div class="dhd"></div>
+            </div>
+          </div>
+          <div class="d-habit-row">
+            <div class="d-habit-icon">🧘</div>
+            <div class="d-habit-name">Meditar</div>
+            <div class="d-habit-dots-row">
+              <div class="dhd done"></div><div class="dhd done"></div><div class="dhd"></div><div class="dhd done"></div><div class="dhd"></div><div class="dhd"></div><div class="dhd"></div>
+            </div>
+          </div>
+          <div class="d-habit-row" style="border-bottom:none">
+            <div class="d-habit-icon">📖</div>
+            <div class="d-habit-name">Leer</div>
+            <div class="d-habit-dots-row">
+              <div class="dhd done"></div><div class="dhd"></div><div class="dhd"></div><div class="dhd"></div><div class="dhd"></div><div class="dhd"></div><div class="dhd"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stream 4: Finanzas -->
+        <div class="d-stream">
+          <div class="d-stream-header">
+            <div class="d-stream-title">💶 Finanzas</div>
+          </div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:6px">Presupuestos</div>
+          <div class="budget-bar-item">
+            <div class="bb-header"><span>🧺 Alimentación</span><span style="color:var(--red-expense)">424€ / 300€</span></div>
+            <div class="bb-track"><div class="bb-fill" style="width:100%;background:var(--red-expense)"></div></div>
+          </div>
+          <div class="budget-bar-item">
+            <div class="bb-header"><span>🏠 Vivienda</span><span style="color:#4a6fa5">590€ / 600€</span></div>
+            <div class="bb-track"><div class="bb-fill" style="width:98%;background:#4a6fa5"></div></div>
+          </div>
+          <div class="budget-bar-item" style="margin-bottom:16px">
+            <div class="bb-header"><span>🎮 Ocio</span><span style="color:#6b5aaa">40€ / 100€</span></div>
+            <div class="bb-track"><div class="bb-fill" style="width:40%;background:#6b5aaa"></div></div>
+          </div>
+
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:6px">Últimos movimientos</div>
+          <div class="d-fin-row">
+            <div class="d-fin-icon">🎵</div>
+            <div class="d-fin-detail"><div class="d-fin-name">Spotify</div><div class="d-fin-date">7 mar</div></div>
+            <div class="d-fin-amt neg">-10€</div>
+          </div>
+          <div class="d-fin-row">
+            <div class="d-fin-icon">🏠</div>
+            <div class="d-fin-detail"><div class="d-fin-name">Alquiler</div><div class="d-fin-date">8 mar</div></div>
+            <div class="d-fin-amt neg">-400€</div>
+          </div>
+          <div class="d-fin-row">
+            <div class="d-fin-icon">🍽️</div>
+            <div class="d-fin-detail"><div class="d-fin-name">Cena anoche</div><div class="d-fin-date">8 mar</div></div>
+            <div class="d-fin-amt neg">-16,8€</div>
+          </div>
+          <div class="d-fin-row" style="border-bottom:none">
+            <div class="d-fin-icon">💼</div>
+            <div class="d-fin-detail"><div class="d-fin-name">Nómina</div><div class="d-fin-date">3 mar</div></div>
+            <div class="d-fin-amt pos">+3.250€</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

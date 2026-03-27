@@ -1,0 +1,8 @@
+.card{
+    background: var(--background-subcolor);
+    border-radius: 10px;
+}
+
+.green{
+    border: 1px solid var(--green);
+}

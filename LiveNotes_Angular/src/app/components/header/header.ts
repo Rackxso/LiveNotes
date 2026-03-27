@@ -21,6 +21,8 @@ export class Header {
 
   @Input() name: string;
 
+  @Input() buttons: boolean = false;
+
   onVistaSeleccionada(vista: string): void {
     this.vistaSeleccionada.emit(vista);
   }

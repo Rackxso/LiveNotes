@@ -1,10 +1,12 @@
 <div id="cabecera">
     <h1 class="titulo">{{name}}</h1>
     <app-selector [vistas]="vistasPage" (vistaSeleccionada)="onVistaSeleccionada($event)"></app-selector>
+    @if(buttons){
     <div id="buttons">
         <app-secondary-button [config]="secondaryButton" (clicked)="secondaryClicked.emit()">
         </app-secondary-button>
         <app-primary-button [config]="primaryButton" (clicked)="primaryClicked.emit()">
         </app-primary-button>
     </div>
+    }
 </div>

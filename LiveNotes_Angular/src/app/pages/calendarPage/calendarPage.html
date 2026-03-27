@@ -4,7 +4,9 @@
   [primaryButton]="primaryButton()"
   [secondaryButton]="secondaryButton()"
   (vistaSeleccionada)="onVistaSeleccionada($event)"
-  (primaryClicked)="onPrimaryClicked()">
+  (primaryClicked)="onPrimaryClicked()"
+  [buttons]="true">
+  
 </app-header>
 <div class="cuerpo">
   <app-calendar></app-calendar>

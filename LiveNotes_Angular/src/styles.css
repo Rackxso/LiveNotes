@@ -15,6 +15,11 @@
 
     --fuente-texto: "Outfit", sans-serif;
     --fuente-titulo: "Fraunces", sans-serif;
+
+    --green: #5A8A60;
+    --red: #B85040;
+    --blue: #4A7FA5;
+    --purple: #7A5A8A;
 }
 
 .dark-theme {
