@@ -1,0 +1,18 @@
+.body{
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+}
+
+.cards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding-block: 15px;
+    margin: auto;
+    width: fit-content;
+}
+
+.progress{
+    padding-inline: 20px;
+    padding-bottom: 15px;
+}

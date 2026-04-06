@@ -1,7 +1,11 @@
 <div class="nota">
     <div class="slot1">
-        <h4>Movie night</h4>
-        <p>21:00</p>
+        <h4>{{ evento().titulo }}</h4>
+        @if (evento().hora) {
+            <p class="hora">{{ evento().hora }}</p>
+        }
     </div>
-    <div class="texto">Hola Hola Hola Hola Hola Hola  </div>
+    @if (evento().descripcion) {
+        <div class="descripcion">{{ evento().descripcion }}</div>
+    }
 </div>

@@ -1,0 +1,80 @@
+.bt-card {
+  background: #f5f0e8;
+  border-radius: 16px;
+  padding: 20px 24px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.bt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.bt-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #3a3530;
+  margin: 0;
+}
+
+
+.bt-item {
+  margin-bottom: 16px;
+}
+
+.bt-item:last-child {
+  margin-bottom: 0;
+}
+
+.bt-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.bt-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bt-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.bt-name {
+  font-size: 14px;
+  color: #3a3530;
+  margin: 0;
+}
+
+.bt-amounts {
+  font-size: 13px;
+}
+
+.bt-spent {
+  font-weight: 500;
+}
+
+.bt-budget {
+  color: #a09888;
+}
+
+.bt-track {
+  height: 5px;
+  background: #e8e0d0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.bt-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}

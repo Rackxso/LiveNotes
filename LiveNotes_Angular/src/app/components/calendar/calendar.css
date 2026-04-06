@@ -1,7 +1,11 @@
 .mes {
     background-color: var(--background-subcolor);
     padding-block: 10px;
+    padding-inline: 16px;
     border: 1px solid var(--primary-subcolor);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     & h3 {
         margin: 0;
@@ -9,6 +13,26 @@
         font-family: var(--fuente-titulo);
         font-size: 28px;
         color: var(--text-color);
+    }
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--accent-color);
+    font-size: 18px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.15s;
+
+    &:hover {
+        background-color: var(--secondary-background-color);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
     }
 }
 
@@ -31,12 +55,83 @@
 .dias {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 1fr);
 }
 
-.dia{
-    width: 200px;
+.dia {
     height: 150px;
     background-color: var(--background-subcolor);
     border: 1px solid var(--primary-subcolor);
+    padding: 6px;
+    box-sizing: border-box;
+
+    & .num-dia {
+        font-family: var(--fuente-texto);
+        font-size: 14px;
+        color: var(--text-color);
+    }
+
+    &.vacia {
+        background-color: var(--background-color);
+        opacity: 0.5;
+    }
+
+    &.hoy {
+        background-color: color-mix(in srgb, var(--primary-color) 15%, var(--background-subcolor));
+
+        & .num-dia {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            font-weight: 600;
+        }
+    }
+}
+
+/* ── SELECCIONADO ────────────────────────────────────────── */
+.dia {
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover:not(.vacia) {
+        background-color: color-mix(in srgb, var(--primary-color) 8%, var(--background-subcolor));
+    }
+
+    &.seleccionado {
+        background-color: color-mix(in srgb, var(--primary-color) 20%, var(--background-subcolor));
+        outline: 2px solid var(--primary-color);
+        outline-offset: -2px;
+    }
+}
+
+/* ── PILLS DE EVENTOS ────────────────────────────────────── */
+.pills {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 4px;
+}
+
+.pill {
+    font-family: var(--fuente-texto);
+    font-size: 11px;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 3px;
+    padding: 1px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.pill-mas {
+    border-left-color: var(--accent-subcolor);
+    color: var(--accent-color);
+    background: transparent;
 }

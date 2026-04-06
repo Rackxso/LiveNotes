@@ -1,17 +1,41 @@
 <div class="mes">
-    <h3>{{ mes }}</h3>
+    <button class="nav-btn" (click)="irAlMesAnterior()" aria-label="Mes anterior">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <h3>{{ nombreMes() }} {{ anyo() }}</h3>
+    <button class="nav-btn" (click)="irAlMesSiguiente()" aria-label="Mes siguiente">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
 </div>
-<div class="semana">
-    @for(dia of diasSemana; track $index){
-        <div class="diaSemana">
-            {{dia}}
-        </div>
+
+<div class="semana" role="row">
+    @for (dia of diasSemana; track $index) {
+        <div class="diaSemana" role="columnheader">{{ dia }}</div>
     }
 </div>
-<div class="dias">
-    @for(dia of diasMes; track $index){
-        <div class="dia">
-            {{dia}}
+
+<div class="dias" role="grid">
+    @for (vacia of celdasVacias(); track $index) {
+        <div class="dia vacia" role="gridcell" aria-hidden="true"></div>
+    }
+    @for (dia of diasMes(); track dia) {
+        <div class="dia"
+             role="gridcell"
+             [class.hoy]="esHoy(dia)"
+             [class.seleccionado]="esSeleccionado(dia)"
+             [attr.aria-label]="nombreMes() + ' ' + dia"
+             (click)="seleccionarDia(dia)">
+            <span class="num-dia">{{ dia }}</span>
+            <div class="pills">
+                @for (evento of eventosDeDia(dia); track evento.id) {
+                    @if ($index < 2) {
+                        <div class="pill">{{ evento.titulo }}</div>
+                    }
+                    @if ($index === 2) {
+                        <div class="pill pill-mas">+{{ eventosDeDia(dia).length - 2 }} more</div>
+                    }
+                }
+            </div>
         </div>
     }
 </div>

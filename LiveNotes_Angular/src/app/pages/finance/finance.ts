@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
 import { MoneyCard } from '../../components/commons/money-card/money-card';
+import { GoalProgress } from '../../components/commons/goal-progress/goal-progress';
 
 @Component({
   selector: 'app-finance',
-  imports: [Header, MoneyCard],
+  imports: [Header, MoneyCard, GoalProgress],
   templateUrl: './finance.html',
   styleUrl: './finance.css',
 })

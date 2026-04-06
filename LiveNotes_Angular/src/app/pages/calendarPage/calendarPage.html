@@ -1,14 +1,13 @@
-<app-header 
-  [vistasPage]="vistasPage()" 
-  [name]="nombreVista()"
-  [primaryButton]="primaryButton()"
-  [secondaryButton]="secondaryButton()"
-  (vistaSeleccionada)="onVistaSeleccionada($event)"
-  (primaryClicked)="onPrimaryClicked()"
-  [buttons]="true">
-  
+<app-header [vistasPage]="vistasPage()" [name]="nombreVista()" [primaryButton]="primaryButton()"
+  [secondaryButton]="secondaryButton()" (vistaSeleccionada)="onVistaSeleccionada($event)"
+  (primaryClicked)="onPrimaryClicked()" [buttons]="true">
 </app-header>
+
 <div class="cuerpo">
-  <app-calendar></app-calendar>
-  <app-eventos></app-eventos>
+  <app-calendar [eventos]="eventos()" [(diaSeleccionado)]="diaSeleccionado">
+  </app-calendar>
+
+  <app-eventos [diaSeleccionado]="diaSeleccionado()" [eventosDia]="eventosDia()" [eventosSemana]="eventosSemana()"
+    [eventosMes]="eventosMes()">
+  </app-eventos>
 </div>

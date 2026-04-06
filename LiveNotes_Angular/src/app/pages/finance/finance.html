@@ -1,6 +1,18 @@
 <app-header [name]="nombreVista()" [vistasPage]="vistasPage()" (vistaSeleccionada)="onVistaSeleccionada($event)"
     [buttons]="false"></app-header>
-<div class="cards">
-    <app-money-card />
-    
+<div class="body">
+    <div class="mainSection">
+        <div class="cards">
+            <app-money-card />
+            <app-money-card />
+            <app-money-card />
+        </div>
+        <div class="progress">
+            <app-goal-progress />
+        </div>
+    </div>
+
+    <div class="sideSection">
+        hola
+    </div>
 </div>

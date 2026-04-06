@@ -5,6 +5,7 @@
 
     display: block;
     height: 100%;
+    flex-shrink: 0;
 }
 
 @keyframes appear {
@@ -29,7 +30,6 @@
     flex-direction: column;
     border-radius: 0 16px 16px 0;
 
-
     .logo-area {
         display: grid;
         overflow: hidden;
@@ -48,8 +48,6 @@
         }
     }
 
-
-
     &.expanded {
         width: var(--sidebar-w);
 
@@ -63,12 +61,10 @@
             }
         }
     }
-
 }
 
 
 /* ── LOGO ────────────────────────────────────────────────── */
-
 
 .sidebar.expanded .logo-area {
     flex-direction: row;
@@ -84,8 +80,6 @@
     width: 28px;
     text-align: center;
 }
-
-
 
 .sidebar.expanded .logo-text {
     opacity: 1;
@@ -120,9 +114,6 @@
     }
 }
 
-
-
-
 /* ── NAV SECTION ─────────────────────────────────────────── */
 .nav-section {
     flex: 1;
@@ -145,7 +136,6 @@
     align-items: center;
     gap: 10px;
     padding-block: 10px;
-
     border-radius: 10px;
     cursor: pointer;
     color: var(--text-color);
@@ -168,7 +158,6 @@
 .nav-item i {
     font-size: 15px;
     width: 20px;
-
 }
 
 .nav-label {

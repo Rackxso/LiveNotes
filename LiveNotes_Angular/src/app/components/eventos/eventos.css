@@ -30,9 +30,12 @@
 
 .cuerpo {
     background: var(--background-subcolor);
-    
+    padding-inline: 10px;
     h4,
     p {
         margin: 0;
+    }
+    .eventoItem{
+        padding-inline: 10px;
     }
 }
