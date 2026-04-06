@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ButtonConfig } from '../models/primary-button.model';
+import { ButtonConfig } from '../../../model/primary-button.model';
 import { Router } from '@angular/router';
 
 

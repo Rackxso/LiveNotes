@@ -1,0 +1,7 @@
+.body{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.side{
+    border: 1px solid var(--primary-subcolor);
+}
