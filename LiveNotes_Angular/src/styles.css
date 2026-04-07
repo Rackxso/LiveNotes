@@ -47,3 +47,27 @@ p{
     color: var(--text-color);
     font-family: var(--fuente-texto);
 }
+
+.addBlank{
+    border: 2px dashed var(--primary-color);
+    border-radius: 10px;
+    padding: 10px 10px;
+    display: flex;
+    justify-content: center;
+    margin-block: 10px;
+    cursor: pointer;
+    & p{
+        color: var(--text-subcolor);
+    }
+
+    &:hover{
+        background: var(--secondary-background-color);
+    }
+
+    &:active{
+        background: var(--primary-color);
+        p{
+            color: var(--background-color);
+        }
+    }
+}

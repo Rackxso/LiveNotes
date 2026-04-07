@@ -1,30 +1,32 @@
 <div class="header">
     <div class="texto">
-        <h4>{{eventosDia[0].fecha | eventsTitlePipe }}</h4>
-        <p>{{eventosDia.length}} Event </p>
+        <h4>{{ diaSeleccionado() | eventsTitlePipe }}</h4>
+        <p>{{ eventosDia().length }} Event</p>
     </div>
 </div>
 <div class="cuerpo">
     <p>Events this day</p>
-    @if(eventosDia.length > 0){
-        @for (ev of eventosDia; track $index) {
-            <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
-        }
-    }@else{
-        
+    @if(eventosDia().length > 0){
+    @for (ev of eventosDia(); track $index) {
+    <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
     }
+    }
+    <div class="addBlank" (click)="addEventoDia.emit()">
+        <p>Add Event</p>
+    </div>
+
     <p>Events this week</p>
-    @if(eventosSemana.length > 0){
-        @for (ev of eventosSemana; track $index) {
-            <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
-        }
-    }@else{
+    @if(eventosSemana().length > 0){
+    @for (ev of eventosSemana(); track $index) {
+    <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
     }
+    }
+
     <p>Events this month</p>
-    @if(eventosMes.length > 0){
-        @for (ev of eventosMes; track $index) {
-            <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
-        }
-    }@else{
+    @if(eventosMes().length > 0){
+    @for (ev of eventosMes(); track $index) {
+    <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
+
+    }
     }
 </div>

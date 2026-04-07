@@ -19,4 +19,9 @@ export class EventosService {
 
 
   readonly eventos = this._eventos.asReadonly();
+
+  addEvento(evento: Omit<Evento, 'id'>): void {
+    const nuevoId = Math.max(...this._eventos().map(e => e.id)) + 1;
+    this._eventos.update(eventos => [...eventos, { id: nuevoId, ...evento }]);
+  }
 }

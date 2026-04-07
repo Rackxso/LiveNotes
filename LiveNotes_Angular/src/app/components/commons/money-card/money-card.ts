@@ -3,7 +3,7 @@ import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-money-card',
-  imports: [CommonModule, CurrencyPipe],
+  imports: [CommonModule],
   templateUrl: './money-card.html',
   styleUrl: './money-card.css',
 })

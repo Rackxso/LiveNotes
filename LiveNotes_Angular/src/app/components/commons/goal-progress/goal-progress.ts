@@ -11,7 +11,7 @@ interface Goal {
 
 @Component({
   selector: 'app-goal-progress',
-  imports: [NgFor, NgStyle, NgClass, PrimaryButton],
+  imports: [NgStyle, PrimaryButton],
   templateUrl: './goal-progress.html',
   styleUrl: './goal-progress.css',
 })

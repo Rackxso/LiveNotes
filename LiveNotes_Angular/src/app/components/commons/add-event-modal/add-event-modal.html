@@ -1,0 +1,37 @@
+<!-- add-event-modal.html -->
+<div class="overlay" (click)="onCerrar()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2>New event</h2>
+      <button class="close-btn" (click)="onCerrar()">✕</button>
+    </div>
+
+    <div class="field">
+      <label>Title</label>
+      <input type="text" [(ngModel)]="titulo" placeholder="Add title" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Date</label>
+        <input type="date" [(ngModel)]="fecha" />
+      </div>
+      <div class="field">
+        <label>Time</label>
+        <input type="time" [(ngModel)]="hora" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <textarea [(ngModel)]="descripcion" placeholder="Add description (optional)"></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="onCerrar()">Cancel</button>
+      <button class="btn-save" (click)="onGuardar()">Save event</button>
+    </div>
+
+  </div>
+</div>

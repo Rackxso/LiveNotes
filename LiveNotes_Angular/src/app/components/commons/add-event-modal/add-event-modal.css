@@ -1,0 +1,150 @@
+/* add-event-modal.css */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--text-color) 40%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--background-color);
+  border: 1px solid var(--primary-subcolor);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 460px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-button);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.modal-header h2 {
+  font-family: var(--fuente-titulo);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-subcolor);
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--text-color);
+  }
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  font-family: var(--fuente-texto);
+  font-size: 13px;
+  color: var(--text-subcolor);
+  margin-bottom: 4px;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--background-subcolor);
+  border: 1px solid var(--primary-subcolor);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  color: var(--text-color);
+  box-shadow: var(--shadow-soket);
+  outline: none;
+  transition: border-color 0.15s;
+
+  &:focus {
+    border-color: var(--accent-color);
+  }
+
+  &::placeholder {
+    color: var(--text-subcolor);
+    opacity: 0.6;
+  }
+}
+
+.field textarea {
+  height: 72px;
+  resize: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--primary-subcolor);
+}
+
+.btn-cancel {
+  background: none;
+  border: 1px solid var(--primary-subcolor);
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  color: var(--text-subcolor);
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--secondary-background-color);
+  }
+
+  &:active {
+    background: var(--primary-subcolor);
+  }
+}
+
+.btn-save {
+  background: var(--primary-color);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 20px;
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--background-color);
+  cursor: pointer;
+  box-shadow: var(--shadow-button);
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--accent-subcolor);
+  }
+
+  &:active {
+    background: var(--accent-color);
+  }
+}

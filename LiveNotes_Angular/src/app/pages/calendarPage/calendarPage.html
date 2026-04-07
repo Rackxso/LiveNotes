@@ -1,13 +1,29 @@
-<app-header [vistasPage]="vistasPage()" [name]="nombreVista()" [primaryButton]="primaryButton()"
-  [secondaryButton]="secondaryButton()" (vistaSeleccionada)="onVistaSeleccionada($event)"
-  (primaryClicked)="onPrimaryClicked()" [buttons]="true">
+<app-header 
+  [vistasPage]="vistasPage()" 
+  [name]="nombreVista()" 
+  [primaryButton]="primaryButton()"
+  [secondaryButton]="secondaryButton()" 
+  (vistaSeleccionada)="onVistaSeleccionada($event)"
+  (primaryClicked)="onPrimaryClicked()" 
+  [buttons]="true">
 </app-header>
 
 <div class="cuerpo">
-  <app-calendar [eventos]="eventos()" [(diaSeleccionado)]="diaSeleccionado">
+  <app-calendar [eventos]="eventos()" [diaSeleccionado]="diaSeleccionado()"
+    (diaSeleccionadoChange)="onDiaSeleccionado($event)">
   </app-calendar>
 
-  <app-eventos [diaSeleccionado]="diaSeleccionado()" [eventosDia]="eventosDia()" [eventosSemana]="eventosSemana()"
-    [eventosMes]="eventosMes()">
-  </app-eventos>
+  <app-eventos 
+    [diaSeleccionado]="diaSeleccionado()" 
+    [eventosDia]="eventosDia()"
+    [eventosSemana]="eventosSemana()" 
+    [eventosMes]="eventosMes()"
+    (addEventoDia)="abrirModalDia()"/>
 </div>
+
+@if(modalAbierto()){
+  <app-add-event-modal
+    [fechaInicial]="fechaModal()"
+    (cerrar)="cerrarModal()"
+    (guardar)="onGuardarEvento($event)"/>
+}
