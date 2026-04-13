@@ -1,3 +1,10 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
 .mes {
     background-color: var(--background-subcolor);
     padding-block: 10px;
@@ -55,14 +62,23 @@
 .dias {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(var(--filas), 1fr);
+    flex: 1;
+    min-height: 0;
+    max-height: calc(100dvh - 61px); 
+    overflow: hidden;
 }
 
 .dia {
-    height: 150px;
     background-color: var(--background-subcolor);
     border: 1px solid var(--primary-subcolor);
     padding: 6px;
     box-sizing: border-box;
+    overflow: hidden;
+    min-height: 0;
+    
+    cursor: pointer;
+    transition: background 0.15s;
 
     & .num-dia {
         font-family: var(--fuente-texto);
@@ -73,6 +89,10 @@
     &.vacia {
         background-color: var(--background-subcolor);
         opacity: 0.5;
+    }
+
+    &:hover:not(.vacia) {
+        background-color: color-mix(in srgb, var(--primary-color) 8%, var(--background-subcolor));
     }
 
     &.hoy {
@@ -90,16 +110,6 @@
             font-weight: 600;
         }
     }
-}
-
-/* ── SELECCIONADO ────────────────────────────────────────── */
-.dia {
-    cursor: pointer;
-    transition: background 0.15s;
-
-    &:hover:not(.vacia) {
-        background-color: color-mix(in srgb, var(--primary-color) 8%, var(--background-subcolor));
-    }
 
     &.seleccionado {
         background-color: color-mix(in srgb, var(--primary-color) 20%, var(--background-subcolor));
@@ -108,7 +118,6 @@
     }
 }
 
-/* ── PILLS DE EVENTOS ────────────────────────────────────── */
 .pills {
     display: flex;
     flex-direction: column;
@@ -128,10 +137,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-}
 
-.pill-mas {
-    border-left-color: var(--accent-subcolor);
-    color: var(--accent-color);
-    background: transparent;
+    &.pill-mas {
+        border-left-color: var(--accent-subcolor);
+        color: var(--accent-color);
+        background: transparent;
+    }
 }

@@ -6,6 +6,7 @@
     display: block;
     height: 100%;
     flex-shrink: 0;
+    overflow: hidden;
 }
 
 @keyframes appear {
@@ -22,6 +23,7 @@
 .sidebar {
     width: var(--sidebar-collapsed);
     height: 100%;
+    box-sizing: border-box;
     background: var(--primary-color);
     padding: 16px 0 20px;
     transition: width 0.4s var(--ease);
@@ -36,6 +38,7 @@
         white-space: nowrap;
         margin-top: 10px;
         justify-content: center;
+
         .logo-text {
             font-family: var(--fuente-titulo);
             font-size: 20px;

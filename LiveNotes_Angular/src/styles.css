@@ -48,6 +48,13 @@ p{
     font-family: var(--fuente-texto);
 }
 
+router-outlet + * {
+    display: flex;
+    flex-direction: column;
+    height: calc(100dvh - 61px);
+    overflow: hidden;
+}
+
 .addBlank{
     border: 2px dashed var(--primary-color);
     border-radius: 10px;

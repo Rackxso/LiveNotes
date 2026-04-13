@@ -14,7 +14,7 @@
     }
 </div>
 
-<div class="dias" role="grid">
+<div class="dias" role="grid" [style.--filas]="filas()">
     @for (vacia of celdasVacias(); track $index) {
         <div class="dia vacia" role="gridcell" aria-hidden="true"></div>
     }

@@ -1,17 +1,17 @@
 :host {
-  display: block;
-  height: 100vh;
-  overflow: hidden;
+    display: block;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 .app-shell {
-  display: flex;
-  height: 100%;
-  overflow: hidden;
+    display: flex;
+    height: 100%;
+    overflow: hidden;
 }
 
 .app-main {
-  flex: 1;
-  overflow: auto;
-  min-width: 0;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }

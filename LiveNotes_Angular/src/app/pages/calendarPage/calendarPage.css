@@ -1,4 +1,17 @@
-.cuerpo{
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cuerpo {
     display: grid;
     grid-template-columns: 3fr 1fr;
+    height: calc(100dvh - 61px);
+    overflow: hidden;
+}
+app-calendar {
+    min-height: 0;  /* ← añade esto */
+    height: 100%;   /* ← añade esto */
+    overflow: hidden auto;
 }

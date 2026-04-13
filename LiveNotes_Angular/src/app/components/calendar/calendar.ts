@@ -13,6 +13,11 @@ export class Calendar {
 
   private readonly today = new Date();
 
+  filas = computed(() => {
+    const totalCeldas = this.celdasVacias().length + this.diasMes().length;
+    return Math.ceil(totalCeldas / 7);
+  });
+
   // Inputs
   readonly eventos = input<Evento[]>([]);
   readonly diaSeleccionado = input<Date>(new Date());
