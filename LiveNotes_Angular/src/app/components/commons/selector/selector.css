@@ -44,13 +44,5 @@
         right: anchor(right);
         bottom: anchor(bottom);
         z-index: 0;
-        /* Sin transición por defecto — el resize no la dispara */
-
-        &.is-animating {
-            transition: top 0.2s ease-in-out,
-                        left 0.2s ease-in-out,
-                        right 0.2s ease-in-out,
-                        bottom 0.2s ease-in-out;
-        }
     }
 }

@@ -11,7 +11,7 @@
 
     <nav class="nav-section">
 
-        @for (item of mainNav; track item.route) {
+        @for (item of mainNav(); track item.route) {
             <a class="nav-item"
                [routerLink]="item.route"
                routerLinkActive="active"
@@ -23,7 +23,7 @@
 
         <div class="divider"></div>
 
-        @for (item of secondaryNav; track item.route) {
+        @for (item of secondaryNav(); track item.route) {
             <a class="nav-item"
                [routerLink]="item.route"
                routerLinkActive="active"
@@ -34,6 +34,8 @@
         }
 
     </nav>
+
+    <app-lang-selector />
 
     <div class="user-area">
         <div class="user-card">

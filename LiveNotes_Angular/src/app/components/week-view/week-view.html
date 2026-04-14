@@ -1,0 +1,55 @@
+<div class="vista-header">
+  <button class="nav-btn" (click)="irASemanaAnterior()" [attr.aria-label]="t()('week.prevWeek')">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+  <h3>{{ nombreSemana() }}</h3>
+  <button class="nav-btn" (click)="irASemanaSiguiente()" [attr.aria-label]="t()('week.nextWeek')">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</div>
+
+<div class="columnas-header" role="row">
+  <div class="gutter-header" aria-hidden="true"></div>
+  @for (dia of diasDeSemana(); track $index) {
+    <div class="dia-header"
+         role="columnheader"
+         [class.hoy]="esHoy(dia)"
+         [class.seleccionado]="esSeleccionado(dia)"
+         [attr.aria-label]="diasSemana()[$index] + ' ' + dia.getDate()"
+         (click)="seleccionarDia(dia)">
+      <span class="dia-nombre">{{ diasSemana()[$index] }}</span>
+      <span class="dia-num">{{ dia.getDate() }}</span>
+    </div>
+  }
+</div>
+
+@if (hayEventosSinHora()) {
+  <div class="todo-el-dia-fila" role="row" aria-label="All-day events">
+    <div class="all-day-label" aria-hidden="true">{{ t()('calendar.allDay') }}</div>
+    @for (dia of diasDeSemana(); track $index) {
+      <div class="all-day-cell" role="gridcell">
+        @for (evento of eventosSinHoraDia(dia); track evento.id) {
+          <div class="pill">{{ evento.titulo }}</div>
+        }
+      </div>
+    }
+  </div>
+}
+
+<div class="scroll-area">
+  <div class="time-grid" role="grid" [attr.aria-label]="'Week of ' + nombreSemana()">
+    @for (hora of horas; track hora) {
+      <div class="time-label" aria-hidden="true">{{ formatHora(hora) }}</div>
+      @for (dia of diasDeSemana(); track $index) {
+        <div class="time-cell"
+             role="gridcell"
+             [class.hoy]="esHoy(dia)"
+             [attr.aria-label]="formatHora(hora) + ' ' + diasSemana()[$index] + ' ' + dia.getDate()">
+          @for (evento of eventosDeDiaHora(dia, hora); track evento.id) {
+            <app-event-card [evento]="evento" />
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

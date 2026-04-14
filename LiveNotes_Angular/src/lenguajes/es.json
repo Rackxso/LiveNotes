@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "notes": "Notas",
+    "calendar": "Calendario",
+    "messages": "Mensajes",
+    "settings": "Ajustes",
+    "help": "Ayuda"
+  },
+  "calendar": {
+    "pageTitle": "Calendario",
+    "addEvent": "Añadir evento",
+    "today": "Hoy",
+    "allDay": "Todo el día",
+    "more": "más",
+    "views": {
+      "month": "Mes",
+      "week": "Semana",
+      "day": "Día"
+    }
+  },
+  "modal": {
+    "newEvent": "Nuevo evento",
+    "title": "Título",
+    "titlePlaceholder": "Añadir título",
+    "date": "Fecha",
+    "time": "Hora",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Añadir descripción (opcional)",
+    "cancel": "Cancelar",
+    "saveEvent": "Guardar evento"
+  },
+  "eventos": {
+    "thisDay": "Eventos de hoy",
+    "thisWeek": "Eventos de esta semana",
+    "thisMonth": "Eventos de este mes",
+    "addEvent": "Añadir evento",
+    "event_one": "Evento",
+    "event_other": "Eventos"
+  },
+  "week": {
+    "prevWeek": "Semana anterior",
+    "nextWeek": "Semana siguiente"
+  },
+  "day": {
+    "prevDay": "Día anterior",
+    "nextDay": "Día siguiente"
+  },
+  "finance": {
+    "pageTitle": "Finanzas",
+    "budgetTracker": "Seguimiento presupuesto",
+    "add": "Añadir",
+    "views": {
+      "overview": "Resumen",
+      "transactions": "Transacciones",
+      "savings": "Ahorros"
+    }
+  },
+  "notes": {
+    "pageTitle": "Notas"
+  },
+  "lang": {
+    "selector": "Idioma",
+    "en": "EN",
+    "es": "ES"
+  }
+}

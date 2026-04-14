@@ -1,7 +1,7 @@
 <div class="bt-card">
     <div class="bt-header">
-        <p class="bt-title">Budget tracker</p>
-        <app-primary-button [config]="primaryButton" />
+        <p class="bt-title">{{ t()('finance.budgetTracker') }}</p>
+        <app-primary-button [config]="primaryButton()" />
     </div>
 
     @for (goal of goals; track $index) {

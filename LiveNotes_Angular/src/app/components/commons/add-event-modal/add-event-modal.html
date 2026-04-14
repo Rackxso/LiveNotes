@@ -3,34 +3,34 @@
   <div class="modal" (click)="$event.stopPropagation()">
 
     <div class="modal-header">
-      <h2>New event</h2>
+      <h2>{{ t()('modal.newEvent') }}</h2>
       <button class="close-btn" (click)="onCerrar()">✕</button>
     </div>
 
     <div class="field">
-      <label>Title</label>
-      <input type="text" [(ngModel)]="titulo" placeholder="Add title" />
+      <label>{{ t()('modal.title') }}</label>
+      <input type="text" [(ngModel)]="titulo" [placeholder]="t()('modal.titlePlaceholder')" />
     </div>
 
     <div class="row">
       <div class="field">
-        <label>Date</label>
+        <label>{{ t()('modal.date') }}</label>
         <input type="date" [(ngModel)]="fecha" />
       </div>
       <div class="field">
-        <label>Time</label>
+        <label>{{ t()('modal.time') }}</label>
         <input type="time" [(ngModel)]="hora" />
       </div>
     </div>
 
     <div class="field">
-      <label>Description</label>
-      <textarea [(ngModel)]="descripcion" placeholder="Add description (optional)"></textarea>
+      <label>{{ t()('modal.description') }}</label>
+      <textarea [(ngModel)]="descripcion" [placeholder]="t()('modal.descriptionPlaceholder')"></textarea>
     </div>
 
     <div class="modal-footer">
-      <button class="btn-cancel" (click)="onCerrar()">Cancel</button>
-      <button class="btn-save" (click)="onGuardar()">Save event</button>
+      <button class="btn-cancel" (click)="onCerrar()">{{ t()('modal.cancel') }}</button>
+      <button class="btn-save" (click)="onGuardar()">{{ t()('modal.saveEvent') }}</button>
     </div>
 
   </div>

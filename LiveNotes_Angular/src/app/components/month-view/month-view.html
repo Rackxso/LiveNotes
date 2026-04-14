@@ -9,7 +9,7 @@
 </div>
 
 <div class="semana" role="row">
-    @for (dia of diasSemana; track $index) {
+    @for (dia of diasSemana(); track $index) {
         <div class="diaSemana" role="columnheader">{{ dia }}</div>
     }
 </div>
@@ -32,7 +32,7 @@
                         <div class="pill">{{ evento.titulo }}</div>
                     }
                     @if ($index === 2) {
-                        <div class="pill pill-mas">+{{ eventosDeDia(dia).length - 2 }} more</div>
+                        <div class="pill pill-mas">+{{ eventosDeDia(dia).length - 2 }} {{ t()('calendar.more') }}</div>
                     }
                 }
             </div>

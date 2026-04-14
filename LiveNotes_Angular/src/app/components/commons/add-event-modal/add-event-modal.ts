@@ -1,16 +1,19 @@
-// add-event-modal.ts
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Evento } from '../../../model/evento.model';
-
+import { I18nService } from '../../../services/i18n.service';
 
 @Component({
   selector: 'app-add-event-modal',
   imports: [FormsModule],
   templateUrl: './add-event-modal.html',
   styleUrl: './add-event-modal.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEventModal {
+  private readonly i18n = inject(I18nService);
+  readonly t = this.i18n.t;
+
   readonly fechaInicial = input<Date | null>(null);
   readonly cerrar = output<void>();
   readonly guardar = output<Omit<Evento, 'id'>>();

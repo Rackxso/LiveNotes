@@ -1,17 +1,36 @@
-<app-header 
-  [vistasPage]="vistasPage()" 
-  [name]="nombreVista()" 
+<app-header
+  [vistasPage]="vistasPage()"
+  [vistaActiva]="vistaActivaTraducida()"
+  [name]="nombreVista()"
   [primaryButton]="primaryButton()"
-  [secondaryButton]="secondaryButton()" 
+  [secondaryButton]="secondaryButton()"
   (vistaSeleccionada)="onVistaSeleccionada($event)"
-  (primaryClicked)="onPrimaryClicked()" 
+  (primaryClicked)="onPrimaryClicked()"
   [buttons]="true">
 </app-header>
 
 <div class="cuerpo">
-  <app-calendar [eventos]="eventos()" [diaSeleccionado]="diaSeleccionado()"
-    (diaSeleccionadoChange)="onDiaSeleccionado($event)">
-  </app-calendar>
+  @switch (vistaActual()) {
+    @case ('Week') {
+      <app-week-view
+        [eventos]="eventos()"
+        [diaSeleccionado]="diaSeleccionado()"
+        (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+      </app-week-view>
+    }
+    @case ('Day') {
+      <app-day-view
+        [eventos]="eventos()"
+        [diaSeleccionado]="diaSeleccionado()"
+        (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+      </app-day-view>
+    }
+    @default {
+      <app-month-view [eventos]="eventos()" [diaSeleccionado]="diaSeleccionado()"
+        (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+      </app-month-view>
+    }
+  }
 
   <app-eventos 
     [diaSeleccionado]="diaSeleccionado()" 

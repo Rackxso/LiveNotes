@@ -1,0 +1,35 @@
+<div class="vista-header">
+  <button class="nav-btn" (click)="irAlDiaAnterior()" [attr.aria-label]="t()('day.prevDay')">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+  <h3 [class.hoy]="esHoy()">{{ nombreDia() }}</h3>
+  <button class="nav-btn" (click)="irAlDiaSiguiente()" [attr.aria-label]="t()('day.nextDay')">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</div>
+
+@if (eventosSinHora().length > 0) {
+  <div class="todo-el-dia" role="region" [attr.aria-label]="t()('calendar.allDay')">
+    <div class="all-day-label" aria-hidden="true">{{ t()('calendar.allDay') }}</div>
+    <div class="all-day-events">
+      @for (evento of eventosSinHora(); track evento.id) {
+        <app-event-card [evento]="evento" />
+      }
+    </div>
+  </div>
+}
+
+<div class="scroll-area">
+  <div class="time-grid" role="grid" [attr.aria-label]="nombreDia()">
+    @for (hora of horas; track hora) {
+      <div class="time-label" aria-hidden="true">{{ formatHora(hora) }}</div>
+      <div class="time-cell"
+           role="gridcell"
+           [attr.aria-label]="formatHora(hora)">
+        @for (evento of eventosDeHora(hora); track evento.id) {
+          <app-event-card [evento]="evento" />
+        }
+      </div>
+    }
+  </div>
+</div>

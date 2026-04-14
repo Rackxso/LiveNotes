@@ -1,3 +1,10 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+}
+
 .header {
     max-height: 84px;
     height: 83px;
@@ -31,6 +38,10 @@
 .cuerpo {
     background: var(--background-subcolor);
     padding-inline: 10px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
     h4,
     p {
         margin: 0;

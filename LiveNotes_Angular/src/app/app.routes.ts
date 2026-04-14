@@ -6,7 +6,15 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/home/home').then(m => m.Home)
     },
     {
-        path: "calendar",
+        path: "calendar/month",
+        loadComponent: () => import('./pages/calendarPage/calendarPage').then(m => m.CalendarPage)
+    },
+    {
+        path: "calendar/week",
+        loadComponent: () => import('./pages/calendarPage/calendarPage').then(m => m.CalendarPage)
+    },
+    {
+        path: "calendar/day",
         loadComponent: () => import('./pages/calendarPage/calendarPage').then(m => m.CalendarPage)
     },
     {

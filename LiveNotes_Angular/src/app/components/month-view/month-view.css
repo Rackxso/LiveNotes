@@ -65,7 +65,7 @@
     grid-template-rows: repeat(var(--filas), 1fr);
     flex: 1;
     min-height: 0;
-    max-height: calc(100dvh - 61px); 
+    max-height: calc(100dvh - 61px);
     overflow: hidden;
 }
 
@@ -76,7 +76,7 @@
     box-sizing: border-box;
     overflow: hidden;
     min-height: 0;
-    
+
     cursor: pointer;
     transition: background 0.15s;
 

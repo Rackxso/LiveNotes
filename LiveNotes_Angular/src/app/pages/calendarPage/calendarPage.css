@@ -10,8 +10,26 @@
     height: calc(100dvh - 61px);
     overflow: hidden;
 }
-app-calendar {
-    min-height: 0;  /* ← añade esto */
-    height: 100%;   /* ← añade esto */
-    overflow: hidden auto;
+app-month-view {
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+app-week-view {
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+app-day-view {
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+app-eventos {
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
 }

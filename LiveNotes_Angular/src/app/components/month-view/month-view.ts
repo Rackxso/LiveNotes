@@ -1,22 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { Evento } from '../../model/evento.model';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
-  selector: 'app-calendar',
+  selector: 'app-month-view',
   imports: [],
-  templateUrl: './calendar.html',
-  styleUrl: './calendar.css',
+  templateUrl: './month-view.html',
+  styleUrl: './month-view.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Calendar {
-  readonly diasSemana = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export class MonthView {
+  private readonly i18n = inject(I18nService);
+  readonly t = this.i18n.t;
 
   private readonly today = new Date();
-
-  filas = computed(() => {
-    const totalCeldas = this.celdasVacias().length + this.diasMes().length;
-    return Math.ceil(totalCeldas / 7);
-  });
 
   // Inputs
   readonly eventos = input<Evento[]>([]);
@@ -28,9 +25,25 @@ export class Calendar {
   readonly anyo = signal<number>(this.today.getFullYear());
   readonly mes = signal<number>(this.today.getMonth());
 
+  /** Días de la semana localizados (Dom/Sun, Lun/Mon, …) */
+  readonly diasSemana = computed<string[]>(() => {
+    const locale = this.i18n.locale();
+    const base = new Date(2006, 0, 1); // 1 ene 2006 era domingo
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(base);
+      d.setDate(base.getDate() + i);
+      return d.toLocaleDateString(locale, { weekday: 'short' });
+    });
+  });
+
   readonly nombreMes = computed(() =>
-    new Date(this.anyo(), this.mes(), 1).toLocaleString('en-US', { month: 'long' })
+    new Date(this.anyo(), this.mes(), 1).toLocaleString(this.i18n.locale(), { month: 'long' })
   );
+
+  readonly filas = computed(() => {
+    const totalCeldas = this.celdasVacias().length + this.diasMes().length;
+    return Math.ceil(totalCeldas / 7);
+  });
 
   private readonly diasEnMes = computed(() =>
     new Date(this.anyo(), this.mes() + 1, 0).getDate()
@@ -60,7 +73,6 @@ export class Calendar {
       this.anyo() === sel.getFullYear();
   };
 
-  /** Devuelve los eventos de un día concreto del mes visible */
   readonly eventosDeDia = (dia: number): Evento[] =>
     this.eventos().filter(e =>
       e.fecha.getDate() === dia &&

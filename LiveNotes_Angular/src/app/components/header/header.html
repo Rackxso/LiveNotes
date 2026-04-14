@@ -1,7 +1,11 @@
 <div id="cabecera">
     <h1 class="titulo">{{name}}</h1>
     @if(vistasPage.length > 0){
-        <app-selector [vistas]="vistasPage" (vistaSeleccionada)="onVistaSeleccionada($event)"></app-selector>
+        <app-selector
+            [vistas]="vistasPage"
+            [vistaActiva]="vistaActiva"
+            (vistaSeleccionada)="onVistaSeleccionada($event)">
+        </app-selector>
     }   
     @if(buttons){
     <div id="buttons">

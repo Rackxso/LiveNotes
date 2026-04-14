@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat /c/Users/ourena/proyecto/LiveNotes/LiveNotes_Angular/src/app/pages/notes/*.ts)"
+    ]
+  }
+}

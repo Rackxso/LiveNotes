@@ -1,0 +1,120 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.vista-header {
+  background-color: var(--background-subcolor);
+  padding-block: 10px;
+  padding-inline: 16px;
+  border: 1px solid var(--primary-subcolor);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & h3 {
+    margin: 0;
+    text-align: center;
+    font-family: var(--fuente-titulo);
+    font-size: 22px;
+    color: var(--text-color);
+
+    &.hoy {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--accent-color);
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.15s;
+
+  &:hover {
+    background-color: var(--secondary-background-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+}
+
+.todo-el-dia {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  border: 1px solid var(--primary-subcolor);
+  border-top: none;
+  min-height: 40px;
+  overflow-y: scroll;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    background: transparent;
+  }
+}
+
+.all-day-label {
+  font-family: var(--fuente-texto);
+  font-size: 11px;
+  color: var(--text-subcolor);
+  text-align: right;
+  padding-right: 8px;
+  padding-top: 6px;
+  border-right: 1px solid var(--primary-subcolor);
+  background: var(--background-subcolor);
+  box-sizing: border-box;
+}
+
+.all-day-events {
+  background: var(--background-subcolor);
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scroll-area {
+  flex: 1;
+  overflow-y: scroll;
+  min-height: 0;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-auto-rows: 60px;
+}
+
+.time-label {
+  font-family: var(--fuente-texto);
+  font-size: 11px;
+  color: var(--text-subcolor);
+  text-align: right;
+  padding-right: 8px;
+  padding-top: 4px;
+  border-right: 1px solid var(--primary-subcolor);
+  border-bottom: 1px solid var(--primary-subcolor);
+  background: var(--background-subcolor);
+  position: sticky;
+  left: 0;
+  box-sizing: border-box;
+}
+
+.time-cell {
+  border-bottom: 1px solid var(--primary-subcolor);
+  padding: 4px 8px;
+  overflow: hidden;
+  background: var(--background-subcolor);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+}

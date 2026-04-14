@@ -1,7 +1,10 @@
 <div class="menu">
     <div class="highlight"></div>
-    <div class="active" (click)="cambiarvista($event)">{{vistas[0]}}</div>
-    @for (vista of vistas.slice(1); track $index) {
-        <div (click)="cambiarvista($event)">{{ vista }}</div>
+    @for (vista of vistas; track vista) {
+        <div
+            [class.active]="vista === (vistaActivaLocal || vistaActiva || vistas[0])"
+            (click)="cambiarvista(vista)">
+            {{ vista }}
+        </div>
     }
 </div>

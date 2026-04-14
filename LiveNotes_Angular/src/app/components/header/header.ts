@@ -11,6 +11,7 @@ import { SecondaryButton } from '../commons/secondary-button/secondary-button';
 })
 export class Header {
   @Input() vistasPage: string[] = [];
+  @Input() vistaActiva: string | null = null;
   @Output() vistaSeleccionada = new EventEmitter<string>();
 
   @Input() primaryButton: { texto: string; url: string } = { texto: '', url: '' };

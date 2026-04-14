@@ -1,0 +1,16 @@
+<div class="lang-selector" role="group" [attr.aria-label]="t()('lang.selector')">
+  <button
+    class="lang-btn"
+    [class.active]="lang() === 'en'"
+    (click)="setLang('en')"
+    [attr.aria-pressed]="lang() === 'en'">
+    {{ t()('lang.en') }}
+  </button>
+  <button
+    class="lang-btn"
+    [class.active]="lang() === 'es'"
+    (click)="setLang('es')"
+    [attr.aria-pressed]="lang() === 'es'">
+    {{ t()('lang.es') }}
+  </button>
+</div>
