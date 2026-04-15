@@ -1,0 +1,36 @@
+<div class="mc-head">
+  <button class="mc-nav" (click)="irAlMesAnterior()" aria-label="Previous month">
+    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+  </button>
+  <span class="mc-month">{{ nombreMes() }} {{ anyo() }}</span>
+  <button class="mc-nav" (click)="irAlMesSiguiente()" aria-label="Next month">
+    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+  </button>
+</div>
+
+<div class="mc-week-headers" role="row">
+  @for (d of diasSemana(); track $index) {
+    <div class="mc-dow" role="columnheader">{{ d }}</div>
+  }
+</div>
+
+<div class="mc-grid" role="grid">
+  @for (v of celdasVacias(); track $index) {
+    <div class="mc-cell mc-empty" role="gridcell" aria-hidden="true"></div>
+  }
+  @for (dia of diasMes(); track dia) {
+    <button
+      class="mc-cell mc-day"
+      [class.mc-today]="esHoy(dia)"
+      [class.mc-selected]="!esHoy(dia) && esSeleccionado(dia)"
+      role="gridcell"
+      (click)="seleccionarDia(dia)"
+      [attr.aria-label]="nombreMes() + ' ' + dia"
+      [attr.aria-pressed]="esSeleccionado(dia)">
+      <span>{{ dia }}</span>
+      @if (tieneEventos(dia)) {
+        <div class="mc-dot" aria-hidden="true"></div>
+      }
+    </button>
+  }
+</div>

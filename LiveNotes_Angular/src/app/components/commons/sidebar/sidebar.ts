@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { I18nService } from '../../../services/i18n.service';
 import { LangSelector } from '../lang-selector/lang-selector';
 
@@ -14,7 +13,7 @@ export interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterModule, LangSelector],
+  imports: [RouterLink, RouterLinkActive, LangSelector],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,7 +32,7 @@ export class SidebarComponent {
     { label: this.t()('nav.home'),     icon: 'fa-solid fa-house',          route: '/',               exact: true },
     { label: this.t()('nav.notes'),    icon: 'fa-solid fa-note-sticky',    route: '/notes',          badge: 3 },
     { label: this.t()('nav.calendar'), icon: 'fa-solid fa-calendar',       route: '/calendar/month' },
-    { label: this.t()('nav.messages'), icon: 'fa-solid fa-message',        route: '/finance',        badge: 5 },
+    { label: this.t()('nav.finances'), icon: 'fa-solid fa-hand-holding-dollar',        route: '/finance',        badge: 5 },
   ]);
 
   readonly secondaryNav = computed<NavItem[]>(() => [

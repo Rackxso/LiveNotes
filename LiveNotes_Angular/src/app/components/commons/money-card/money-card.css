@@ -1,7 +1,6 @@
 .card {
     background: var(--background-subcolor);
     border-radius: 14px;
-    max-width: 280px;
     padding: 14px 20px;
     display: flex;
     align-items: stretch;
@@ -71,10 +70,23 @@
     }
 }
 
-.red{
+.red {
     border: 1px solid var(--red);
     color: var(--red);
-    .label{
-        color: var(--red);
-    }
+    .label { color: var(--red); }
+}
+
+.blue {
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    .label { color: var(--blue); }
+}
+
+.triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid currentColor;
+    display: inline-block;
 }

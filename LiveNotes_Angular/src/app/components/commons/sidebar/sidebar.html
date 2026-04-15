@@ -1,50 +1,62 @@
 <aside class="sidebar" [class.expanded]="expanded()">
 
-    <button class="toggle-btn" (click)="toggle()">
-        <i class="fa-solid fa-angles-right"></i>
-    </button>
+  <button class="toggle-btn" (click)="toggle()"
+    [attr.aria-label]="expanded() ? 'Collapse sidebar' : 'Expand sidebar'">
+    <i class="fa-solid fa-angles-right" aria-hidden="true"></i>
+  </button>
 
-    <div class="logo-area">
-        <div class="logo-mark"><i class="fa-brands fa-bity"></i></div>
-        <div class="logo-text">Live Notes</div>
-    </div>
+  <div class="logo-area">
+    <i class="fa-brands fa-bity logo-mark" aria-hidden="true"></i>
+    <span class="logo-text">Live Notes</span>
+  </div>
 
-    <nav class="nav-section">
+  <div class="divider"></div>
 
-        @for (item of mainNav(); track item.route) {
-            <a class="nav-item"
-               [routerLink]="item.route"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: item.exact ?? false }">
-                <i [class]="item.icon"></i>
-                <span class="nav-label">{{ item.label }}</span>
-            </a>
+  <!-- Main nav — crece y centra verticalmente su contenido -->
+  <nav class="nav-main" aria-label="Main">
+    @for (item of mainNav(); track item.route) {
+      <a class="nav-item"
+         [routerLink]="item.route"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+         [attr.aria-label]="item.label"
+         [title]="!expanded() ? item.label : null">
+        <i [class]="item.icon" aria-hidden="true"></i>
+        <span class="nav-label">{{ item.label }}</span>
+        @if (item.badge) {
+          <span class="badge">{{ item.badge }}</span>
         }
+      </a>
+    }
+  </nav>
 
-        <div class="divider"></div>
+  <!-- Bottom group: secondary nav + lang + user -->
+  <div class="nav-bottom">
+    <div class="divider"></div>
 
-        @for (item of secondaryNav(); track item.route) {
-            <a class="nav-item"
-               [routerLink]="item.route"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: item.exact ?? false }">
-                <i [class]="item.icon"></i>
-                <span class="nav-label">{{ item.label }}</span>
-            </a>
-        }
-
+    <nav aria-label="Secondary">
+      @for (item of secondaryNav(); track item.route) {
+        <a class="nav-item"
+           [routerLink]="item.route"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+           [attr.aria-label]="item.label"
+           [title]="!expanded() ? item.label : null">
+          <i [class]="item.icon" aria-hidden="true"></i>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      }
     </nav>
 
-    <app-lang-selector />
+    <app-lang-selector [expanded]="expanded()" />
 
-    <div class="user-area">
-        <div class="user-card">
-            <div class="avatar">A</div>
-            <div class="user-info">
-                <div class="user-name">Ana García</div>
-                <div class="user-role">Personal</div>
-            </div>
-        </div>
-    </div>
+    <button class="user-card" [title]="!expanded() ? 'Ana García' : null" aria-label="User profile">
+      <div class="avatar" aria-hidden="true">A</div>
+      <div class="user-info">
+        <div class="user-name">Ana García</div>
+        <div class="user-role">Personal</div>
+      </div>
+    </button>
+  </div>
 
 </aside>

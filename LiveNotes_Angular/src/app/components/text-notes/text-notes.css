@@ -1,0 +1,46 @@
+:host { display: block; }
+
+.notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.note-item {
+  background: var(--background-color);
+  border-radius: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--background-subcolor);
+  border-left: 3px solid var(--cat-color, var(--primary-color));
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+
+  &:hover {
+    background: var(--background-subcolor);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+}
+
+.note-cat {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cat-color, var(--primary-color));
+  margin-bottom: 3px;
+}
+
+.note-title {
+  display: block;
+  font-size: 13px;
+  color: var(--text-color);
+  line-height: 1.3;
+}

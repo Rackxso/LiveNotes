@@ -1,24 +1,28 @@
-<div class="bt-card">
-    <div class="bt-header">
-        <p class="bt-title">{{ t()('finance.budgetTracker') }}</p>
-        <app-primary-button [config]="primaryButton()" />
-    </div>
-
-    @for (goal of goals; track $index) {
-    <div class="bt-item">
-        <div class="bt-item-header">
-            <div class="bt-item-left">
-                <span class="bt-dot" [ngStyle]="{ background: goal.color }"></span>
-                <p class="bt-name">{{ goal.name }}</p>
-            </div>
-            <span class="bt-amounts">
-                <span class="bt-spent"
-                    [ngStyle]="{ color: isOverBudget(goal) ? goal.color : '#3a3530' }">{{formatAmount(goal.spent)}}</span> <span class="bt-budget"> / {{ formatAmount(goal.budget) }}</span>
-            </span>
-        </div>
-        <div class="bt-track">
-            <div class="bt-fill" [ngStyle]="{ width: getProgress(goal) + '%', background: goal.color }"></div>
-        </div>
-    </div>
-    }
+<div class="bt-header">
+  <p class="bt-title">{{ t()('finance.budgetTracker') }}</p>
+  <button class="bt-add-btn">{{ t()('finance.add') }}</button>
 </div>
+
+@for (goal of goals(); track goal.id) {
+  <div class="bt-item">
+    <div class="bt-item-header">
+      <div class="bt-item-left">
+        <span class="bt-dot" [style.background]="goal.color"></span>
+        <p class="bt-name">{{ goal.name }}</p>
+      </div>
+      <span class="bt-amounts">
+        <span class="bt-spent"
+          [style.color]="isOverBudget(goal.spent, goal.budget) ? goal.color : 'var(--text-color)'">
+          {{ formatAmount(goal.spent) }}
+        </span>
+        <span class="bt-budget"> / {{ formatAmount(goal.budget) }}</span>
+      </span>
+    </div>
+    <div class="bt-track">
+      <div class="bt-fill"
+        [style.width]="getProgress(goal.spent, goal.budget) + '%'"
+        [style.background]="goal.color">
+      </div>
+    </div>
+  </div>
+}

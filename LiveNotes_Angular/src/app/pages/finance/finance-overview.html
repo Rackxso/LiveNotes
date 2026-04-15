@@ -1,0 +1,61 @@
+<!-- Left column -->
+<div class="main-col">
+  <div class="money-cards">
+    <app-money-card [label]="t()('finance.balance')"  amount="2.442,13" pct="3,7 %"  variant="green" />
+    <app-money-card [label]="t()('finance.expenses')" amount="457,87"   pct="1,2 %"  variant="red"   [pctUp]="false" />
+    <app-money-card [label]="t()('finance.income')"   amount="3.250,00" pct="40,5 %" variant="blue"  />
+  </div>
+
+  <div class="section-card">
+    <app-goal-progress />
+  </div>
+
+  <div class="section-card">
+    <div class="section-header">
+      <h2 class="section-title">{{ t()('finance.recentMovements') }}</h2>
+      <a [routerLink]="['/finance/transactions']" class="see-more">{{ t()('finance.seeMore') }} →</a>
+    </div>
+    @for (tx of recentTransactions(); track tx.id) {
+      <app-transaction-item [transaction]="tx" />
+    }
+  </div>
+</div>
+
+<!-- Right panel -->
+<div class="side-col">
+  <!-- Past months grouped bar chart -->
+  <div class="side-card">
+    <h3 class="side-title">{{ t()('finance.pastMonths') }}</h3>
+    <div class="bar-chart" role="img" [attr.aria-label]="t()('finance.pastMonths')">
+      @for (stat of monthlyStats(); track stat.month) {
+        <div class="bar-col">
+          <div class="bars-row">
+            <div class="bar income" [style.height.px]="incomeH(stat.income)"></div>
+            <div class="bar expenses" [style.height.px]="expensesH(stat.expenses)"></div>
+          </div>
+          <span class="bar-label">{{ stat.month }}</span>
+        </div>
+      }
+    </div>
+    <div class="chart-legend">
+      <span class="legend-dot income" aria-hidden="true"></span>
+      <span class="legend-text">{{ t()('finance.income') }}</span>
+      <span class="legend-dot expenses" aria-hidden="true"></span>
+      <span class="legend-text">{{ t()('finance.expenses') }}</span>
+    </div>
+  </div>
+
+  <!-- Savings overview -->
+  <div class="side-card">
+    <h3 class="side-title">{{ t()('finance.savingsOverview') }}</h3>
+    <p class="savings-total">€ {{ fmt(totalSaved()) }}</p>
+    <div class="savings-mini-grid">
+      @for (goal of savingsGoals(); track goal.id) {
+        <div class="mini-goal" [style.--goal-color]="goal.color">
+          <span class="mini-name">{{ goal.name }}</span>
+          <span class="mini-pct">{{ goalPct(goal) }}%</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

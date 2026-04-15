@@ -1,18 +1,21 @@
-<app-header [name]="nombreVista()" [vistasPage]="vistasPage()" (vistaSeleccionada)="onVistaSeleccionada($event)"
-    [buttons]="false"></app-header>
-<div class="body">
-    <div class="mainSection">
-        <div class="cards">
-            <app-money-card />
-            <app-money-card />
-            <app-money-card />
-        </div>
-        <div class="progress">
-            <app-goal-progress />
-        </div>
-    </div>
+<app-header
+  [vistasPage]="vistasPage()"
+  [vistaActiva]="vistaActivaTraducida()"
+  [name]="nombreVista()"
+  [buttons]="false"
+  (vistaSeleccionada)="onVistaSeleccionada($event)">
+</app-header>
 
-    <div class="sideSection">
-        hola
-    </div>
+<div class="finance-body">
+  @switch (vistaActual()) {
+    @case ('Transactions') {
+      <app-finance-transactions />
+    }
+    @case ('Savings') {
+      <app-finance-savings />
+    }
+    @default {
+      <app-finance-overview />
+    }
+  }
 </div>

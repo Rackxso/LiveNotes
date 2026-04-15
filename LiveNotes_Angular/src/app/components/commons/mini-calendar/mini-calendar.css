@@ -1,0 +1,126 @@
+:host {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  max-width: 200px;
+}
+
+/* ── Header ── */
+.mc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.mc-month {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-color);
+  text-transform: capitalize;
+}
+
+.mc-nav {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-subcolor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 0;
+  transition: background 0.15s;
+
+  &:hover { background: var(--background-subcolor); }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+
+  i { font-size: 9px; }
+}
+
+/* ── Day-of-week header ── */
+.mc-week-headers {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 2px;
+}
+
+.mc-dow {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-subcolor);
+  padding-block: 2px;
+  text-transform: uppercase;
+}
+
+/* ── Grid ── */
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.mc-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 7px;
+  position: relative;
+  min-width: 0;
+  gap: 1px;
+}
+
+.mc-empty {
+  background: transparent;
+}
+
+.mc-day {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+  font-size: 11px;
+  font-family: var(--fuente-texto);
+  padding: 0;
+  transition: background 0.15s;
+
+  &:hover { background: var(--background-subcolor); }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 1px;
+  }
+}
+
+.mc-today {
+  background: var(--primary-color);
+  color: var(--background-color);
+  font-weight: 700;
+
+  &:hover { background: var(--accent-subcolor); }
+
+  .mc-dot { background: var(--background-color); opacity: 0.8; }
+}
+
+.mc-selected {
+  background: var(--secondary-background-color);
+  font-weight: 600;
+}
+
+/* ── Event dot ── */
+.mc-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  flex-shrink: 0;
+}

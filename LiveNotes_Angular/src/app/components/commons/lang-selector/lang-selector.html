@@ -1,16 +1,28 @@
-<div class="lang-selector" role="group" [attr.aria-label]="t()('lang.selector')">
-  <button
-    class="lang-btn"
-    [class.active]="lang() === 'en'"
-    (click)="setLang('en')"
-    [attr.aria-pressed]="lang() === 'en'">
-    {{ t()('lang.en') }}
-  </button>
-  <button
-    class="lang-btn"
-    [class.active]="lang() === 'es'"
-    (click)="setLang('es')"
-    [attr.aria-pressed]="lang() === 'es'">
-    {{ t()('lang.es') }}
-  </button>
-</div>
+@if (expanded()) {
+  <div class="lang-selector" role="group" [attr.aria-label]="t()('lang.selector')">
+    <button
+      class="lang-btn"
+      [class.active]="lang() === 'en'"
+      (click)="setLang('en')"
+      [attr.aria-pressed]="lang() === 'en'">
+      {{ t()('lang.en') }}
+    </button>
+    <button
+      class="lang-btn"
+      [class.active]="lang() === 'es'"
+      (click)="setLang('es')"
+      [attr.aria-pressed]="lang() === 'es'">
+      {{ t()('lang.es') }}
+    </button>
+  </div>
+} @else {
+  <div class="lang-collapsed">
+    <button
+      class="lang-toggle"
+      (click)="toggle()"
+      [title]="t()('lang.selector')"
+      [attr.aria-label]="t()('lang.selector')">
+      {{ t()('lang.' + lang()) }}
+    </button>
+  </div>
+}

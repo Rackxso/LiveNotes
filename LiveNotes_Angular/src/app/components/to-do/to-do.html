@@ -1,1 +1,18 @@
-<p>to-do works!</p>
+<ul class="todo-list" role="list">
+  @for (item of todos(); track item.id) {
+    <li class="todo-item" [class.done]="item.done">
+      <button
+        class="todo-check"
+        [class.checked]="item.done"
+        (click)="toggle(item.id)"
+        [attr.aria-label]="(item.done ? 'Marcar incompleto: ' : 'Marcar completo: ') + item.text"
+        [attr.aria-pressed]="item.done">
+        @if (item.done) {
+          <i class="fa-solid fa-check" aria-hidden="true"></i>
+        }
+      </button>
+      <span class="todo-text">{{ item.text }}</span>
+      <span class="todo-when">{{ item.when }}</span>
+    </li>
+  }
+</ul>

@@ -1,0 +1,50 @@
+<app-transaction-modal
+  #modal
+  [transaction]="selectedTransaction()"
+  (saved)="selectedTransaction.set(null)" />
+
+<!-- Monthly summary + Add button -->
+<div class="month-summary">
+  <div class="summary-stats">
+    <div class="summary-item income">
+      <span class="summary-label">{{ t()('finance.income') }}</span>
+      <span class="summary-value">+{{ fmt(monthIncome()) }} €</span>
+    </div>
+    <div class="summary-item expenses">
+      <span class="summary-label">{{ t()('finance.expenses') }}</span>
+      <span class="summary-value">-{{ fmt(monthExpenses()) }} €</span>
+    </div>
+  </div>
+  <button class="add-tx-btn" (click)="openCreate()">
+    + {{ t()('finance.addTransaction') }}
+  </button>
+</div>
+
+<!-- Filter chips -->
+<div class="filter-chips" role="group" [attr.aria-label]="t()('finance.filterBy')">
+  @for (f of filters; track f.key) {
+    <button
+      class="chip"
+      [class.active]="activeFilter() === f.key"
+      [style.--chip-color]="f.color"
+      (click)="activeFilter.set(f.key)">
+      {{ t()(f.labelKey) }}
+    </button>
+  }
+</div>
+
+<!-- Grouped transaction list -->
+@for (group of groupedTransactions(); track group.dateKey) {
+  <div class="date-group">
+    <h3 class="group-label">{{ group.label }}</h3>
+    @for (tx of group.items; track tx.id) {
+      <button type="button" class="tx-btn" (click)="openView(tx)">
+        <app-transaction-item [transaction]="tx" />
+      </button>
+    }
+  </div>
+}
+
+@if (isEmpty()) {
+  <p class="empty">—</p>
+}

@@ -1,1 +1,8 @@
-<p>text-notes works!</p>
+<ul class="notes-list" role="list">
+  @for (note of notes; track note.id) {
+    <li class="note-item" [style.--cat-color]="note.categoryColor">
+      <span class="note-cat">{{ note.category }}</span>
+      <span class="note-title">{{ note.title }}</span>
+    </li>
+  }
+</ul>

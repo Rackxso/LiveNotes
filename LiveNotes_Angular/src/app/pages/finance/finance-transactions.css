@@ -1,0 +1,139 @@
+:host {
+  display: block;
+  padding: 20px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* ── Monthly summary bar ── */
+.month-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--background-subcolor);
+  border-radius: 14px;
+  padding: 14px 20px;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summary-label {
+  font-size: 11px;
+  color: var(--text-subcolor);
+  font-family: var(--fuente-texto);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.summary-value {
+  font-family: var(--fuente-titulo);
+  font-size: 18px;
+  font-weight: 500;
+
+  .income & { color: var(--green); }
+  .expenses & { color: var(--text-color); }
+}
+
+.add-tx-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: var(--primary-color);
+  color: var(--background-color);
+  font-family: var(--fuente-texto);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+
+  &:hover { opacity: 0.88; }
+  &:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; }
+}
+
+/* ── Filter chips ── */
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.chip {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--secondary-background-color);
+  background: transparent;
+  color: var(--text-subcolor);
+  font-family: var(--fuente-texto);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover { border-color: var(--chip-color, var(--primary-color)); color: var(--text-color); }
+  &:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+
+  &.active {
+    border-color: var(--chip-color, var(--primary-color));
+    background: color-mix(in srgb, var(--chip-color, var(--primary-color)) 12%, transparent);
+    color: var(--chip-color, var(--primary-color));
+    font-weight: 500;
+  }
+}
+
+/* ── Date groups ── */
+.date-group {
+  margin-bottom: 8px;
+}
+
+.group-label {
+  font-size: 11px;
+  color: var(--text-subcolor);
+  font-family: var(--fuente-texto);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 4px 4px;
+}
+
+/* ── Transaction row button ── */
+.tx-btn {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 10px;
+  text-align: left;
+  transition: background 0.12s;
+
+  &:hover { background: var(--secondary-background-color); }
+  &:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+}
+
+.empty {
+  font-size: 13px;
+  color: var(--text-subcolor);
+  text-align: center;
+  padding: 32px 0;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  :host { padding: 16px; }
+
+  .month-summary { flex-direction: column; align-items: flex-start; }
+  .add-tx-btn { align-self: stretch; text-align: center; }
+}

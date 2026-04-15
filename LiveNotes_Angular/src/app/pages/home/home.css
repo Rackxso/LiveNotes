@@ -1,0 +1,366 @@
+/* The host element gets display:flex; flex-direction:column; height:calc(100dvh - 61px)
+   from the global router-outlet + * rule. We fill it completely. */
+:host {
+  overflow: hidden;
+}
+
+/* ── 2×2 GRID ────────────────────────────────────────── */
+.cuadricula {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+  gap: 1px;
+  background: var(--secondary-background-color);
+  overflow: hidden;
+}
+
+.quadrant {
+  background: var(--background-color);
+  padding: 16px 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--background-subcolor) transparent;
+}
+
+/* ── SHARED: section header ──────────────────────────── */
+.q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.q-title {
+  font-family: var(--fuente-titulo);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+  font-style: italic;
+}
+
+.q-link {
+  font-size: 12px;
+  color: var(--accent-color);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; border-radius: 2px; }
+}
+
+/* ── Q1: GREETING ────────────────────────────────────── */
+.greeting-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 10px;
+  flex-shrink: 0;
+}
+
+.greeting-name {
+  font-family: var(--fuente-titulo);
+  font-size: 28px;
+  line-height: 1.1;
+  color: var(--text-color);
+  margin: 0 0 6px;
+  flex-shrink: 0;
+
+  em {
+    font-style: italic;
+    color: var(--accent-color);
+  }
+}
+
+.greeting-sub {
+  font-size: 13px;
+  color: var(--text-subcolor);
+  margin: 0 0 10px;
+  flex-shrink: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--background-subcolor);
+  color: var(--text-subcolor);
+  background: var(--background-color);
+  cursor: pointer;
+  font-family: var(--fuente-texto);
+  transition: background 0.15s;
+
+  &:hover { background: var(--background-subcolor); }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+
+  &.chip-done {
+    border-color: color-mix(in srgb, var(--green) 30%, transparent);
+    color: var(--green);
+    background: color-mix(in srgb, var(--green) 6%, var(--background-color));
+  }
+
+  &.chip-mood {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.quick-stats {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.stat-pill {
+  flex: 1;
+  background: var(--background-subcolor);
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--secondary-background-color);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--text-subcolor);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-val {
+  font-family: var(--fuente-titulo);
+  font-size: 22px;
+  color: var(--text-color);
+  line-height: 1;
+
+  &.green { color: var(--green); }
+  &.red   { color: var(--red);   }
+}
+
+.stat-change {
+  font-size: 11px;
+  color: var(--green);
+
+  &.red { color: var(--red); }
+}
+
+/* ── Q2: CALENDAR ────────────────────────────────────── */
+.q2 {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0 16px;
+  align-content: start;
+
+  .q-header {
+    grid-column: 1 / -1;
+  }
+
+  app-mini-calendar {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .eventos-list {
+    grid-column: 2;
+    grid-row: 2;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--background-subcolor) transparent;
+  }
+}
+
+.eventos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.evento-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.evento-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.evento-titulo {
+  flex: 1;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.evento-hora {
+  font-size: 11px;
+  color: var(--text-subcolor);
+  flex-shrink: 0;
+}
+
+.empty-msg {
+  font-size: 12px;
+  color: var(--text-subcolor);
+  margin: 0;
+}
+
+/* ── Q3: FINANCE ─────────────────────────────────────── */
+.finance-summary {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.fin-card {
+  flex: 1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--background-subcolor);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fin-card.green {
+  border-color: color-mix(in srgb, var(--green) 35%, transparent);
+  background: color-mix(in srgb, var(--green) 6%, var(--background-color));
+}
+
+.fin-card.red {
+  border-color: color-mix(in srgb, var(--red) 35%, transparent);
+  background: color-mix(in srgb, var(--red) 6%, var(--background-color));
+}
+
+.fin-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.fin-card.green .fin-label { color: var(--green); }
+.fin-card.red   .fin-label { color: var(--red);   }
+
+.fin-val {
+  font-family: var(--fuente-titulo);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.fin-card.green .fin-val { color: var(--green); }
+.fin-card.red   .fin-val { color: var(--red);   }
+
+.fin-change {
+  font-size: 11px;
+  color: var(--text-subcolor);
+}
+
+/* GoalProgress has its own card styles; give it some breathing room */
+app-goal-progress {
+  flex-shrink: 0;
+  display: block;
+  margin-bottom: 0;
+}
+
+.transacciones {
+  margin-top: 14px;
+  flex-shrink: 0;
+}
+
+.tx-row {
+  display: flex;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--background-subcolor);
+  gap: 10px;
+  font-size: 12px;
+
+  &:last-child { border-bottom: none; }
+}
+
+.tx-name {
+  flex: 1;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.tx-cat {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.tx-cat.ent { background: color-mix(in srgb, var(--purple) 15%, transparent); color: var(--purple); }
+.tx-cat.hou { background: color-mix(in srgb, var(--blue)   15%, transparent); color: var(--blue);   }
+.tx-cat.job { background: color-mix(in srgb, var(--green)  15%, transparent); color: var(--green);  }
+
+.tx-amt { font-weight: 600; font-size: 12px; }
+.tx-amt.neg { color: var(--red);   }
+.tx-amt.pos { color: var(--green); }
+
+/* ── Q4: NOTES & TODOS ───────────────────────────────── */
+.q4-cols {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.q4-col {
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--background-subcolor) transparent;
+}
+
+.q4-col-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-subcolor);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 10px;
+  flex-shrink: 0;
+}

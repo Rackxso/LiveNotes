@@ -1,0 +1,107 @@
+<dialog #dialogEl (click)="onBackdropClick($event)">
+  <div class="modal-panel">
+
+    <!-- Header -->
+    <header class="modal-header">
+      <h2 class="modal-title">
+        @if (mode() === 'view') {
+          {{ t()('finance.modal.detail') }}
+        } @else {
+          {{ t()('finance.modal.new') }}
+        }
+      </h2>
+      <button type="button" class="modal-close" (click)="close()" [attr.aria-label]="t()('finance.modal.close')">
+        ×
+      </button>
+    </header>
+
+    <!-- VIEW MODE -->
+    @if (mode() === 'view') {
+      @if (transaction(); as tx) {
+        <div class="detail-body">
+          <p class="detail-amount" [class]="amountClass()">{{ formattedAmount() }}</p>
+
+          <dl class="detail-grid">
+            <dt>{{ t()('finance.modal.concept') }}</dt>
+            <dd>{{ tx.name }}</dd>
+
+            <dt>{{ t()('finance.modal.category') }}</dt>
+            <dd>
+              <span class="cat-badge" [class]="tx.categoryKey">{{ tx.category }}</span>
+            </dd>
+
+            <dt>{{ t()('finance.modal.date') }}</dt>
+            <dd>{{ formattedDate() }}</dd>
+          </dl>
+        </div>
+      }
+    }
+
+    <!-- CREATE MODE -->
+    @if (mode() === 'create') {
+      <form class="create-form" [formGroup]="form" (ngSubmit)="submit()">
+
+        <!-- Type toggle -->
+        <div class="field">
+          <label>{{ t()('finance.modal.type') }}</label>
+          <div class="type-toggle" role="group" [attr.aria-label]="t()('finance.modal.type')">
+            <button type="button" class="type-btn"
+              [class.active]="selectedType() === 'expense'"
+              (click)="setType('expense')">
+              {{ t()('finance.modal.typeExpense') }}
+            </button>
+            <button type="button" class="type-btn"
+              [class.active]="selectedType() === 'income'"
+              (click)="setType('income')">
+              {{ t()('finance.modal.typeIncome') }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Concept -->
+        <div class="field">
+          <label for="tx-name">{{ t()('finance.modal.concept') }}</label>
+          <input id="tx-name" type="text" formControlName="name"
+            [placeholder]="t()('finance.modal.conceptPlaceholder')" />
+        </div>
+
+        <!-- Amount -->
+        <div class="field">
+          <label for="tx-amount">{{ t()('finance.modal.amount') }} (€)</label>
+          <input id="tx-amount" type="number" formControlName="amount" min="0.01" step="0.01" />
+        </div>
+
+        <!-- Date -->
+        <div class="field">
+          <label for="tx-date">{{ t()('finance.modal.date') }}</label>
+          <input id="tx-date" type="date" formControlName="date" />
+        </div>
+
+        <!-- Destination (only for expenses) -->
+        @if (selectedType() === 'expense') {
+          <div class="field">
+            <label for="tx-dest">{{ t()('finance.modal.destination') }}</label>
+            <select id="tx-dest" formControlName="categoryKey">
+              <option value="untracked">{{ t()('finance.modal.untracked') }}</option>
+              @for (cat of budgetCategories(); track cat.id) {
+                <option [value]="cat.categoryKey">{{ cat.name }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="close()">
+            {{ t()('finance.modal.cancel') }}
+          </button>
+          <button type="submit" class="btn-save" [disabled]="form.invalid">
+            {{ t()('finance.modal.save') }}
+          </button>
+        </div>
+
+      </form>
+    }
+
+  </div>
+</dialog>

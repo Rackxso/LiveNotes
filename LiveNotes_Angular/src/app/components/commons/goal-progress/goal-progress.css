@@ -1,31 +1,48 @@
-.bt-card {
-  background: #f5f0e8;
-  border-radius: 16px;
-  padding: 20px 24px;
-  font-family: 'DM Sans', sans-serif;
+:host {
+  display: block;
 }
 
 .bt-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .bt-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
-  color: #3a3530;
+  color: var(--text-color);
+  font-family: var(--fuente-texto);
   margin: 0;
 }
 
+.bt-add-btn {
+  font-size: 12px;
+  font-family: var(--fuente-texto);
+  color: var(--accent-color);
+  background: transparent;
+  border: 1.5px solid var(--accent-color);
+  border-radius: 20px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 
-.bt-item {
-  margin-bottom: 16px;
+  &:hover {
+    background: var(--accent-color);
+    color: var(--background-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
 }
 
-.bt-item:last-child {
-  margin-bottom: 0;
+.bt-item {
+  margin-bottom: 10px;
+
+  &:last-child { margin-bottom: 0; }
 }
 
 .bt-item-header {
@@ -42,20 +59,22 @@
 }
 
 .bt-dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 3px;
   flex-shrink: 0;
 }
 
 .bt-name {
-  font-size: 14px;
-  color: #3a3530;
+  font-size: 13px;
+  color: var(--text-color);
+  font-family: var(--fuente-texto);
   margin: 0;
 }
 
 .bt-amounts {
-  font-size: 13px;
+  font-size: 11px;
+  font-family: var(--fuente-texto);
 }
 
 .bt-spent {
@@ -63,12 +82,12 @@
 }
 
 .bt-budget {
-  color: #a09888;
+  color: var(--text-subcolor);
 }
 
 .bt-track {
   height: 5px;
-  background: #e8e0d0;
+  background: var(--secondary-background-color);
   border-radius: 99px;
   overflow: hidden;
 }

@@ -1,18 +1,12 @@
-.body{
-    display: grid;
-    grid-template-columns: 4fr 1fr;
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.cards{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    padding-block: 15px;
-    margin: auto;
-    width: fit-content;
-}
-
-.progress{
-    padding-inline: 20px;
-    padding-bottom: 15px;
+.finance-body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--background-subcolor) transparent;
 }

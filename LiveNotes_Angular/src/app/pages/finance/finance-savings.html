@@ -1,0 +1,80 @@
+<!-- Left column -->
+<div class="main-col">
+  <!-- Savings Progress card -->
+  <div class="progress-card">
+    <h2 class="progress-title">{{ t()('finance.savingsProgress') }}</h2>
+
+    <div class="big-amount">
+      <span class="big-currency">€</span>
+      <span class="big-value">{{ fmt(finance.totalSaved()) }}</span>
+      <span class="big-of">{{ t()('finance.of') }} {{ fmt(finance.totalTarget()) }} €</span>
+    </div>
+
+    <div class="main-track"
+         role="progressbar"
+         [attr.aria-valuenow]="finance.totalProgress()"
+         aria-valuemin="0"
+         aria-valuemax="100">
+      <div class="main-fill" [style.width]="finance.totalProgress() + '%'"></div>
+    </div>
+  </div>
+
+  <!-- Goals grid -->
+  <div class="goals-grid">
+    @for (goal of finance.savingsGoals(); track goal.id) {
+      <div class="goal-card" [style.--goal-color]="goal.color">
+        <div class="goal-header">
+          <span class="goal-name">{{ goal.name }}</span>
+          <span class="goal-pct">{{ goalPct(goal) }}%</span>
+        </div>
+        <div class="goal-track">
+          <div class="goal-fill" [style.width]="goalPct(goal) + '%'"></div>
+        </div>
+        <div class="goal-amounts">
+          <span>€ {{ fmt(goal.saved) }} {{ t()('finance.saved') }}</span>
+          <span>€ {{ fmt(goal.target - goal.saved) }} {{ t()('finance.toGo') }}</span>
+        </div>
+        @if (monthsToComplete(goal); as months) {
+          <p class="goal-projection">~ {{ months }} {{ t()('finance.projectionMonths') }}</p>
+        }
+      </div>
+    }
+
+    <button class="add-goal">
+      <span class="add-goal-text">{{ t()('finance.addGoal') }}</span>
+      <span class="add-goal-icon" aria-hidden="true">+</span>
+    </button>
+  </div>
+</div>
+
+<!-- Right panel -->
+<div class="side-col">
+  <!-- Saved last months chart -->
+  <div class="side-card">
+    <h3 class="side-title">{{ t()('finance.savedLastMonths') }}</h3>
+    <div class="bar-chart" role="img" [attr.aria-label]="t()('finance.savedLastMonths')">
+      @for (stat of finance.monthlyStats(); track stat.month) {
+        <div class="bar-col">
+          <div class="bar" [style.height.px]="barH(stat.saved)"></div>
+          <span class="bar-label">{{ stat.month }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Last deposits -->
+  <div class="side-card">
+    <h3 class="side-title">{{ t()('finance.lastDeposits') }}</h3>
+    <ul class="deposits-list">
+      @for (dep of finance.recentDeposits(); track dep.id) {
+        <li class="deposit-row">
+          <div class="dep-info">
+            <span class="dep-name">{{ dep.goalName }}</span>
+            <span class="dep-date">{{ fmtDate(dep.date) }}</span>
+          </div>
+          <span class="dep-amount">+ {{ fmt(dep.amount) }} €</span>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

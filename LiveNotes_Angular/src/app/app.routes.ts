@@ -23,6 +23,19 @@ export const routes: Routes = [
     },
     {
         path: "finance",
+        redirectTo: "finance/overview",
+        pathMatch: "full"
+    },
+    {
+        path: "finance/overview",
+        loadComponent: () => import('./pages/finance/finance').then(m => m.Finance)
+    },
+    {
+        path: "finance/transactions",
+        loadComponent: () => import('./pages/finance/finance').then(m => m.Finance)
+    },
+    {
+        path: "finance/savings",
         loadComponent: () => import('./pages/finance/finance').then(m => m.Finance)
     }
 ];
