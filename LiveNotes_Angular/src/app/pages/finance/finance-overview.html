@@ -18,6 +18,15 @@
     @for (tx of recentTransactions(); track tx.id) {
       <app-transaction-item [transaction]="tx" />
     }
+
+    @if (spendingInsight(); as insight) {
+      <div class="spending-insight" [class.up]="insight.up" [class.down]="!insight.up">
+        <span class="insight-arrow" aria-hidden="true">{{ insight.up ? '↑' : '↓' }}</span>
+        <span class="insight-text">
+          {{ insight.pct }}% {{ t()(insight.up ? 'finance.insight.more' : 'finance.insight.less') }}
+        </span>
+      </div>
+    }
   </div>
 </div>
 

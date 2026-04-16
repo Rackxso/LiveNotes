@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(cat /c/Users/ourena/proyecto/LiveNotes/LiveNotes_Angular/src/app/pages/notes/*.ts)",
-      "Bash(npx ng:*)"
+      "Bash(npx ng:*)",
+      "Bash(xargs wc *)",
+      "Bash(npx tsc *)",
+      "Bash(xargs ls *)"
     ]
   }
 }

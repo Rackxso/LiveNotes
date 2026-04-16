@@ -1,41 +1,61 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
+import { loggedInGuard } from './guards/logged-in.guard';
 
 export const routes: Routes = [
     {
-        path: "",
+        path: 'login',
+        canActivate: [loggedInGuard],
+        loadComponent: () => import('./pages/auth/login').then(m => m.Login)
+    },
+    {
+        path: 'register',
+        canActivate: [loggedInGuard],
+        loadComponent: () => import('./pages/auth/register').then(m => m.Register)
+    },
+    {
+        path: '',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/home/home').then(m => m.Home)
     },
     {
-        path: "calendar/month",
+        path: 'calendar/month',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/calendarPage/calendarPage').then(m => m.CalendarPage)
     },
     {
-        path: "calendar/week",
+        path: 'calendar/week',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/calendarPage/calendarPage').then(m => m.CalendarPage)
     },
     {
-        path: "calendar/day",
+        path: 'calendar/day',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/calendarPage/calendarPage').then(m => m.CalendarPage)
     },
     {
-        path: "notes",
+        path: 'notes',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/notes/notes').then(m => m.Notes)
     },
     {
-        path: "finance",
-        redirectTo: "finance/overview",
-        pathMatch: "full"
+        path: 'finance',
+        redirectTo: 'finance/overview',
+        pathMatch: 'full'
     },
     {
-        path: "finance/overview",
+        path: 'finance/overview',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/finance/finance').then(m => m.Finance)
     },
     {
-        path: "finance/transactions",
+        path: 'finance/transactions',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/finance/finance').then(m => m.Finance)
     },
     {
-        path: "finance/savings",
+        path: 'finance/savings',
+        canActivate: [authGuard],
         loadComponent: () => import('./pages/finance/finance').then(m => m.Finance)
     }
 ];

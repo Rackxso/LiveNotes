@@ -252,6 +252,47 @@
   transition: opacity 0.2s var(--ease), max-width 0.25s var(--ease);
 }
 
+/* ── USER AREA ─────────────────────────────────────────── */
+.user-area {
+  position: relative;
+}
+
+.user-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--background-color);
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12);
+  animation: appear 0.15s ease;
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--red, #e55);
+  font-family: var(--fuente-texto);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+
+  i { font-size: 13px; flex-shrink: 0; }
+
+  &:hover { background: color-mix(in srgb, var(--red, #e55) 10%, transparent); }
+}
+
 /* ── USER CARD ─────────────────────────────────────────── */
 .user-card {
   width: 100%;

@@ -49,6 +49,7 @@ export class CalendarPage {
   public buttons = signal<boolean>(true);
 
   constructor() {
+    this.eventosService.loadEventos();
     this.route.url.subscribe(segments => {
       const lastIndex = segments.length - 1;
       const view = lastIndex >= 0 ? segments[lastIndex].path : undefined;
@@ -67,6 +68,10 @@ export class CalendarPage {
   // Día seleccionado (por defecto hoy)
   public diaSeleccionado = signal<Date>(new Date());
 
+  // Mes visible en el MonthView (se actualiza al navegar entre meses)
+  private readonly _today = new Date();
+  readonly mesVisible = signal({ anyo: this._today.getFullYear(), mes: this._today.getMonth() });
+
   private readonly diaSeleccionadoFecha = computed(() => {
     const sel = this.diaSeleccionado();
     const d = new Date(sel);
@@ -77,54 +82,54 @@ export class CalendarPage {
   readonly eventos = this.eventosService.eventos;
 
   readonly eventosDia = computed(() => {
-    const sel = this.diaSeleccionado();
-    const hoy = this.diaSeleccionadoFecha();
-    return this.eventos().filter(e => {
-      const fecha = new Date(e.fecha);
-      fecha.setHours(0, 0, 0, 0);
-      return fecha >= hoy &&
-        e.fecha.getDate() === sel.getDate() &&
-        e.fecha.getMonth() === sel.getMonth() &&
-        e.fecha.getFullYear() === sel.getFullYear();
-    });
+    const sel  = this.diaSeleccionado();
+    return this.eventos().filter(e =>
+      e.fecha.getDate()     === sel.getDate()     &&
+      e.fecha.getMonth()    === sel.getMonth()    &&
+      e.fecha.getFullYear() === sel.getFullYear()
+    );
   });
 
   private readonly semana = computed(() => {
-    const sel = this.diaSeleccionado();
+    const sel   = this.diaSeleccionado();
     const inicio = new Date(sel);
     inicio.setDate(sel.getDate() - sel.getDay());
+    inicio.setHours(0, 0, 0, 0);
     const fin = new Date(inicio);
     fin.setDate(inicio.getDate() + 6);
+    fin.setHours(23, 59, 59, 999);
     return { inicio, fin };
   });
 
   readonly eventosSemana = computed(() => {
     const { inicio, fin } = this.semana();
-    const sel = this.diaSeleccionado();
-    const hoy = this.diaSeleccionadoFecha();
+    const cutoff = this.diaSeleccionadoFecha();
+    const sel    = this.diaSeleccionado();
     return this.eventos().filter(e => {
       const fecha = new Date(e.fecha);
       fecha.setHours(0, 0, 0, 0);
       const enSemana = e.fecha >= inicio && e.fecha <= fin;
-      const esDia = e.fecha.getDate() === sel.getDate() &&
-        e.fecha.getMonth() === sel.getMonth() &&
-        e.fecha.getFullYear() === sel.getFullYear();
-      return fecha >= hoy && enSemana && !esDia;
+      const esDia    = e.fecha.getDate()     === sel.getDate()     &&
+                       e.fecha.getMonth()    === sel.getMonth()    &&
+                       e.fecha.getFullYear() === sel.getFullYear();
+      return fecha > cutoff && enSemana && !esDia;
     });
   });
 
   readonly eventosMes = computed(() => {
+    const { anyo, mes }   = this.mesVisible();
     const { inicio, fin } = this.semana();
-    const sel = this.diaSeleccionado();
-    const hoy = this.diaSeleccionadoFecha();
-    return this.eventos().filter(e => {
-      const fecha = new Date(e.fecha);
-      fecha.setHours(0, 0, 0, 0);
-      return fecha >= hoy &&
-        e.fecha.getMonth() === sel.getMonth() &&
-        e.fecha.getFullYear() === sel.getFullYear() &&
-        !(e.fecha >= inicio && e.fecha <= fin);
-    });
+    const cutoff = this.diaSeleccionadoFecha();
+    return this.eventos()
+      .filter(e => {
+        const fecha = new Date(e.fecha);
+        fecha.setHours(0, 0, 0, 0);
+        return fecha > cutoff &&
+               e.fecha.getFullYear() === anyo &&
+               e.fecha.getMonth()    === mes  &&
+               !(e.fecha >= inicio && e.fecha <= fin);
+      })
+      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
   });
 
   onVistaSeleccionada(label: string): void {
@@ -178,5 +183,9 @@ export class CalendarPage {
 
   onDiaSeleccionado(fecha: Date): void {
     this.diaSeleccionado.set(fecha);
+  }
+
+  onMesVisibleChange(val: { anyo: number; mes: number }): void {
+    this.mesVisible.set(val);
   }
 }

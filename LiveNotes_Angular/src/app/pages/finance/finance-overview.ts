@@ -43,6 +43,16 @@ export class FinanceOverview {
     return Math.min(Math.round((goal.saved / goal.target) * 100), 100);
   }
 
+  readonly spendingInsight = computed(() => {
+    const stats = this.finance.monthlyStats();
+    if (stats.length < 2) return null;
+    const current  = stats[stats.length - 1];
+    const previous = stats[stats.length - 2];
+    const diff = current.expenses - previous.expenses;
+    const pct  = Math.abs(Math.round((diff / previous.expenses) * 100));
+    return { pct, up: diff > 0, month: current.month };
+  });
+
   fmt(amount: number): string {
     return amount.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }

@@ -77,4 +77,26 @@
       }
     </ul>
   </div>
+
+  <!-- Closest goal to completion -->
+  @if (closestGoal(); as goal) {
+    <div class="side-card closest-card" [style.--goal-color]="goal.color">
+      <h3 class="side-title">{{ t()('finance.closestGoal') }}</h3>
+      <p class="closest-name">{{ goal.name }}</p>
+      <div class="closest-row">
+        <div class="closest-track"
+             role="progressbar"
+             [attr.aria-valuenow]="goalPct(goal)"
+             aria-valuemin="0"
+             aria-valuemax="100">
+          <div class="closest-fill" [style.width]="goalPct(goal) + '%'"></div>
+        </div>
+        <span class="closest-pct">{{ goalPct(goal) }}%</span>
+      </div>
+      <div class="closest-amounts">
+        <span>€ {{ fmt(goal.saved) }} / {{ fmt(goal.target) }}</span>
+        <span>€ {{ fmt(goal.target - goal.saved) }} {{ t()('finance.toGo') }}</span>
+      </div>
+    </div>
+  }
 </div>

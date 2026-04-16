@@ -18,13 +18,14 @@ export class Eventos {
   readonly locale = this.i18n.locale;
 
   readonly diaSeleccionado = input.required<Date>();
-  readonly eventosDia = input<Evento[]>([]);
-  readonly eventosSemana = input<Evento[]>([]);
-  readonly eventosMes = input<Evento[]>([]);
-  readonly addEventoDia = output<void>();
+  readonly vista          = input<string>('Month');
+  readonly eventosDia     = input<Evento[]>([]);
+  readonly eventosSemana  = input<Evento[]>([]);
+  readonly eventosMes     = input<Evento[]>([]);
+  readonly addEventoDia   = output<void>();
 
   readonly eventCount = computed(() => {
-    const n = this.eventosDia().length;
+    const n = this.eventosDia().length + this.eventosSemana().length + this.eventosMes().length;
     const key = n === 1 ? 'eventos.event_one' : 'eventos.event_other';
     return `${n} ${this.t()(key)}`;
   });

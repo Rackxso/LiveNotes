@@ -1,0 +1,112 @@
+<div class="login-shell">
+
+  <!-- Panel izquierdo: marca -->
+  <aside class="brand-panel" aria-hidden="true">
+    <div class="brand-logo">
+      <div class="brand-logo-mark">L</div>
+      <span class="brand-logo-name">LiveNotes</span>
+    </div>
+
+    <div class="brand-tagline">
+      Todo en un<br><em>solo lugar.</em>
+    </div>
+
+    <ul class="brand-features" role="list">
+      <li class="brand-feat">
+        <span class="brand-feat-icon" aria-hidden="true">📅</span>
+        Calendario y eventos
+      </li>
+      <li class="brand-feat">
+        <span class="brand-feat-icon" aria-hidden="true">💶</span>
+        Finanzas y presupuestos
+      </li>
+      <li class="brand-feat">
+        <span class="brand-feat-icon" aria-hidden="true">📝</span>
+        Notas y listas
+      </li>
+      <li class="brand-feat">
+        <span class="brand-feat-icon" aria-hidden="true">🌿</span>
+        Hábitos y estado de ánimo
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Panel derecho: formulario -->
+  <main class="form-panel">
+    <div class="form-card">
+      <h1 class="form-title">Bienvenido <em>de nuevo</em></h1>
+      <p class="form-subtitle">Inicia sesión para acceder a tu espacio personal.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+        <div class="field">
+          <label class="field-label" for="email">Correo electrónico</label>
+          <input
+            id="email"
+            class="field-input"
+            [class.field-input--error]="emailInvalid"
+            type="email"
+            placeholder="tu@email.com"
+            formControlName="email"
+            autocomplete="email"
+            aria-describedby="email-error"
+          />
+          @if (emailInvalid) {
+            <span id="email-error" class="field-error" role="alert">
+              Introduce un correo válido.
+            </span>
+          }
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password">Contraseña</label>
+          <div class="field-input-wrap">
+            <input
+              id="password"
+              class="field-input"
+              [class.field-input--error]="passwordInvalid"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="••••••••"
+              formControlName="password"
+              autocomplete="current-password"
+              aria-describedby="password-error"
+            />
+            <button
+              type="button"
+              class="field-toggle"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            >
+              {{ showPassword() ? '🙈' : '👁' }}
+            </button>
+          </div>
+          @if (passwordInvalid) {
+            <span id="password-error" class="field-error" role="alert">
+              La contraseña debe tener al menos 6 caracteres.
+            </span>
+          }
+          <a class="forgot-link" routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        @if (error()) {
+          <div class="form-error" role="alert">{{ error() }}</div>
+        }
+
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="loading()"
+          [attr.aria-busy]="loading()"
+        >
+          {{ loading() ? 'Iniciando sesión…' : 'Iniciar sesión' }}
+        </button>
+
+      </form>
+
+      <p class="form-switch">
+        ¿No tienes cuenta? <a routerLink="/register">Regístrate gratis</a>
+      </p>
+    </div>
+  </main>
+
+</div>

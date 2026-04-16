@@ -26,16 +26,20 @@
       </app-day-view>
     }
     @default {
-      <app-month-view [eventos]="eventos()" [diaSeleccionado]="diaSeleccionado()"
-        (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+      <app-month-view
+        [eventos]="eventos()"
+        [diaSeleccionado]="diaSeleccionado()"
+        (diaSeleccionadoChange)="onDiaSeleccionado($event)"
+        (mesVisibleChange)="onMesVisibleChange($event)">
       </app-month-view>
     }
   }
 
-  <app-eventos 
-    [diaSeleccionado]="diaSeleccionado()" 
+  <app-eventos
+    [diaSeleccionado]="diaSeleccionado()"
+    [vista]="vistaActual()"
     [eventosDia]="eventosDia()"
-    [eventosSemana]="eventosSemana()" 
+    [eventosSemana]="eventosSemana()"
     [eventosMes]="eventosMes()"
     (addEventoDia)="abrirModalDia()"/>
 </div>

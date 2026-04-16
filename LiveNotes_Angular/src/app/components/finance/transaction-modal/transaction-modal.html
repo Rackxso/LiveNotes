@@ -77,7 +77,7 @@
           <input id="tx-date" type="date" formControlName="date" />
         </div>
 
-        <!-- Destination (only for expenses) -->
+        <!-- Destination: expense → budget category | income → regular or savings goal -->
         @if (selectedType() === 'expense') {
           <div class="field">
             <label for="tx-dest">{{ t()('finance.modal.destination') }}</label>
@@ -88,6 +88,25 @@
               }
             </select>
           </div>
+        }
+
+        @if (selectedType() === 'income') {
+          <div class="field">
+            <label for="tx-income-dest">{{ t()('finance.modal.destination') }}</label>
+            <select id="tx-income-dest" formControlName="savingsGoalId">
+              <option value="null">{{ t()('finance.modal.regularIncome') }}</option>
+              @for (goal of savingsGoals(); track goal.id) {
+                <option [value]="goal.id">{{ goal.name }}</option>
+              }
+            </select>
+          </div>
+
+          @if (form.controls.savingsGoalId.value !== 'null') {
+            <div class="savings-hint">
+              <span class="hint-icon" aria-hidden="true">↗</span>
+              {{ t()('finance.modal.savingsHint') }}
+            </div>
+          }
         }
 
         <!-- Actions -->

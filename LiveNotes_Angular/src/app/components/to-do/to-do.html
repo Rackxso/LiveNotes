@@ -1,18 +1,48 @@
+@if (lists().length > 1) {
+  <div class="list-tabs" role="tablist" aria-label="Filter by list">
+    <button
+      class="tab"
+      role="tab"
+      [class.active]="selectedList() === 'all'"
+      [attr.aria-selected]="selectedList() === 'all'"
+      (click)="selectList('all')">
+      All
+    </button>
+    @for (list of lists(); track list) {
+      <button
+        class="tab"
+        role="tab"
+        [class.active]="selectedList() === list"
+        [attr.aria-selected]="selectedList() === list"
+        (click)="selectList(list)">
+        {{ list }}
+      </button>
+    }
+  </div>
+}
+
 <ul class="todo-list" role="list">
-  @for (item of todos(); track item.id) {
-    <li class="todo-item" [class.done]="item.done">
+  @for (item of filteredTodos(); track item._id) {
+    <li class="todo-item" [class.done]="item.completado">
       <button
         class="todo-check"
-        [class.checked]="item.done"
-        (click)="toggle(item.id)"
-        [attr.aria-label]="(item.done ? 'Marcar incompleto: ' : 'Marcar completo: ') + item.text"
-        [attr.aria-pressed]="item.done">
-        @if (item.done) {
+        [class.checked]="item.completado"
+        (click)="toggle(item._id)"
+        [attr.aria-label]="(item.completado ? 'Mark incomplete: ' : 'Mark complete: ') + item.texto"
+        [attr.aria-pressed]="item.completado">
+        @if (item.completado) {
           <i class="fa-solid fa-check" aria-hidden="true"></i>
         }
       </button>
-      <span class="todo-text">{{ item.text }}</span>
-      <span class="todo-when">{{ item.when }}</span>
+      <div class="todo-body">
+        <span class="todo-text">{{ item.texto }}</span>
+        @if (item.fechaLimite) {
+          <span class="todo-when">{{ formatDate(item.fechaLimite) }}</span>
+        }
+      </div>
     </li>
+  }
+  @empty {
+    <li class="empty-msg" role="listitem">No tasks</li>
   }
 </ul>

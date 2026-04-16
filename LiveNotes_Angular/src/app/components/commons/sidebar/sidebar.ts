@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { I18nService } from '../../../services/i18n.service';
+import { AuthService } from '../../../services/auth.service';
 import { LangSelector } from '../lang-selector/lang-selector';
 
 export interface NavItem {
@@ -19,20 +20,34 @@ export interface NavItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
-  private readonly i18n = inject(I18nService);
+  private readonly i18n   = inject(I18nService);
+  private readonly auth   = inject(AuthService);
+  private readonly router = inject(Router);
   readonly t = this.i18n.t;
 
-  expanded = signal(false);
+  readonly expanded     = signal(false);
+  readonly userMenuOpen = signal(false);
 
-  toggle() {
-    this.expanded.update(v => !v);
+  readonly userName    = computed(() => this.auth.user()?.name ?? '');
+  readonly userInitial = computed(() => this.userName().charAt(0).toUpperCase());
+
+  toggle(): void { this.expanded.update(v => !v); }
+
+  toggleUserMenu(): void { this.userMenuOpen.update(v => !v); }
+
+  logout(): void {
+    this.auth.logout().subscribe({
+      next:  () => this.router.navigate(['/login']),
+      error: () => this.router.navigate(['/login']),
+    });
+    this.userMenuOpen.set(false);
   }
 
   readonly mainNav = computed<NavItem[]>(() => [
-    { label: this.t()('nav.home'),     icon: 'fa-solid fa-house',          route: '/',               exact: true },
-    { label: this.t()('nav.notes'),    icon: 'fa-solid fa-note-sticky',    route: '/notes',          badge: 3 },
-    { label: this.t()('nav.calendar'), icon: 'fa-solid fa-calendar',       route: '/calendar/month' },
-    { label: this.t()('nav.finances'), icon: 'fa-solid fa-hand-holding-dollar',        route: '/finance',        badge: 5 },
+    { label: this.t()('nav.home'),     icon: 'fa-solid fa-house',               route: '/',               exact: true },
+    { label: this.t()('nav.notes'),    icon: 'fa-solid fa-note-sticky',         route: '/notes' },
+    { label: this.t()('nav.calendar'), icon: 'fa-solid fa-calendar',            route: '/calendar/month' },
+    { label: this.t()('nav.finances'), icon: 'fa-solid fa-hand-holding-dollar', route: '/finance' },
   ]);
 
   readonly secondaryNav = computed<NavItem[]>(() => [

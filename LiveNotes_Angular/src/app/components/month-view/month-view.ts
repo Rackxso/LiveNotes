@@ -19,8 +19,9 @@ export class MonthView {
   readonly eventos = input<Evento[]>([]);
   readonly diaSeleccionado = input<Date>(new Date());
 
-  // Output
+  // Outputs
   readonly diaSeleccionadoChange = output<Date>();
+  readonly mesVisibleChange      = output<{ anyo: number; mes: number }>();
 
   readonly anyo = signal<number>(this.today.getFullYear());
   readonly mes = signal<number>(this.today.getMonth());
@@ -87,11 +88,13 @@ export class MonthView {
   irAlMesAnterior(): void {
     if (this.mes() === 0) { this.mes.set(11); this.anyo.update(a => a - 1); }
     else { this.mes.update(m => m - 1); }
+    this.mesVisibleChange.emit({ anyo: this.anyo(), mes: this.mes() });
   }
 
   irAlMesSiguiente(): void {
     if (this.mes() === 11) { this.mes.set(0); this.anyo.update(a => a + 1); }
     else { this.mes.update(m => m + 1); }
+    this.mesVisibleChange.emit({ anyo: this.anyo(), mes: this.mes() });
   }
 
   irAHoy(): void {

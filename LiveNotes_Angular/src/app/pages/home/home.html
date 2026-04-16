@@ -3,44 +3,31 @@
   <!-- Q1: Saludo ─────────────────────────────────────── -->
   <section class="quadrant q1" aria-label="Saludo">
     <p class="greeting-date">{{ fechaHoy() }}</p>
-    <h1 class="greeting-name">Hola, <em>Ana</em> 👋</h1>
+    <h1 class="greeting-name">Hola, <em>{{ userName() }}</em> 👋</h1>
     <p class="greeting-sub">
-      Tienes {{ eventosHoy().length }} eventos hoy
+      Tienes {{ eventosHoy().length }} evento{{ eventosHoy().length === 1 ? '' : 's' }} hoy
     </p>
 
-    <div class="chips">
-      @for (h of habitos(); track h.id) {
-        <button
-          class="chip"
-          [class.chip-done]="h.done"
-          (click)="toggleHabito(h.id)"
-          [attr.aria-pressed]="h.done">
-          <span class="chip-dot" [style.background]="h.done ? 'var(--green)' : 'var(--accent-color)'"></span>
-          {{ h.name }}{{ h.done ? ' ✓' : '' }}
-        </button>
-      }
-      <span class="chip chip-mood">
-        <span class="chip-dot" [style.background]="'var(--primary-color)'"></span>
-        Mood: 😊
-      </span>
-    </div>
-
     <div class="quick-stats">
-      <div class="stat-pill">
-        <span class="stat-label">Balance</span>
-        <span class="stat-val green">€2.442</span>
-        <span class="stat-change">▲ 3,7%</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-label">Gastos</span>
-        <span class="stat-val red">€457</span>
-        <span class="stat-change red">▲ 1,2%</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-label">Racha</span>
-        <span class="stat-val">18d</span>
-        <span class="stat-change">🔥 Buena</span>
-      </div>
+      @if (currentMonthStats(); as stats) {
+        <div class="stat-pill">
+          <span class="stat-label">Ingresos</span>
+          <span class="stat-val green">€{{ stats.income | number:'1.0-0' }}</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Gastos</span>
+          <span class="stat-val red">€{{ stats.expenses | number:'1.0-0' }}</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Ahorrado</span>
+          <span class="stat-val">€{{ stats.saved | number:'1.0-0' }}</span>
+        </div>
+      } @else {
+        <div class="stat-pill">
+          <span class="stat-label">Sin datos</span>
+          <span class="stat-val">—</span>
+        </div>
+      }
     </div>
   </section>
 
@@ -78,37 +65,34 @@
       <a routerLink="/finance" class="q-link">Ver todo →</a>
     </div>
 
-    <div class="finance-summary">
-      <div class="fin-card green">
-        <span class="fin-label">Balance</span>
-        <span class="fin-val">€2.442,13</span>
-        <span class="fin-change">▲ 3,7% vs mes ant.</span>
+    @if (currentMonthStats(); as stats) {
+      <div class="finance-summary">
+        <div class="fin-card green">
+          <span class="fin-label">Ingresos</span>
+          <span class="fin-val">€{{ stats.income | number:'1.2-2' }}</span>
+        </div>
+        <div class="fin-card red">
+          <span class="fin-label">Gastos</span>
+          <span class="fin-val">€{{ stats.expenses | number:'1.2-2' }}</span>
+        </div>
       </div>
-      <div class="fin-card red">
-        <span class="fin-label">Gastos</span>
-        <span class="fin-val">€457,87</span>
-        <span class="fin-change">▲ 1,2% vs mes ant.</span>
-      </div>
-    </div>
+    }
 
     <app-goal-progress />
 
     <div class="transacciones">
-      <div class="tx-row">
-        <span class="tx-name">Spotify</span>
-        <span class="tx-cat ent">Ocio</span>
-        <span class="tx-amt neg">-10€</span>
-      </div>
-      <div class="tx-row">
-        <span class="tx-name">Alquiler</span>
-        <span class="tx-cat hou">Vivienda</span>
-        <span class="tx-amt neg">-400€</span>
-      </div>
-      <div class="tx-row">
-        <span class="tx-name">Nómina</span>
-        <span class="tx-cat job">Trabajo</span>
-        <span class="tx-amt pos">+3250€</span>
-      </div>
+      @for (tx of recentTransactions(); track tx.id) {
+        <div class="tx-row">
+          <span class="tx-name">{{ tx.name }}</span>
+          <span class="tx-cat" [class]="'tx-cat ' + tx.categoryKey.slice(0,3)">{{ tx.category }}</span>
+          <span class="tx-amt" [class.pos]="tx.amount > 0" [class.neg]="tx.amount < 0">
+            {{ tx.amount > 0 ? '+' : '' }}{{ tx.amount | number:'1.0-0' }}€
+          </span>
+        </div>
+      }
+      @empty {
+        <p class="empty-msg">Sin transacciones recientes</p>
+      }
     </div>
   </section>
 

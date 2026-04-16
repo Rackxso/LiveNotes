@@ -181,6 +181,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   &:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; }
 }
 
+/* Savings hint */
+.savings-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--green) 10%, transparent);
+  color: var(--green);
+  font-family: var(--fuente-texto);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.hint-icon { font-size: 14px; }
+
 /* Form actions */
 .form-actions {
   display: flex;

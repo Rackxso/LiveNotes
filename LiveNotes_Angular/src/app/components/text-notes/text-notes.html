@@ -1,8 +1,19 @@
-<ul class="notes-list" role="list">
-  @for (note of notes; track note.id) {
-    <li class="note-item" [style.--cat-color]="note.categoryColor">
-      <span class="note-cat">{{ note.category }}</span>
-      <span class="note-title">{{ note.title }}</span>
+<ul class="notes-grid" role="list">
+  @for (note of filteredNotes(); track note._id) {
+    <li class="note-card">
+      <span class="note-title">{{ note.titulo }}</span>
+      @if (note.contenido) {
+        <span class="note-content">{{ note.contenido }}</span>
+      }
     </li>
   }
+  <li class="addBlank"
+      role="button"
+      tabindex="0"
+      (click)="addNote.emit()"
+      (keydown.enter)="addNote.emit()"
+      (keydown.space)="addNote.emit()"
+      aria-label="Add new note">
+    <p>Add new note</p>
+  </li>
 </ul>

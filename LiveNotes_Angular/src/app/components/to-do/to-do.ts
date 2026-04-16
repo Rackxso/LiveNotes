@@ -1,11 +1,5 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-
-interface TodoItem {
-  id: number;
-  text: string;
-  done: boolean;
-  when: string;
-}
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
+import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-to-do',
@@ -14,18 +8,54 @@ interface TodoItem {
   styleUrl: './to-do.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToDo {
-  readonly todos = signal<TodoItem[]>([
-    { id: 1, text: 'Revisar propuesta del cliente',  done: false, when: 'Mañana' },
-    { id: 2, text: 'Hacer gráficos de finanzas',      done: false, when: 'Hoy'    },
-    { id: 3, text: 'Actualizar portfolio',             done: true,  when: 'Hoy'    },
-    { id: 4, text: 'Comprar comida para la semana',   done: false, when: 'Mañana' },
-    { id: 5, text: 'Llamar al médico',                done: true,  when: 'Hoy'    },
-  ]);
+export class ToDo implements OnInit {
+  private readonly todoService = inject(TodoService);
 
-  toggle(id: number): void {
-    this.todos.update(items =>
-      items.map(t => t.id === id ? { ...t, done: !t.done } : t)
-    );
+  readonly searchQuery = input<string>('');
+  readonly selectedList = signal<string>('all');
+
+  readonly todos = this.todoService.todos;
+
+  ngOnInit(): void {
+    this.todoService.getTodos().subscribe();
+  }
+
+  readonly lists = computed(() => {
+    const unique = [...new Set(this.todos().map(t => t.idLista))];
+    return unique;
+  });
+
+  readonly filteredTodos = computed(() => {
+    let items = this.todos();
+    const list = this.selectedList();
+    if (list !== 'all') {
+      items = items.filter(t => t.idLista === list);
+    }
+    const q = this.searchQuery().toLowerCase().trim();
+    if (q) {
+      items = items.filter(t => t.texto.toLowerCase().includes(q));
+    }
+    return items;
+  });
+
+  toggle(id: string): void {
+    const todo = this.todos().find(t => t._id === id);
+    if (!todo) return;
+    this.todoService.updateTodo(id, { completado: !todo.completado }).subscribe();
+  }
+
+  formatDate(fechaLimite: string | null): string {
+    if (!fechaLimite) return '';
+    const date = new Date(fechaLimite);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    if (date.toDateString() === today.toDateString()) return 'Today';
+    if (date.toDateString() === tomorrow.toDateString()) return 'Tomorrow';
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+  }
+
+  selectList(list: string): void {
+    this.selectedList.set(list);
   }
 }

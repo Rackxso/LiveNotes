@@ -1,5 +1,56 @@
 <app-header [name]="nombreVista()"></app-header>
+
 <div class="body">
-    <app-to-do class="side" />
-    <app-text-notes class="side" />
+
+  <!-- NOTES PANEL -->
+  <section class="panel" aria-label="Notes">
+    <div class="panel-header">
+      <h2 class="panel-title">Notes</h2>
+      <button class="btn-new" type="button" aria-label="Create new note">
+        New note <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <label class="search-bar" for="notes-search">
+      <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+      <input
+        id="notes-search"
+        type="search"
+        class="search-input"
+        placeholder="Search in your notes"
+        [value]="notesSearch()"
+        (input)="notesSearch.set($any($event.target).value)"
+        aria-label="Search notes" />
+      <button class="search-filter" type="button" aria-label="Filter notes">
+        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+      </button>
+    </label>
+
+    <app-text-notes [searchQuery]="notesSearch()" class="notes-content" />
+  </section>
+
+  <!-- TO-DO PANEL -->
+  <section class="panel" aria-label="To-do">
+    <div class="panel-header">
+      <h2 class="panel-title">To-do</h2>
+    </div>
+
+    <label class="search-bar" for="todos-search">
+      <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+      <input
+        id="todos-search"
+        type="search"
+        class="search-input"
+        placeholder="Search in your to-do's"
+        [value]="todosSearch()"
+        (input)="todosSearch.set($any($event.target).value)"
+        aria-label="Search to-dos" />
+      <button class="search-filter" type="button" aria-label="Filter to-dos">
+        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+      </button>
+    </label>
+
+    <app-to-do [searchQuery]="todosSearch()" class="todos-content" />
+  </section>
+
 </div>

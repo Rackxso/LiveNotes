@@ -1,27 +1,88 @@
-import { Injectable, signal } from '@angular/core';
-import { Evento } from '../model/evento.model.js';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
+import { Evento } from '../model/evento.model';
+import { environment } from '../../environments/environment';
+
+interface CalendarEventResponse {
+  _id: string;
+  title: string;
+  date: string;
+  notes?: string;
+  endDate?: string;
+  location?: string;
+  allDay?: boolean;
+  color?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class EventosService {
-  private readonly _eventos = signal<Evento[]>([
-    { id: 1, titulo: 'Movie night', descripcion: 'Buy snack on the way home', fecha: new Date(2026, 3, 12), hora: '21:00' },
-    { id: 2, titulo: 'Pharma meeting', fecha: new Date(2026, 3, 13), hora: '11:00' },
-    { id: 3, titulo: 'Dentist', descripcion: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been ....', fecha: new Date(2026, 3, 13), hora: '16:00' },
-    { id: 4, titulo: 'Client Meeting', fecha: new Date(2026, 3, 18), hora: '10:00' },
-    { id: 5, titulo: 'Movie night', fecha: new Date(2026, 3, 6), hora: '21:00' },
-    { id: 6, titulo: 'Pharma proposal review', fecha: new Date(2026, 3, 20), hora: '08:00' },
-    { id: 7, titulo: 'Proyect 2 Deadline', fecha: new Date(2026, 3, 20) },
-    { id: 8, titulo: "Office's dinner", fecha: new Date(2026, 3, 27), hora: '19:00' },
-    { id: 9, titulo: 'Friends meeting', fecha: new Date(2026, 3, 27) },
-    { id: 10, titulo: 'Proyect 1 Deadline', fecha: new Date(2026, 3, 4) },
-    { id: 11, titulo: 'Lunch with Sara', fecha: new Date(2026, 3, 1), hora: '13:00' },
-  ]);
+  private readonly http = inject(HttpClient);
+  private readonly base = `${environment.apiUrl}/events/calendar`;
 
-
+  private readonly _eventos = signal<Evento[]>([]);
+  private _loaded = false;
   readonly eventos = this._eventos.asReadonly();
 
+  loadEventos(): void {
+    if (this._loaded) return;
+    this._loaded = true;
+    this.http.get<CalendarEventResponse[]>(this.base).pipe(
+      tap(data => this._eventos.set(data.map(e => this.mapToEvento(e))))
+    ).subscribe();
+  }
+
   addEvento(evento: Omit<Evento, 'id'>): void {
-    const nuevoId = Math.max(...this._eventos().map(e => e.id)) + 1;
-    this._eventos.update(eventos => [...eventos, { id: nuevoId, ...evento }]);
+    const tempId = `temp-${Date.now()}`;
+    this._eventos.update(evs => [...evs, { id: tempId, ...evento }]);
+
+    const dto = {
+      title: evento.titulo,
+      date: this.buildISODate(evento.fecha, evento.hora),
+      notes: evento.descripcion,
+    };
+
+    this.http.post<CalendarEventResponse>(this.base, dto).subscribe({
+      next: created => {
+        this._eventos.update(evs =>
+          evs.map(e => e.id === tempId ? this.mapToEvento(created) : e)
+        );
+      },
+      error: () => {
+        this._eventos.update(evs => evs.filter(e => e.id !== tempId));
+      }
+    });
+  }
+
+  deleteEvento(id: string): void {
+    this._eventos.update(evs => evs.filter(e => e.id !== id));
+    this.http.delete(`${this.base}/${id}`).subscribe();
+  }
+
+  private mapToEvento(e: CalendarEventResponse): Evento {
+    const fecha = new Date(e.date);
+    const h = fecha.getHours();
+    const m = fecha.getMinutes();
+    const hora = (h !== 0 || m !== 0)
+      ? `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+      : undefined;
+
+    return {
+      id: e._id,
+      titulo: e.title,
+      descripcion: e.notes,
+      fecha,
+      hora,
+    };
+  }
+
+  private buildISODate(fecha: Date, hora?: string): string {
+    if (hora) {
+      const [h, min] = hora.split(':').map(Number);
+      const d = new Date(fecha);
+      d.setHours(h, min, 0, 0);
+      return d.toISOString();
+    }
+    return fecha.toISOString();
   }
 }

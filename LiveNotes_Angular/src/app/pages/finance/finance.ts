@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { ActivatedRoute, Router } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { I18nService } from '../../services/i18n.service';
+import { FinanceService } from '../../services/finance.service';
 import { FinanceOverview } from './finance-overview';
 import { FinanceTransactions } from './finance-transactions';
 import { FinanceSavings } from './finance-savings';
@@ -14,9 +15,10 @@ import { FinanceSavings } from './finance-savings';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Finance {
-  private readonly route  = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly i18n   = inject(I18nService);
+  private readonly route   = inject(ActivatedRoute);
+  private readonly router  = inject(Router);
+  private readonly i18n    = inject(I18nService);
+  private readonly finance = inject(FinanceService);
   readonly t = this.i18n.t;
 
   readonly vistaActual = signal<string>('Overview');
@@ -39,6 +41,8 @@ export class Finance {
   readonly nombreVista = computed(() => this.t()('finance.pageTitle'));
 
   constructor() {
+    this.finance.loadTransactions().subscribe();
+    this.finance.loadSavingsGoals().subscribe();
     this.route.url.subscribe(segments => {
       const last = segments[segments.length - 1]?.path;
       this.vistaActual.set(this.urlToKey(last));

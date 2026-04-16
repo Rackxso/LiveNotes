@@ -50,13 +50,29 @@
 
     <app-lang-selector [expanded]="expanded()" />
 
-    <button class="user-card" [title]="!expanded() ? 'Ana García' : null" aria-label="User profile">
-      <div class="avatar" aria-hidden="true">A</div>
-      <div class="user-info">
-        <div class="user-name">Ana García</div>
-        <div class="user-role">Personal</div>
-      </div>
-    </button>
+    <div class="user-area">
+      @if (userMenuOpen()) {
+        <div class="user-menu" role="menu">
+          <button class="user-menu-item" role="menuitem" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+            <span>Cerrar sesión</span>
+          </button>
+        </div>
+      }
+      <button
+        class="user-card"
+        [title]="!expanded() ? userName() : null"
+        [attr.aria-label]="'Menú de ' + userName()"
+        [attr.aria-expanded]="userMenuOpen()"
+        (click)="toggleUserMenu()"
+      >
+        <div class="avatar" aria-hidden="true">{{ userInitial() }}</div>
+        <div class="user-info">
+          <div class="user-name">{{ userName() }}</div>
+          <div class="user-role">Personal</div>
+        </div>
+      </button>
+    </div>
   </div>
 
 </aside>

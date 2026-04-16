@@ -1,7 +1,12 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+// ── Frontend interfaces (used by components) ────────────────────────────────
 
 export interface Transaction {
-  id: number;
+  id: string;
   name: string;
   category: string;
   categoryKey: 'entertainment' | 'housing' | 'work' | 'food' | 'untracked';
@@ -10,11 +15,12 @@ export interface Transaction {
 }
 
 export interface SavingsGoal {
-  id: number;
+  id: string;
   name: string;
   saved: number;
   target: number;
   color: string;
+  movimientos?: { fecha: string; importe: number }[];
 }
 
 export interface BudgetCategory {
@@ -39,48 +45,134 @@ export interface Deposit {
   amount: number;
 }
 
+// ── Backend response shapes ──────────────────────────────────────────────────
+
+interface ApiCategoria {
+  _id: string;
+  nombre: string;
+  color?: string;
+}
+
+interface ApiMovimiento {
+  _id: string;
+  name: string;
+  fecha: string;
+  tipo: boolean;
+  importe: number;
+  categorias: ApiCategoria[];
+}
+
+interface ApiMeta {
+  _id: string;
+  name: string;
+  meta: number;
+  acumulado: number;
+  completada: boolean;
+  movimientos: { fecha: string; importe: number }[];
+}
+
+export interface ApiMovimientoDto {
+  name: string;
+  fecha: string;
+  tipo: boolean;
+  importe: number;
+  cuenta: string;
+  destinatario?: string;
+  metodo?: 'Transferencia' | 'Tarjeta' | 'Factura' | 'Subscripcion' | 'Bizum' | 'Efectivo' | 'Otro';
+  metaId?: string;
+  categorias?: string[];
+}
+
+export interface ApiMetaDto {
+  name: string;
+  meta: number;
+  acumulado?: number;
+}
+
+// ── Goal colors cycle ────────────────────────────────────────────────────────
+
+const GOAL_COLORS = [
+  'var(--purple)', 'var(--green)', 'var(--red)',
+  'var(--accent-color)', 'var(--blue)',
+];
+
+// ── Service ──────────────────────────────────────────────────────────────────
+
 @Injectable({ providedIn: 'root' })
 export class FinanceService {
-  readonly transactions = signal<Transaction[]>([
-    { id: 1, name: 'Spotify',          category: 'Ocio',       categoryKey: 'entertainment', date: new Date(2026, 2, 7),  amount: -10 },
-    { id: 2, name: 'Alquiler',         category: 'Vivienda',   categoryKey: 'housing',       date: new Date(2026, 2, 8),  amount: -400 },
-    { id: 3, name: 'Cena de ayer',     category: 'Comida',     categoryKey: 'food',          date: new Date(2026, 2, 8),  amount: -18.8 },
-    { id: 4, name: 'Gasto sin trazar', category: 'Sin trazar', categoryKey: 'untracked',     date: new Date(2026, 2, 5),  amount: -25 },
-    { id: 5, name: 'Nómina',           category: 'Trabajo',    categoryKey: 'work',          date: new Date(2026, 2, 5),  amount: 3250 },
-    { id: 6, name: 'Netflix',          category: 'Ocio',       categoryKey: 'entertainment', date: new Date(2026, 2, 3),  amount: -15.99 },
-    { id: 7, name: 'Supermercado',     category: 'Comida',     categoryKey: 'food',          date: new Date(2026, 2, 10), amount: -87.5 },
-    { id: 8, name: 'Gym',              category: 'Ocio',       categoryKey: 'entertainment', date: new Date(2026, 2, 1),  amount: -40 },
-  ]);
+  private readonly http = inject(HttpClient);
+  private readonly baseMovimientos = `${environment.apiUrl}/movimientos`;
+  private readonly baseMetas = `${environment.apiUrl}/metas`;
 
-  readonly savingsGoals = signal<SavingsGoal[]>([
-    { id: 1, name: 'Fondo emergencia', saved: 1200, target: 3000,  color: 'var(--purple)' },
-    { id: 2, name: 'Vacaciones',       saved: 350,  target: 600,   color: 'var(--green)' },
-    { id: 3, name: 'Portátil nuevo',   saved: 480,  target: 1500,  color: 'var(--red)' },
-    { id: 4, name: 'Jubilación',       saved: 2100, target: 10000, color: 'var(--accent-color)' },
-  ]);
+  // ── Signals ────────────────────────────────────────────────────────────────
 
-  readonly budgetCategories = signal<BudgetCategory[]>([
-    { id: 1, name: 'Alimentación', categoryKey: 'food',          budget: 500, color: 'var(--green)' },
-    { id: 2, name: 'Vivienda',     categoryKey: 'housing',       budget: 400, color: 'var(--blue)' },
-    { id: 3, name: 'Ocio',         categoryKey: 'entertainment', budget: 100, color: 'var(--purple)' },
-  ]);
+  readonly transactions = signal<Transaction[]>([]);
+  readonly savingsGoals = signal<SavingsGoal[]>([]);
+  readonly budgetCategories = signal<BudgetCategory[]>([]);
 
-  readonly monthlyStats = signal<MonthlyStats[]>([
-    { month: 'Jul', income: 3200, expenses: 2800, saved: 400 },
-    { month: 'Aug', income: 3250, expenses: 2700, saved: 550 },
-    { month: 'Sep', income: 3250, expenses: 2600, saved: 650 },
-    { month: 'Oct', income: 3100, expenses: 2900, saved: 200 },
-    { month: 'Nov', income: 3250, expenses: 3000, saved: 250 },
-    { month: 'Dec', income: 3400, expenses: 2500, saved: 900 },
-    { month: 'Jan', income: 3250, expenses: 2850, saved: 400 },
-    { month: 'Feb', income: 3250, expenses: 2900, saved: 350 },
-  ]);
+  private _txLoaded = false;
+  private _goalsLoaded = false;
 
-  readonly recentDeposits = signal<Deposit[]>([
-    { id: 1, goalName: 'Fondo emergencia', date: new Date(2025, 10, 4), amount: 80 },
-    { id: 2, goalName: 'Vacaciones',       date: new Date(2025, 10, 4), amount: 50 },
-    { id: 3, goalName: 'Fondo emergencia', date: new Date(2025, 10, 6), amount: 200 },
-  ]);
+  // ── Computed ───────────────────────────────────────────────────────────────
+
+  readonly monthlyStats = computed<MonthlyStats[]>(() => {
+    const txs = this.transactions();
+    const map = new Map<string, { income: number; expenses: number; year: number; monthNum: number }>();
+
+    for (const tx of txs) {
+      const d = tx.date;
+      const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+      if (!map.has(key)) {
+        map.set(key, { income: 0, expenses: 0, year: d.getFullYear(), monthNum: d.getMonth() });
+      }
+      const entry = map.get(key)!;
+      if (tx.amount > 0) entry.income += tx.amount;
+      else entry.expenses += Math.abs(tx.amount);
+    }
+
+    return Array.from(map.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([, { income, expenses, year, monthNum }]) => ({
+        month: new Date(year, monthNum).toLocaleString('en-US', { month: 'short' }),
+        income,
+        expenses,
+        saved: income - expenses,
+      }));
+  });
+
+  readonly recentDeposits = computed<Deposit[]>(() => {
+    let autoId = 0;
+    return this.savingsGoals()
+      .flatMap(g =>
+        (g.movimientos ?? []).map(m => ({
+          id: autoId++,
+          goalName: g.name,
+          date: new Date(m.fecha),
+          amount: m.importe,
+        }))
+      )
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
+      .slice(0, 10);
+  });
+
+  readonly totalSaved = computed(() =>
+    this.savingsGoals().reduce((sum, g) => sum + g.saved, 0)
+  );
+
+  readonly totalTarget = computed(() =>
+    this.savingsGoals().reduce((sum, g) => sum + g.target, 0)
+  );
+
+  readonly totalProgress = computed(() => {
+    const target = this.totalTarget();
+    return target ? Math.round((this.totalSaved() / target) * 100) : 0;
+  });
+
+  readonly avgMonthlySaved = computed(() => {
+    const stats = this.monthlyStats();
+    if (!stats.length) return 0;
+    return stats.reduce((sum, s) => sum + s.saved, 0) / stats.length;
+  });
 
   readonly categorySpending = computed(() => {
     const txs = this.transactions();
@@ -92,27 +184,109 @@ export class FinanceService {
     });
   });
 
-  readonly totalSaved = computed(() =>
-    this.savingsGoals().reduce((sum, g) => sum + g.saved, 0)
-  );
+  // ── HTTP: Movimientos ──────────────────────────────────────────────────────
 
-  readonly totalTarget = computed(() =>
-    this.savingsGoals().reduce((sum, g) => sum + g.target, 0)
-  );
+  loadTransactions(): Observable<ApiMovimiento[]> {
+    if (this._txLoaded) return of([]);
+    this._txLoaded = true;
+    return this.http.get<ApiMovimiento[]>(this.baseMovimientos).pipe(
+      tap(data => this.transactions.set(data.map(m => this.mapToTransaction(m))))
+    );
+  }
 
-  readonly totalProgress = computed(() =>
-    Math.round((this.totalSaved() / this.totalTarget()) * 100)
-  );
+  createMovimiento(dto: ApiMovimientoDto): Observable<ApiMovimiento> {
+    return this.http.post<ApiMovimiento>(this.baseMovimientos, dto).pipe(
+      tap(m => this.transactions.update(txs => [this.mapToTransaction(m), ...txs]))
+    );
+  }
 
-  readonly avgMonthlySaved = computed(() => {
-    const stats = this.monthlyStats();
-    if (!stats.length) return 0;
-    return stats.reduce((sum, s) => sum + s.saved, 0) / stats.length;
-  });
+  // ── HTTP: Metas ────────────────────────────────────────────────────────────
+
+  loadSavingsGoals(): Observable<ApiMeta[]> {
+    if (this._goalsLoaded) return of([]);
+    this._goalsLoaded = true;
+    return this.http.get<ApiMeta[]>(this.baseMetas).pipe(
+      tap(data => this.savingsGoals.set(data.map((m, i) => this.mapToSavingsGoal(m, i))))
+    );
+  }
+
+  createMeta(dto: ApiMetaDto): Observable<ApiMeta> {
+    const colorIdx = this.savingsGoals().length % GOAL_COLORS.length;
+    return this.http.post<ApiMeta>(this.baseMetas, dto).pipe(
+      tap(m => this.savingsGoals.update(goals => [...goals, this.mapToSavingsGoal(m, colorIdx)]))
+    );
+  }
+
+  updateMeta(id: string, dto: Partial<ApiMetaDto>): Observable<ApiMeta> {
+    return this.http.put<ApiMeta>(`${this.baseMetas}/${id}`, dto).pipe(
+      tap(updated => this.savingsGoals.update(goals =>
+        goals.map(g => g.id === id ? this.mapToSavingsGoal(updated, goals.findIndex(x => x.id === id)) : g)
+      ))
+    );
+  }
+
+  deleteMeta(id: string): Observable<unknown> {
+    return this.http.delete(`${this.baseMetas}/${id}`).pipe(
+      tap(() => this.savingsGoals.update(goals => goals.filter(g => g.id !== id)))
+    );
+  }
+
+  // ── Local write helpers (used by components pending full API integration) ──
 
   addTransaction(data: Omit<Transaction, 'id'>): void {
-    const ids = this.transactions().map(t => t.id);
-    const newId = ids.length ? Math.max(...ids) + 1 : 1;
-    this.transactions.update(txs => [{ ...data, id: newId }, ...txs]);
+    const tempId = `local-${Date.now()}`;
+    this.transactions.update(txs => [{ ...data, id: tempId }, ...txs]);
+  }
+
+  depositToGoal(goalId: string, amount: number, name: string, date: Date): void {
+    const goal = this.savingsGoals().find(g => g.id === goalId);
+    if (!goal) return;
+
+    this.savingsGoals.update(goals =>
+      goals.map(g => g.id === goalId ? { ...g, saved: g.saved + amount } : g)
+    );
+
+    this.addTransaction({
+      name,
+      amount,
+      date,
+      categoryKey: 'work',
+      category: `→ ${goal.name}`,
+    });
+  }
+
+  // ── Mapping helpers ────────────────────────────────────────────────────────
+
+  private mapToTransaction(m: ApiMovimiento): Transaction {
+    const cat = m.categorias?.[0];
+    return {
+      id: m._id,
+      name: m.name,
+      category: cat?.nombre ?? 'Sin trazar',
+      categoryKey: this.mapCategoryKey(cat?.nombre),
+      date: new Date(m.fecha),
+      amount: m.tipo ? m.importe : -m.importe,
+    };
+  }
+
+  private mapToSavingsGoal(m: ApiMeta, colorIndex: number): SavingsGoal {
+    return {
+      id: m._id,
+      name: m.name,
+      saved: m.acumulado,
+      target: m.meta,
+      color: GOAL_COLORS[colorIndex % GOAL_COLORS.length],
+      movimientos: m.movimientos,
+    };
+  }
+
+  private mapCategoryKey(nombre?: string): Transaction['categoryKey'] {
+    if (!nombre) return 'untracked';
+    const n = nombre.toLowerCase();
+    if (n.includes('ocio') || n.includes('entret') || n.includes('suscr')) return 'entertainment';
+    if (n.includes('vivien') || n.includes('alquil') || n.includes('hous')) return 'housing';
+    if (n.includes('trabaj') || n.includes('nómin') || n.includes('work') || n.includes('salari')) return 'work';
+    if (n.includes('comid') || n.includes('aliment') || n.includes('food') || n.includes('super') || n.includes('restaur')) return 'food';
+    return 'untracked';
   }
 }

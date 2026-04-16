@@ -35,6 +35,12 @@ export class FinanceSavings {
     return date.toLocaleDateString(this.locale(), { day: 'numeric', month: 'short' });
   }
 
+  readonly closestGoal = computed(() =>
+    [...this.finance.savingsGoals()]
+      .filter(g => g.saved < g.target)
+      .sort((a, b) => (b.saved / b.target) - (a.saved / a.target))[0] ?? null
+  );
+
   monthsToComplete(goal: SavingsGoal): number | null {
     if (goal.saved >= goal.target) return null;
     const deposits = this.finance.recentDeposits().filter(d => d.goalName === goal.name);

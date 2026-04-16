@@ -36,7 +36,8 @@
     "thisMonth": "Events this month",
     "addEvent": "Add Event",
     "event_one": "Event",
-    "event_other": "Events"
+    "event_other": "Events",
+    "noEvents": "No upcoming events"
   },
   "week": {
     "prevWeek": "Previous week",
@@ -67,6 +68,11 @@
     "addTransaction": "Add movement",
     "filterBy": "Filter by",
     "projectionMonths": "months to goal",
+    "closestGoal": "Closest to goal",
+    "insight": {
+      "more": "more in expenses vs last month",
+      "less": "less in expenses vs last month"
+    },
     "cat": {
       "all": "All",
       "food": "Food",
@@ -90,7 +96,9 @@
       "save": "Save",
       "cancel": "Cancel",
       "close": "Close",
-      "category": "Category"
+      "category": "Category",
+      "regularIncome": "Regular income",
+      "savingsHint": "This amount will be added to the selected goal"
     },
     "views": {
       "overview": "Overview",

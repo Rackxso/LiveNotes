@@ -1,5 +1,43 @@
 :host { display: block; }
 
+/* ── List tabs ─────────────────────────────────── */
+.list-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  font-size: 12px;
+  font-family: var(--fuente-texto);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--background-subcolor);
+  background: transparent;
+  color: var(--text-subcolor);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: var(--background-subcolor);
+    color: var(--text-color);
+  }
+
+  &.active {
+    background: var(--background-subcolor);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    font-weight: 600;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Todo list ─────────────────────────────────── */
 .todo-list {
   list-style: none;
   margin: 0;
@@ -10,9 +48,9 @@
 
 .todo-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--background-subcolor);
   font-size: 13px;
 
@@ -33,6 +71,7 @@
   transition: background 0.15s, border-color 0.15s;
   color: var(--background-color);
   padding: 0;
+  margin-top: 1px;
 
   &.checked {
     background: var(--primary-color);
@@ -47,8 +86,15 @@
   }
 }
 
-.todo-text {
+.todo-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   flex: 1;
+  min-width: 0;
+}
+
+.todo-text {
   color: var(--text-color);
   line-height: 1.3;
 
@@ -62,5 +108,10 @@
 .todo-when {
   font-size: 11px;
   color: var(--text-subcolor);
-  flex-shrink: 0;
+}
+
+.empty-msg {
+  font-size: 12px;
+  color: var(--text-subcolor);
+  padding: 12px 0;
 }

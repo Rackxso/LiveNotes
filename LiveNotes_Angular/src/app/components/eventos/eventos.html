@@ -5,27 +5,24 @@
     </div>
 </div>
 <div class="cuerpo">
+
     <p>{{ t()('eventos.thisDay') }}</p>
-    @if(eventosDia().length > 0){
-    @for (ev of eventosDia(); track $index) {
-    <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
+    @for (ev of eventosDia(); track ev.id) {
+      <app-event-card class="eventoItem" [evento]="ev" />
     }
-    }
-    <div class="addBlank" (click)="addEventoDia.emit()">
-        <p>{{ t()('eventos.addEvent') }}</p>
-    </div>
 
     <p>{{ t()('eventos.thisWeek') }}</p>
-    @if(eventosSemana().length > 0){
-    @for (ev of eventosSemana(); track $index) {
-    <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
-    }
+    @for (ev of eventosSemana(); track ev.id) {
+      <app-event-card class="eventoItem" [evento]="ev" />
     }
 
     <p>{{ t()('eventos.thisMonth') }}</p>
-    @if(eventosMes().length > 0){
-    @for (ev of eventosMes(); track $index) {
-    <app-event-card class="eventoItem" [evento]="ev"></app-event-card>
+    @for (ev of eventosMes(); track ev.id) {
+      <app-event-card class="eventoItem" [evento]="ev" />
     }
-    }
+
+</div>
+
+<div class="addBlank" (click)="addEventoDia.emit()">
+    <p>{{ t()('eventos.addEvent') }}</p>
 </div>

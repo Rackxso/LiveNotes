@@ -5,6 +5,8 @@
     height: 100%;
 }
 
+
+
 .header {
     max-height: 84px;
     height: 83px;
@@ -48,5 +50,21 @@
     }
     .eventoItem{
         padding-inline: 10px;
+    }
+}
+
+.addBlank {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--background-subcolor);
+    border-top: 1px solid var(--primary-subcolor);
+    padding: 12px;
+
+    p {
+        margin: 0;
+        font-family: var(--fuente-texto);
     }
 }
