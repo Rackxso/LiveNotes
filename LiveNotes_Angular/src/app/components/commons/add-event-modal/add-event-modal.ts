@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, input, output } from '@angu
 import { FormsModule } from '@angular/forms';
 import { Evento } from '../../../model/evento.model';
 import { I18nService } from '../../../services/i18n.service';
+import { PrimaryButton } from '../primary-button/primary-button';
+import { SecondaryButton } from '../secondary-button/secondary-button';
 
 @Component({
   selector: 'app-add-event-modal',
-  imports: [FormsModule],
+  imports: [FormsModule, PrimaryButton, SecondaryButton],
   templateUrl: './add-event-modal.html',
   styleUrl: './add-event-modal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

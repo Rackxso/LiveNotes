@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import { SidebarComponent } from './components/commons/sidebar/sidebar';
+import { PosthogService } from './services/posthog.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { SidebarComponent } from './components/commons/sidebar/sidebar';
 })
 export class App {
   private readonly router = inject(Router);
+  private readonly posthog = inject(PosthogService);
 
   protected readonly isAuthPage = toSignal(
     this.router.events.pipe(

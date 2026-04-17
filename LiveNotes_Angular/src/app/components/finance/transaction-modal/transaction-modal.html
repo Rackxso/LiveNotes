@@ -111,12 +111,8 @@
 
         <!-- Actions -->
         <div class="form-actions">
-          <button type="button" class="btn-cancel" (click)="close()">
-            {{ t()('finance.modal.cancel') }}
-          </button>
-          <button type="submit" class="btn-save" [disabled]="form.invalid">
-            {{ t()('finance.modal.save') }}
-          </button>
+          <app-secondary-button class="small" [config]="{texto: t()('finance.modal.cancel')}" (clicked)="close()" />
+          <app-primary-button class="small" [config]="{texto: t()('finance.modal.save'), type: 'submit'}" [disabled]="form.invalid" />
         </div>
 
       </form>

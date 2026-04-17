@@ -4,26 +4,26 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   align-content: start;
 }
 
 .note-card {
-  background: var(--background-color);
+  background: var(--secondary-background-color);
   border-radius: 10px;
-  padding: 12px;
-  border: 1px solid var(--background-subcolor);
+  padding: 10px 14px;
+  border: 1px solid var(--primary-subcolor);
   cursor: pointer;
-  min-height: 100px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  transition: background 0.15s;
+  gap: 4px;
+  transition: border-color 0.15s;
+  font-family: var(--fuente-texto);
 
   &:hover {
-    background: var(--background-subcolor);
+    border-color: var(--accent-color);
   }
 
   &:focus-visible {
@@ -45,7 +45,37 @@
   line-height: 1.5;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+
+.addBlank {
+  background: transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 1px dashed var(--primary-subcolor);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+  font-family: var(--fuente-texto);
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-subcolor);
+  }
+
+  &:hover {
+    border-color: var(--accent-color);
+
+    p { color: var(--accent-color); }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
 }
 

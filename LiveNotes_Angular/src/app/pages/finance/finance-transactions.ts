@@ -10,6 +10,7 @@ import { FinanceService, Transaction } from '../../services/finance.service';
 import { I18nService } from '../../services/i18n.service';
 import { TransactionItem } from '../../components/finance/transaction-item/transaction-item';
 import { TransactionModal } from '../../components/finance/transaction-modal/transaction-modal';
+import { PrimaryButton } from '../../components/commons/primary-button/primary-button';
 
 type FilterKey = Transaction['categoryKey'] | 'all';
 
@@ -21,7 +22,7 @@ interface TxGroup {
 
 @Component({
   selector: 'app-finance-transactions',
-  imports: [TransactionItem, TransactionModal],
+  imports: [TransactionItem, TransactionModal, PrimaryButton],
   templateUrl: './finance-transactions.html',
   styleUrl: './finance-transactions.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

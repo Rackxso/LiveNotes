@@ -45,9 +45,11 @@ export class SidebarComponent {
 
   readonly mainNav = computed<NavItem[]>(() => [
     { label: this.t()('nav.home'),     icon: 'fa-solid fa-house',               route: '/',               exact: true },
-    { label: this.t()('nav.notes'),    icon: 'fa-solid fa-note-sticky',         route: '/notes' },
     { label: this.t()('nav.calendar'), icon: 'fa-solid fa-calendar',            route: '/calendar/month' },
+    { label: this.t()('nav.tracker'), icon: 'fa-solid fa-chart-line', route: '/tracker' },
+    { label: this.t()('nav.notes'),    icon: 'fa-solid fa-note-sticky',         route: '/notes' },
     { label: this.t()('nav.finances'), icon: 'fa-solid fa-hand-holding-dollar', route: '/finance' },
+    
   ]);
 
   readonly secondaryNav = computed<NavItem[]>(() => [

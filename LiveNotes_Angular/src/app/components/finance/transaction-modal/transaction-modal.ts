@@ -12,10 +12,12 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FinanceService, Transaction } from '../../../services/finance.service';
 import { I18nService } from '../../../services/i18n.service';
+import { PrimaryButton } from '../../commons/primary-button/primary-button';
+import { SecondaryButton } from '../../commons/secondary-button/secondary-button';
 
 @Component({
   selector: 'app-transaction-modal',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PrimaryButton, SecondaryButton],
   templateUrl: './transaction-modal.html',
   styleUrl: './transaction-modal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

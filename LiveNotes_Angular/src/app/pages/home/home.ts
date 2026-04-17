@@ -10,10 +10,11 @@ import { MiniCalendar } from '../../components/commons/mini-calendar/mini-calend
 import { GoalProgress } from '../../components/commons/goal-progress/goal-progress';
 import { ToDo } from '../../components/to-do/to-do';
 import { TextNotes } from '../../components/text-notes/text-notes';
+import { AddNoteModal } from '../../components/commons/add-note-modal/add-note-modal';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, DecimalPipe, MiniCalendar, GoalProgress, ToDo, TextNotes],
+  imports: [RouterLink, DecimalPipe, MiniCalendar, GoalProgress, ToDo, TextNotes, AddNoteModal],
   templateUrl: './home.html',
   styleUrl: './home.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,6 +84,11 @@ export class Home {
 
     return [fecha, ev.hora].filter(Boolean).join(' · ');
   };
+
+  readonly showAddNoteModal = signal(false);
+
+  openAddNoteModal(): void  { this.showAddNoteModal.set(true);  }
+  closeAddNoteModal(): void { this.showAddNoteModal.set(false); }
 
   onDiaSeleccionado(fecha: Date): void { this.diaSeleccionado.set(fecha); }
   onMesVisibleChange(val: { anyo: number; mes: number }): void { this.mesCalendario.set(val); }

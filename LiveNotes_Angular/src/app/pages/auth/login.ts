@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { PrimaryButton } from '../../components/commons/primary-button/primary-button';
+import { PosthogService } from '../../services/posthog.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PrimaryButton],
   templateUrl: './login.html',
   styleUrl: './login.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -13,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
 export class Login {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly posthog = inject(PosthogService);
 
   protected readonly form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -37,7 +40,10 @@ export class Login {
     this.error.set(null);
 
     this.auth.login(email!, password!).subscribe({
-      next: () => this.router.navigate(['/']),
+      next: () => {
+        this.posthog.capture('user_logged_in');
+        this.router.navigate(['/']);
+      },
       error: (err: { error?: { message?: string } }) => {
         this.error.set(err.error?.message ?? 'Error al iniciar sesión. Inténtalo de nuevo.');
         this.loading.set(false);

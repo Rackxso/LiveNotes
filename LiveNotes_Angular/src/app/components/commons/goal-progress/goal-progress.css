@@ -17,27 +17,6 @@
   margin: 0;
 }
 
-.bt-add-btn {
-  font-size: 12px;
-  font-family: var(--fuente-texto);
-  color: var(--accent-color);
-  background: transparent;
-  border: 1.5px solid var(--accent-color);
-  border-radius: 20px;
-  padding: 3px 10px;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-
-  &:hover {
-    background: var(--accent-color);
-    color: var(--background-color);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
-  }
-}
 
 .bt-item {
   margin-bottom: 10px;

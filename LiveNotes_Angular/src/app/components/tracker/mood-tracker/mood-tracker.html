@@ -1,0 +1,53 @@
+<p class="mt-title">{{ t()('tracker.mood') }}</p>
+
+@if (!alreadySaved()) {
+  <p class="mt-question">{{ t()('tracker.howFeeling') }}</p>
+
+  <div class="mt-moods" role="group" [attr.aria-label]="t()('tracker.howFeeling')">
+    @for (m of MOODS; track m.key) {
+      <button
+        class="mt-mood-btn"
+        [class.selected]="selectedMood() === m.key"
+        [style.--mood-color]="m.color"
+        (click)="selectedMood.set(m.key)"
+        [attr.aria-pressed]="selectedMood() === m.key"
+        [attr.aria-label]="t()('tracker.mood' + (m.key | titlecase))">
+        <i [class]="m.icon" aria-hidden="true"></i>
+        <span>{{ t()('tracker.mood' + (m.key | titlecase)) }}</span>
+      </button>
+    }
+  </div>
+
+  <textarea
+    class="mt-notes"
+    [value]="notes()"
+    (input)="onNotesInput($event)"
+    [placeholder]="t()('tracker.whyFeeling')"
+    [attr.aria-label]="t()('tracker.whyFeeling')"></textarea>
+
+  <app-primary-button
+    class="small"
+    [config]="{ texto: t()('tracker.saveEntry') }"
+    [disabled]="!selectedMood() || saving()"
+    (clicked)="save()" />
+} @else {
+  <p class="mt-saved-label">{{ t()('tracker.done') }} ✓</p>
+}
+
+<!-- Monthly mood calendar -->
+<p class="mt-section-label">{{ t()('tracker.yourStreak') }}: <strong>{{ moodStreak() }}</strong> {{ t()('tracker.days') }}</p>
+
+<div class="mt-calendar" role="grid" [attr.aria-label]="t()('tracker.mood')">
+  @for (d of currentMonthDays(); track d) {
+    <span
+      class="mt-cal-dot"
+      [style.background]="moodColorForDay(d) ?? 'var(--primary-subcolor)'"
+      role="gridcell"
+      [attr.aria-label]="'Day ' + d + (moodColorForDay(d) ? ' logged' : '')"></span>
+  }
+</div>
+
+<!-- Dominant mood stat -->
+<div class="mt-stats">
+  <p class="mt-stat-text">{{ t()('tracker.moodMonth') }}: <strong>{{ dominantMoodLabel() }}</strong></p>
+</div>

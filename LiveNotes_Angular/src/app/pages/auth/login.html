@@ -92,14 +92,11 @@
           <div class="form-error" role="alert">{{ error() }}</div>
         }
 
-        <button
-          type="submit"
-          class="btn-primary"
+        <app-primary-button
+          class="full"
+          [config]="{texto: loading() ? 'Iniciando sesión…' : 'Iniciar sesión', type: 'submit'}"
           [disabled]="loading()"
-          [attr.aria-busy]="loading()"
-        >
-          {{ loading() ? 'Iniciando sesión…' : 'Iniciar sesión' }}
-        </button>
+        />
 
       </form>
 

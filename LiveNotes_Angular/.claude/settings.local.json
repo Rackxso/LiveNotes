@@ -5,7 +5,8 @@
       "Bash(npx ng:*)",
       "Bash(xargs wc *)",
       "Bash(npx tsc *)",
-      "Bash(xargs ls *)"
+      "Bash(xargs ls *)",
+      "Bash(xargs grep *)"
     ]
   }
 }

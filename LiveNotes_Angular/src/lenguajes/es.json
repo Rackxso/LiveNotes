@@ -5,7 +5,8 @@
     "calendar": "Calendario",
     "finances": "Finanzas",
     "settings": "Ajustes",
-    "help": "Ayuda"
+    "help": "Ayuda",
+    "tracker": "Tracker"
   },
   "calendar": {
     "pageTitle": "Calendario",
@@ -108,6 +109,36 @@
   },
   "notes": {
     "pageTitle": "Notas"
+  },
+  "tracker": {
+    "pageTitle": "Tracker",
+    "habits": "Hábitos",
+    "addHabit": "Añadir hábito",
+    "yourHabits": "Tus hábitos",
+    "noHabits": "Aún no hay hábitos",
+    "streak": "días de racha",
+    "markDone": "Marcar hecho",
+    "done": "Hecho",
+    "mood": "Estado de ánimo",
+    "howFeeling": "¿Cómo te sientes hoy?",
+    "whyFeeling": "¿Qué te hizo sentir así?",
+    "saveEntry": "Guardar",
+    "moodMonth": "Tu estado de ánimo este mes ha sido",
+    "yourStreak": "Tu racha es de",
+    "days": "Días",
+    "moodHappy": "Feliz",
+    "moodAngry": "Enfadado",
+    "moodSad": "Triste",
+    "moodMotivated": "Motivado",
+    "moodExcited": "Emocionado",
+    "moodCalm": "Tranquilo",
+    "modal": {
+      "title": "Nuevo hábito",
+      "name": "Nombre del hábito",
+      "namePlaceholder": "Ej. Correr 30 min",
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    }
   },
   "lang": {
     "selector": "Idioma",

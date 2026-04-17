@@ -1,1 +1,9 @@
-<button (click)="click()">{{ config.texto }}</button>
+<button
+  [type]="config().type ?? 'button'"
+  [disabled]="disabled()"
+  (click)="handleClick()">
+  @if (config().icon) {
+    <i [class]="config().icon" aria-hidden="true"></i>
+  }
+  {{ config().texto }}
+</button>

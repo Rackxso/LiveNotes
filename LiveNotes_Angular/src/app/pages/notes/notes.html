@@ -6,9 +6,10 @@
   <section class="panel" aria-label="Notes">
     <div class="panel-header">
       <h2 class="panel-title">Notes</h2>
-      <button class="btn-new" type="button" aria-label="Create new note">
-        New note <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
-      </button>
+      <app-primary-button
+        [config]="{texto: 'New note', icon: 'fa-solid fa-circle-plus'}"
+        (clicked)="openAddNoteModal()"
+        aria-label="Create new note" />
     </div>
 
     <label class="search-bar" for="notes-search">
@@ -26,7 +27,7 @@
       </button>
     </label>
 
-    <app-text-notes [searchQuery]="notesSearch()" class="notes-content" />
+    <app-text-notes [searchQuery]="notesSearch()" class="notes-content" (addNote)="openAddNoteModal()" />
   </section>
 
   <!-- TO-DO PANEL -->
@@ -54,3 +55,9 @@
   </section>
 
 </div>
+
+@if (showAddNoteModal()) {
+  <app-add-note-modal
+    (cerrar)="closeAddNoteModal()"
+    (guardado)="closeAddNoteModal()" />
+}

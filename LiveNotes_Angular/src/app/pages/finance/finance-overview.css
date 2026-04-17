@@ -45,6 +45,7 @@
 
 .see-more {
   font-size: 12px;
+  font-family: var(--fuente-texto);
   color: var(--accent-color);
   text-decoration: none;
 

@@ -57,5 +57,10 @@ export const routes: Routes = [
         path: 'finance/savings',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/finance/finance').then(m => m.Finance)
+    },
+    {
+        path: 'tracker',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/tracker/tracker').then(m => m.Tracker)
     }
 ];

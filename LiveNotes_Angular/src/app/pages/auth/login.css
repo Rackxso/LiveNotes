@@ -272,34 +272,6 @@
   margin-bottom: 14px;
 }
 
-/* ── Botones ──────────────────────────────────────────────────────────*/
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-subcolor));
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-family: var(--fuente-texto);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  margin-top: 8px;
-  letter-spacing: 0.3px;
-  box-shadow: var(--shadow-button);
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--primary-color) 35%, transparent);
-}
-
-.btn-primary:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-  transform: none;
-}
 
 /* ── Switch regístrate ───────────────────────────────────────────────*/
 .form-switch {

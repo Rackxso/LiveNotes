@@ -15,9 +15,9 @@
       <span class="summary-value">-{{ fmt(monthExpenses()) }} €</span>
     </div>
   </div>
-  <button class="add-tx-btn" (click)="openCreate()">
-    + {{ t()('finance.addTransaction') }}
-  </button>
+  <app-primary-button
+    [config]="{texto: '+ ' + t()('finance.addTransaction')}"
+    (clicked)="openCreate()" />
 </div>
 
 <!-- Filter chips -->

@@ -1,6 +1,6 @@
 <div class="bt-header">
   <p class="bt-title">{{ t()('finance.budgetTracker') }}</p>
-  <button class="bt-add-btn">{{ t()('finance.add') }}</button>
+  <app-primary-button class="small" [config]="{texto: t()('finance.add')}" />
 </div>
 
 @for (goal of goals(); track goal.id) {

@@ -106,7 +106,7 @@
     <div class="q4-cols">
       <div class="q4-col">
         <h3 class="q4-col-title">Notas</h3>
-        <app-text-notes />
+        <app-text-notes (addNote)="openAddNoteModal()" />
       </div>
       <div class="q4-col">
         <h3 class="q4-col-title">Pendientes</h3>
@@ -116,3 +116,9 @@
   </section>
 
 </div>
+
+@if (showAddNoteModal()) {
+  <app-add-note-modal
+    (cerrar)="closeAddNoteModal()"
+    (guardado)="closeAddNoteModal()" />
+}

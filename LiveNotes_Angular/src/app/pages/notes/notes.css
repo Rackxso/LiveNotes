@@ -41,27 +41,6 @@
   margin: 0;
 }
 
-/* ── New note button ──────────────────────────── */
-.btn-new {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--fuente-texto);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--background-color);
-  background: var(--accent-color);
-  border: none;
-  border-radius: 20px;
-  padding: 7px 14px;
-  cursor: pointer;
-  transition: opacity 0.15s;
-
-  i { font-size: 14px; }
-
-  &:hover { opacity: 0.85; }
-  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 3px; }
-}
 
 /* ── Search bar ───────────────────────────────── */
 .search-bar {

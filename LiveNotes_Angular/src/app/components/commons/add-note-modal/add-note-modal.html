@@ -1,0 +1,47 @@
+<div class="overlay" (click)="onCerrar()" role="dialog" aria-modal="true" aria-labelledby="add-note-title">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 id="add-note-title">New note</h2>
+      <button class="close-btn" type="button" aria-label="Close" (click)="onCerrar()">✕</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onGuardar()">
+
+      <div class="field">
+        <label for="note-title">Title <span aria-hidden="true">*</span></label>
+        <input
+          id="note-title"
+          type="text"
+          formControlName="titulo"
+          placeholder="Note title"
+          autocomplete="off"
+          [attr.aria-invalid]="form.controls.titulo.invalid && form.controls.titulo.touched" />
+        @if (form.controls.titulo.invalid && form.controls.titulo.touched) {
+          <span class="field-error" role="alert">
+            @if (form.controls.titulo.hasError('required')) { Title is required. }
+            @else if (form.controls.titulo.hasError('maxlength')) { Max 100 characters. }
+          </span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="note-content">Content</label>
+        <textarea
+          id="note-content"
+          formControlName="contenido"
+          placeholder="Write something…"
+          [attr.aria-invalid]="form.controls.contenido.invalid && form.controls.contenido.touched"></textarea>
+        @if (form.controls.contenido.hasError('maxlength') && form.controls.contenido.touched) {
+          <span class="field-error" role="alert">Max 2000 characters.</span>
+        }
+      </div>
+
+      <div class="modal-footer">
+        <app-secondary-button class="small" [config]="{texto: 'Cancel'}" (clicked)="onCerrar()" />
+        <app-primary-button class="small" [config]="{texto: 'Save note', type: 'submit'}" />
+      </div>
+
+    </form>
+  </div>
+</div>

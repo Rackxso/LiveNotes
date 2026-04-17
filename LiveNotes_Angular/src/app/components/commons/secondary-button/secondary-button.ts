@@ -1,19 +1,23 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ButtonConfig } from '../../../model/primary-button.model';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { ButtonConfig } from '../../../model/primary-button.model';
 
 @Component({
   selector: 'app-secondary-button',
-  imports: [],
   templateUrl: './secondary-button.html',
   styleUrl: './secondary-button.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecondaryButton {
-  @Input() config: ButtonConfig = { texto: '', url: '' };
-  @Output() clicked = new EventEmitter<void>();
-  constructor(private router: Router) {}
-  click(): void {
-    this.router.navigateByUrl(`/${this.config.url}`);
+  private readonly router = inject(Router);
+  readonly config = input<ButtonConfig>({ texto: '' });
+  readonly disabled = input(false);
+  readonly clicked = output<void>();
+
+  handleClick(): void {
+    this.clicked.emit();
+    if (this.config().url) {
+      this.router.navigateByUrl(`/${this.config().url}`);
+    }
   }
 }
