@@ -24,7 +24,7 @@ export interface SavingsGoal {
 }
 
 export interface BudgetCategory {
-  id: number;
+  id: string;
   name: string;
   categoryKey: Transaction['categoryKey'];
   budget: number;
@@ -47,10 +47,28 @@ export interface Deposit {
 
 // ── Backend response shapes ──────────────────────────────────────────────────
 
-interface ApiCategoria {
+export interface ApiCategoria {
   _id: string;
   nombre: string;
   color?: string;
+}
+
+export interface ApiPresupuestoDto {
+  nombre: string;
+  color: string;
+  limite: number;
+  mes: number;
+  anio: number;
+}
+
+interface ApiPresupuesto {
+  _id: string;
+  categoria: ApiCategoria;
+  limite: number;
+  mes: number;
+  anio: number;
+  acumulado: number;
+  superado: boolean;
 }
 
 interface ApiMovimiento {
@@ -76,7 +94,6 @@ export interface ApiMovimientoDto {
   fecha: string;
   tipo: boolean;
   importe: number;
-  cuenta: string;
   destinatario?: string;
   metodo?: 'Transferencia' | 'Tarjeta' | 'Factura' | 'Subscripcion' | 'Bizum' | 'Efectivo' | 'Otro';
   metaId?: string;
@@ -103,6 +120,8 @@ export class FinanceService {
   private readonly http = inject(HttpClient);
   private readonly baseMovimientos = `${environment.apiUrl}/movimientos`;
   private readonly baseMetas = `${environment.apiUrl}/metas`;
+  private readonly basePresupuestos = `${environment.apiUrl}/presupuestos`;
+  private readonly baseCategorias = `${environment.apiUrl}/categorias`;
 
   // ── Signals ────────────────────────────────────────────────────────────────
 
@@ -110,8 +129,12 @@ export class FinanceService {
   readonly savingsGoals = signal<SavingsGoal[]>([]);
   readonly budgetCategories = signal<BudgetCategory[]>([]);
 
+  readonly categorias = signal<ApiCategoria[]>([]);
+
   private _txLoaded = false;
   private _goalsLoaded = false;
+  private _categoriasLoaded = false;
+  private _presupuestosLoaded = false;
 
   // ── Computed ───────────────────────────────────────────────────────────────
 
@@ -231,6 +254,35 @@ export class FinanceService {
     );
   }
 
+  // ── HTTP: Categorias ───────────────────────────────────────────────────────
+
+  loadCategorias(): Observable<ApiCategoria[]> {
+    if (this._categoriasLoaded) return of(this.categorias());
+    this._categoriasLoaded = true;
+    return this.http.get<ApiCategoria[]>(this.baseCategorias).pipe(
+      tap(data => this.categorias.set(data))
+    );
+  }
+
+  // ── HTTP: Presupuestos ─────────────────────────────────────────────────────
+
+  loadPresupuestos(mes?: number, anio?: number): Observable<ApiPresupuesto[]> {
+    if (this._presupuestosLoaded) return of([] as ApiPresupuesto[]);
+    this._presupuestosLoaded = true;
+    const today = new Date();
+    const m = mes ?? today.getMonth() + 1;
+    const a = anio ?? today.getFullYear();
+    return this.http.get<ApiPresupuesto[]>(`${this.basePresupuestos}?mes=${m}&anio=${a}`).pipe(
+      tap(data => this.budgetCategories.set(data.map(p => this.mapToBudgetCategory(p))))
+    );
+  }
+
+  createPresupuesto(dto: ApiPresupuestoDto): Observable<ApiPresupuesto> {
+    return this.http.post<ApiPresupuesto>(this.basePresupuestos, dto).pipe(
+      tap(p => this.budgetCategories.update(cats => [...cats, this.mapToBudgetCategory(p)]))
+    );
+  }
+
   // ── Local write helpers (used by components pending full API integration) ──
 
   addTransaction(data: Omit<Transaction, 'id'>): void {
@@ -277,6 +329,16 @@ export class FinanceService {
       target: m.meta,
       color: GOAL_COLORS[colorIndex % GOAL_COLORS.length],
       movimientos: m.movimientos,
+    };
+  }
+
+  private mapToBudgetCategory(p: ApiPresupuesto): BudgetCategory {
+    return {
+      id: p._id,
+      name: p.categoria.nombre,
+      categoryKey: this.mapCategoryKey(p.categoria.nombre),
+      budget: p.limite,
+      color: p.categoria.color ?? '#888888',
     };
   }
 

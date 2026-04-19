@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, viewChild } from '@angular/core';
 import { FinanceService } from '../../../services/finance.service';
 import { I18nService } from '../../../services/i18n.service';
 import { PrimaryButton } from '../primary-button/primary-button';
+import { BudgetModal } from '../../finance/budget-modal/budget-modal';
 
 @Component({
   selector: 'app-goal-progress',
-  imports: [PrimaryButton],
+  imports: [PrimaryButton, BudgetModal],
   templateUrl: './goal-progress.html',
   styleUrl: './goal-progress.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,6 +17,11 @@ export class GoalProgress {
   readonly t = this.i18n.t;
 
   readonly goals = this.finance.categorySpending;
+  readonly modal = viewChild.required<BudgetModal>('modal');
+
+  openModal(): void {
+    this.modal().open();
+  }
 
   getProgress(spent: number, budget: number): number {
     return Math.min((spent / budget) * 100, 100);

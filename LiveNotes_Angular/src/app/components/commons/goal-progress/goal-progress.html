@@ -1,7 +1,9 @@
 <div class="bt-header">
   <p class="bt-title">{{ t()('finance.budgetTracker') }}</p>
-  <app-primary-button class="small" [config]="{texto: t()('finance.add')}" />
+  <app-primary-button class="small" [config]="{texto: t()('finance.add')}" (clicked)="openModal()" />
 </div>
+
+<app-budget-modal #modal />
 
 @for (goal of goals(); track goal.id) {
   <div class="bt-item">

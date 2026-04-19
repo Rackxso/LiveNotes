@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FinanceService, Transaction } from '../../../services/finance.service';
+import { ApiMovimientoDto, FinanceService, Transaction } from '../../../services/finance.service';
 import { I18nService } from '../../../services/i18n.service';
 import { PrimaryButton } from '../../commons/primary-button/primary-button';
 import { SecondaryButton } from '../../commons/secondary-button/secondary-button';
@@ -106,33 +106,20 @@ export class TransactionModal {
     const v    = this.form.getRawValue();
     const type = this.selectedType();
     const [year, month, day] = v.date.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
+    const fecha = new Date(year, month - 1, day).toISOString();
 
-    if (type === 'income') {
-      const goalId = v.savingsGoalId === 'null' ? null : v.savingsGoalId;
-      if (goalId !== null) {
-        this.financeService.depositToGoal(goalId, Math.abs(v.amount), v.name, date);
-      } else {
-        this.financeService.addTransaction({
-          name: v.name,
-          amount: Math.abs(v.amount),
-          date,
-          categoryKey: 'work',
-          category: 'Trabajo',
-        });
-      }
-    } else {
-      const cat = this.financeService.budgetCategories().find(c => c.categoryKey === v.categoryKey);
-      this.financeService.addTransaction({
-        name: v.name,
-        amount: -Math.abs(v.amount),
-        date,
-        categoryKey: v.categoryKey,
-        category: cat?.name ?? 'Sin trazar',
-      });
-    }
+    const dto: ApiMovimientoDto = {
+      name: v.name,
+      fecha,
+      tipo: type === 'income',
+      importe: Math.abs(v.amount),
+      metaId: type === 'income' && v.savingsGoalId !== 'null' ? v.savingsGoalId : undefined,
+      categorias: [],
+    };
 
-    this.saved.emit();
-    this.close();
+    this.financeService.createMovimiento(dto).subscribe(() => {
+      this.saved.emit();
+      this.close();
+    });
   }
 }

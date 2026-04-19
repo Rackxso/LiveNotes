@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, viewChild } from '@angular/core';
 import { FinanceService, SavingsGoal } from '../../services/finance.service';
 import { I18nService } from '../../services/i18n.service';
+import { BudgetModal } from '../../components/finance/budget-modal/budget-modal';
 
 @Component({
   selector: 'app-finance-savings',
-  imports: [],
+  imports: [BudgetModal],
   templateUrl: './finance-savings.html',
   styleUrl: './finance-savings.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,6 +15,12 @@ export class FinanceSavings {
   private readonly i18n = inject(I18nService);
   readonly t = this.i18n.t;
   private readonly locale = this.i18n.locale;
+
+  readonly modal = viewChild.required<BudgetModal>('modal');
+
+  openModal(): void {
+    this.modal().open();
+  }
 
   private readonly maxMonthlySaved = computed(() =>
     Math.max(...this.finance.monthlyStats().map(s => s.saved), 1)
