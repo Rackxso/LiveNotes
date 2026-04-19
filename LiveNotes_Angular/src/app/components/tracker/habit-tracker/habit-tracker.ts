@@ -21,10 +21,44 @@ export class HabitTracker {
 
   private readonly today = new Date();
 
+  readonly WEEK_DAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
   readonly currentMonthDays = computed<number[]>(() => {
     const daysInMonth = new Date(this.today.getFullYear(), this.today.getMonth() + 1, 0).getDate();
     return Array.from({ length: daysInMonth }, (_, i) => i + 1);
   });
+
+  readonly currentWeekDays = computed<Date[]>(() => {
+    const diff = (this.today.getDay() + 6) % 7;
+    const monday = new Date(this.today);
+    monday.setDate(this.today.getDate() - diff);
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return d;
+    });
+  });
+
+  isToday(date: Date): boolean {
+    return (
+      date.getDate() === this.today.getDate() &&
+      date.getMonth() === this.today.getMonth() &&
+      date.getFullYear() === this.today.getFullYear()
+    );
+  }
+
+  dotForDate(habit: Habit, date: Date): boolean {
+    if (!habit.ultimoHecho || habit.rachaActual <= 0) return false;
+    const last = new Date(habit.ultimoHecho);
+    last.setHours(0, 0, 0, 0);
+    const check = new Date(date);
+    check.setHours(0, 0, 0, 0);
+    if (check > last) return false;
+    const start = new Date(last);
+    start.setDate(last.getDate() - habit.rachaActual + 1);
+    start.setHours(0, 0, 0, 0);
+    return check >= start;
+  }
 
   isDoneToday(habit: Habit): boolean {
     if (!habit.ultimoHecho) return false;

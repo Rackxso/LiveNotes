@@ -6,50 +6,64 @@
     (clicked)="showModal.set(true)" />
 </div>
 
-<div class="ht-cards" role="list" [attr.aria-label]="t()('tracker.habits')">
+<!-- Today's habits card -->
+<div class="ht-card">
+  <p class="ht-card-title">{{ t()('tracker.todayHabits') }}</p>
   @if (habits().length === 0) {
     <p class="ht-empty">{{ t()('tracker.noHabits') }}</p>
-  }
-  @for (h of habits(); track h._id) {
-    <button
-      class="ht-card"
-      role="listitem"
-      [class.done]="isDoneToday(h)"
-      (click)="mark(h._id)"
-      [disabled]="isDoneToday(h)"
-      [attr.aria-label]="h.name + ' – ' + (isDoneToday(h) ? t()('tracker.done') : t()('tracker.markDone'))">
-      <i class="fa-solid fa-dumbbell" aria-hidden="true"></i>
-      <span class="ht-card-name">{{ h.name }}</span>
-      <span class="ht-card-streak">{{ h.rachaActual }} {{ t()('tracker.streak') }}</span>
-      @if (isDoneToday(h)) {
-        <i class="fa-solid fa-check ht-done-icon" aria-hidden="true"></i>
+  } @else {
+    <div class="ht-today-grid" role="list" [attr.aria-label]="t()('tracker.habits')">
+      @for (h of habits(); track h._id) {
+        <button
+          class="ht-today-item"
+          role="listitem"
+          [class.done]="isDoneToday(h)"
+          (click)="mark(h._id)"
+          [disabled]="isDoneToday(h)"
+          [attr.aria-label]="h.name + ' – ' + (isDoneToday(h) ? t()('tracker.done') : t()('tracker.markDone'))">
+          <i class="fa-solid fa-dumbbell ht-today-icon" aria-hidden="true"></i>
+          <span class="ht-today-name">{{ h.name }}</span>
+          <div class="ht-week-row">
+            @for (d of currentWeekDays(); track $index; let i = $index) {
+              <div class="ht-week-cell">
+                <span class="ht-week-label" [class.today]="isToday(d)">{{ WEEK_DAYS[i] }}</span>
+                <span class="ht-week-dot" [class.filled]="dotForDate(h, d)"></span>
+              </div>
+            }
+          </div>
+          @if (isDoneToday(h)) {
+            <i class="fa-solid fa-check ht-done-icon" aria-hidden="true"></i>
+          }
+        </button>
       }
-    </button>
+    </div>
   }
 </div>
 
+<!-- Monthly grid card -->
 @if (habits().length > 0) {
-  <p class="ht-section-label">{{ t()('tracker.yourHabits') }}</p>
-
-  <div class="ht-grid" role="table" [attr.aria-label]="t()('tracker.yourHabits')">
-    <div class="ht-day-nums" role="row" aria-hidden="true">
-      @for (d of currentMonthDays(); track d) {
-        <span class="ht-dn">{{ d }}</span>
+  <div class="ht-card">
+    <p class="ht-card-title">{{ t()('tracker.yourHabits') }}</p>
+    <div class="ht-grid" role="table" [attr.aria-label]="t()('tracker.yourHabits')">
+      <div class="ht-day-nums" role="row" aria-hidden="true">
+        @for (d of currentMonthDays(); track d) {
+          <span class="ht-dn">{{ d }}</span>
+        }
+      </div>
+      @for (h of habits(); track h._id) {
+        <div class="ht-row" role="row">
+          <span class="ht-row-name" role="rowheader">{{ h.name }}</span>
+          <div class="ht-dots" role="cell">
+            @for (d of currentMonthDays(); track d) {
+              <span
+                class="ht-dot"
+                [class.filled]="dotForDay(h, d)"
+                [attr.aria-label]="'Day ' + d + (dotForDay(h, d) ? ' done' : '')"></span>
+            }
+          </div>
+        </div>
       }
     </div>
-    @for (h of habits(); track h._id) {
-      <div class="ht-row" role="row">
-        <span class="ht-row-name" role="rowheader">{{ h.name }}</span>
-        <div class="ht-dots" role="cell">
-          @for (d of currentMonthDays(); track d) {
-            <span
-              class="ht-dot"
-              [class.filled]="dotForDay(h, d)"
-              [attr.aria-label]="'Day ' + d + (dotForDay(h, d) ? ' done' : '')"></span>
-          }
-        </div>
-      </div>
-    }
   </div>
 }
 

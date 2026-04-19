@@ -44,6 +44,30 @@ export class MoodTracker {
     return Array.from({ length: daysInMonth }, (_, i) => i + 1);
   });
 
+  readonly firstDayOfMonth = computed<number>(() => {
+    const d = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+    return (d.getDay() + 6) % 7; // 0=Mon … 6=Sun
+  });
+
+  readonly calendarCells = computed<(number | null)[]>(() => [
+    ...Array(this.firstDayOfMonth()).fill(null),
+    ...this.currentMonthDays(),
+  ]);
+
+  readonly currentMonthName = computed<string>(() =>
+    new Date(this.today.getFullYear(), this.today.getMonth(), 1)
+      .toLocaleString('default', { month: 'long' })
+      .replace(/^\w/, c => c.toUpperCase())
+  );
+
+  readonly moodDistribution = computed(() =>
+    this.MOODS.map(m => ({
+      key: m.key,
+      color: m.color,
+      count: this.currentMonthEntries().filter(e => e.emotions?.[0] === m.key).length,
+    })).filter(m => m.count > 0)
+  );
+
   readonly currentMonthEntries = computed<MoodEntry[]>(() =>
     this.moodEntries().filter(e => {
       const d = new Date(e.date);

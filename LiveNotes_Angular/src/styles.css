@@ -20,6 +20,7 @@
     --red: #B85040;
     --blue: #4A7FA5;
     --purple: #7A5A8A;
+    --orange: #C8784A;
 }
 
 .dark-theme {
@@ -37,6 +38,25 @@ html, body {
     height: 100%;
     margin: 0;
     background: var(--background-color);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--background-color);
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 99px;
 }
 
 app-root {
