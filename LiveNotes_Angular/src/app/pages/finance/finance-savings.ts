@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, viewChild } from '@angular/core';
 import { FinanceService, SavingsGoal } from '../../services/finance.service';
 import { I18nService } from '../../services/i18n.service';
-import { BudgetModal } from '../../components/finance/budget-modal/budget-modal';
+import { SavingsGoalModal } from '../../components/finance/savings-goal-modal/savings-goal-modal';
 
 @Component({
   selector: 'app-finance-savings',
-  imports: [BudgetModal],
+  imports: [SavingsGoalModal],
   templateUrl: './finance-savings.html',
   styleUrl: './finance-savings.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,7 +16,7 @@ export class FinanceSavings {
   readonly t = this.i18n.t;
   private readonly locale = this.i18n.locale;
 
-  readonly modal = viewChild.required<BudgetModal>('modal');
+  readonly modal = viewChild.required<SavingsGoalModal>('modal');
 
   openModal(): void {
     this.modal().open();
@@ -52,9 +52,20 @@ export class FinanceSavings {
     if (goal.saved >= goal.target) return null;
     const deposits = this.finance.recentDeposits().filter(d => d.goalName === goal.name);
     if (!deposits.length) return null;
-    const totalDeposited = deposits.reduce((s, d) => s + d.amount, 0);
-    const avgPerMonth = totalDeposited / 2;
-    if (avgPerMonth <= 0) return null;
-    return Math.ceil((goal.target - goal.saved) / avgPerMonth);
+
+    const monthTotals = new Map<string, number>();
+    for (const d of deposits) {
+      const key = `${d.date.getFullYear()}-${d.date.getMonth()}`;
+      monthTotals.set(key, (monthTotals.get(key) ?? 0) + d.amount);
+    }
+
+    const sorted = Array.from(monthTotals.values()).sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    const median = sorted.length % 2 === 0
+      ? (sorted[mid - 1] + sorted[mid]) / 2
+      : sorted[mid];
+
+    if (median <= 0) return null;
+    return Math.ceil((goal.target - goal.saved) / median);
   }
 }

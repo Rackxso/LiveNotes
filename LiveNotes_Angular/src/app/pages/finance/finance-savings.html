@@ -47,23 +47,10 @@
   </div>
 </div>
 
-<app-budget-modal #modal />
+
 
 <!-- Right panel -->
 <div class="side-col">
-  <!-- Saved last months chart -->
-  <div class="side-card">
-    <h3 class="side-title">{{ t()('finance.savedLastMonths') }}</h3>
-    <div class="bar-chart" role="img" [attr.aria-label]="t()('finance.savedLastMonths')">
-      @for (stat of finance.monthlyStats(); track stat.month) {
-        <div class="bar-col">
-          <div class="bar" [style.height.px]="barH(stat.saved)"></div>
-          <span class="bar-label">{{ stat.month }}</span>
-        </div>
-      }
-    </div>
-  </div>
-
   <!-- Last deposits -->
   <div class="side-card">
     <h3 class="side-title">{{ t()('finance.lastDeposits') }}</h3>
@@ -102,3 +89,5 @@
     </div>
   }
 </div>
+
+<app-savings-goal-modal #modal />

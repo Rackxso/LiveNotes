@@ -9,7 +9,7 @@ export interface Transaction {
   id: string;
   name: string;
   category: string;
-  categoryKey: 'entertainment' | 'housing' | 'work' | 'food' | 'untracked';
+  categoryColor: string;
   date: Date;
   amount: number;
 }
@@ -25,8 +25,8 @@ export interface SavingsGoal {
 
 export interface BudgetCategory {
   id: string;
+  categoriaId: string;
   name: string;
-  categoryKey: Transaction['categoryKey'];
   budget: number;
   color: string;
 }
@@ -201,7 +201,7 @@ export class FinanceService {
     const txs = this.transactions();
     return this.budgetCategories().map(cat => {
       const spent = txs
-        .filter(t => t.categoryKey === cat.categoryKey && t.amount < 0)
+        .filter(t => t.category === cat.name && t.amount < 0)
         .reduce((sum, t) => sum + Math.abs(t.amount), 0);
       return { ...cat, spent };
     });
@@ -219,7 +219,25 @@ export class FinanceService {
 
   createMovimiento(dto: ApiMovimientoDto): Observable<ApiMovimiento> {
     return this.http.post<ApiMovimiento>(this.baseMovimientos, dto).pipe(
-      tap(m => this.transactions.update(txs => [this.mapToTransaction(m), ...txs]))
+      tap(m => {
+        this.transactions.update(txs => [this.mapToTransaction(m), ...txs]);
+        if (dto.metaId) {
+          const delta = dto.tipo ? dto.importe : -dto.importe;
+          this.savingsGoals.update(goals =>
+            goals.map(g => g.id === dto.metaId ? {
+              ...g,
+              saved: g.saved + delta,
+              movimientos: [...(g.movimientos ?? []), { fecha: dto.fecha, importe: dto.importe }],
+            } : g)
+          );
+        }
+      })
+    );
+  }
+
+  deleteMovimiento(id: string): Observable<unknown> {
+    return this.http.delete(`${this.baseMovimientos}/${id}`).pipe(
+      tap(() => this.transactions.update(txs => txs.filter(t => t.id !== id)))
     );
   }
 
@@ -283,6 +301,31 @@ export class FinanceService {
     );
   }
 
+  updatePresupuesto(id: string, limite: number): Observable<unknown> {
+    return this.http.put(`${this.basePresupuestos}/${id}`, { limite }).pipe(
+      tap(() => this.budgetCategories.update(cats =>
+        cats.map(c => c.id === id ? { ...c, budget: limite } : c)
+      ))
+    );
+  }
+
+  deletePresupuesto(id: string): Observable<unknown> {
+    return this.http.delete(`${this.basePresupuestos}/${id}`).pipe(
+      tap(() => this.budgetCategories.update(cats => cats.filter(c => c.id !== id)))
+    );
+  }
+
+  resetState(): void {
+    this._txLoaded = false;
+    this._goalsLoaded = false;
+    this._categoriasLoaded = false;
+    this._presupuestosLoaded = false;
+    this.transactions.set([]);
+    this.savingsGoals.set([]);
+    this.budgetCategories.set([]);
+    this.categorias.set([]);
+  }
+
   // ── Local write helpers (used by components pending full API integration) ──
 
   addTransaction(data: Omit<Transaction, 'id'>): void {
@@ -302,7 +345,7 @@ export class FinanceService {
       name,
       amount,
       date,
-      categoryKey: 'work',
+      categoryColor: '',
       category: `→ ${goal.name}`,
     });
   }
@@ -315,7 +358,7 @@ export class FinanceService {
       id: m._id,
       name: m.name,
       category: cat?.nombre ?? 'Sin trazar',
-      categoryKey: this.mapCategoryKey(cat?.nombre),
+      categoryColor: cat?.color ?? '',
       date: new Date(m.fecha),
       amount: m.tipo ? m.importe : -m.importe,
     };
@@ -335,20 +378,10 @@ export class FinanceService {
   private mapToBudgetCategory(p: ApiPresupuesto): BudgetCategory {
     return {
       id: p._id,
+      categoriaId: p.categoria._id,
       name: p.categoria.nombre,
-      categoryKey: this.mapCategoryKey(p.categoria.nombre),
       budget: p.limite,
       color: p.categoria.color ?? '#888888',
     };
-  }
-
-  private mapCategoryKey(nombre?: string): Transaction['categoryKey'] {
-    if (!nombre) return 'untracked';
-    const n = nombre.toLowerCase();
-    if (n.includes('ocio') || n.includes('entret') || n.includes('suscr')) return 'entertainment';
-    if (n.includes('vivien') || n.includes('alquil') || n.includes('hous')) return 'housing';
-    if (n.includes('trabaj') || n.includes('nómin') || n.includes('work') || n.includes('salari')) return 'work';
-    if (n.includes('comid') || n.includes('aliment') || n.includes('food') || n.includes('super') || n.includes('restaur')) return 'food';
-    return 'untracked';
   }
 }

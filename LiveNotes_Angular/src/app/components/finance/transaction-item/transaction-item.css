@@ -6,6 +6,9 @@
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid var(--secondary-background-color);
+  border-left: 3px solid var(--border-color, transparent);
+  border-radius: 4px;
+  margin-block: 2px;
   gap: 12px;
   padding-inline: 10px;
 }
@@ -31,13 +34,9 @@
   font-weight: 500;
   font-family: var(--fuente-texto);
   white-space: nowrap;
+  background: color-mix(in srgb, var(--cat-color, var(--primary-color)) 15%, transparent);
+  color: var(--cat-color, var(--primary-color));
 }
-
-.ent  { background: color-mix(in srgb, var(--purple) 15%, transparent); color: var(--purple); }
-.hou  { background: color-mix(in srgb, var(--blue)   15%, transparent); color: var(--blue);   }
-.job  { background: color-mix(in srgb, var(--green)  15%, transparent); color: var(--green);  }
-.food { background: color-mix(in srgb, var(--primary-color) 15%, transparent); color: var(--accent-color); }
-.unk  { background: color-mix(in srgb, var(--text-subcolor) 12%, transparent); color: var(--text-subcolor); }
 
 .tx-date {
   font-size: 12px;

@@ -27,12 +27,18 @@
 
             <dt>{{ t()('finance.modal.category') }}</dt>
             <dd>
-              <span class="cat-badge" [class]="tx.categoryKey">{{ tx.category }}</span>
+              <span class="cat-badge" [style.--cat-color]="tx.categoryColor || 'var(--primary-color)'">{{ tx.category }}</span>
             </dd>
 
             <dt>{{ t()('finance.modal.date') }}</dt>
             <dd>{{ formattedDate() }}</dd>
           </dl>
+
+          <div class="detail-actions">
+            <button type="button" class="delete-btn" (click)="deleteTransaction()">
+              Eliminar movimiento
+            </button>
+          </div>
         </div>
       }
     }
@@ -81,10 +87,10 @@
         @if (selectedType() === 'expense') {
           <div class="field">
             <label for="tx-dest">{{ t()('finance.modal.destination') }}</label>
-            <select id="tx-dest" formControlName="categoryKey">
-              <option value="untracked">{{ t()('finance.modal.untracked') }}</option>
+            <select id="tx-dest" formControlName="categoryId">
+              <option value="null">{{ t()('finance.modal.untracked') }}</option>
               @for (cat of budgetCategories(); track cat.id) {
-                <option [value]="cat.categoryKey">{{ cat.name }}</option>
+                <option [value]="cat.categoriaId">{{ cat.name }}</option>
               }
             </select>
           </div>

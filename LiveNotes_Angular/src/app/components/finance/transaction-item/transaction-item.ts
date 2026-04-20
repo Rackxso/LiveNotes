@@ -14,16 +14,13 @@ export class TransactionItem {
 
   readonly transaction = input.required<Transaction>();
 
-  readonly categoryClass = computed(() => {
-    const map: Record<string, string> = {
-      entertainment: 'ent',
-      housing:       'hou',
-      work:          'job',
-      food:          'food',
-      untracked:     'unk',
-    };
-    return map[this.transaction().categoryKey] ?? 'unk';
-  });
+  readonly categoryColor = computed(() =>
+    this.transaction().categoryColor || 'var(--primary-color)'
+  );
+
+  readonly borderColor = computed(() =>
+    this.transaction().categoryColor || 'transparent'
+  );
 
   readonly amountClass = computed(() =>
     this.transaction().amount >= 0 ? 'pos' : 'neg'

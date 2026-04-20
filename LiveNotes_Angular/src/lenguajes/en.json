@@ -70,6 +70,7 @@
     "filterBy": "Filter by",
     "projectionMonths": "months to goal",
     "closestGoal": "Closest to goal",
+    "budgets": "Budgets",
     "insight": {
       "more": "more in expenses vs last month",
       "less": "less in expenses vs last month"

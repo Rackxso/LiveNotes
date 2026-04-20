@@ -10,10 +10,10 @@
 }
 
 .bt-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-color);
-  font-family: var(--fuente-texto);
+  font-family: var(--fuente-titulo);
   margin: 0;
 }
 

@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { FinanceService } from './finance.service';
 
 export interface AuthUser {
   email: string;
@@ -17,6 +18,7 @@ const STORAGE_KEY = 'ln_user';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
+  private readonly financeService = inject(FinanceService);
   private readonly base = `${environment.apiUrl}/user`;
 
   private readonly _user = signal<AuthUser | null>(this.readStorage());
@@ -48,6 +50,7 @@ export class AuthService {
   clearUser(): void {
     this._user.set(null);
     localStorage.removeItem(STORAGE_KEY);
+    this.financeService.resetState();
   }
 
   private setUser(user: AuthUser): void {

@@ -28,8 +28,12 @@ export class BudgetModal {
   private readonly financeService = inject(FinanceService);
 
   readonly saved = output<void>();
+  readonly deleted = output<void>();
   readonly colors = BUDGET_COLORS;
   readonly selectedColor = signal(BUDGET_COLORS[0]);
+  readonly mode = signal<'create' | 'edit'>('create');
+  readonly editingId = signal<string | null>(null);
+  readonly editingName = signal<string>('');
 
   private readonly dialogEl = viewChild.required<ElementRef<HTMLDialogElement>>('dialogEl');
 
@@ -49,10 +53,20 @@ export class BudgetModal {
     anio:   new FormControl(new Date().getFullYear(),  { validators: [Validators.required], nonNullable: true }),
   });
 
-  open(): void {
+  open(budget?: { id: string; name: string; limite: number }): void {
     const today = new Date();
-    this.form.reset({ nombre: '', limite: 0, mes: today.getMonth() + 1, anio: today.getFullYear() });
-    this.selectedColor.set(BUDGET_COLORS[0]);
+    if (budget) {
+      this.mode.set('edit');
+      this.editingId.set(budget.id);
+      this.editingName.set(budget.name);
+      this.form.reset({ nombre: budget.name, limite: budget.limite, mes: today.getMonth() + 1, anio: today.getFullYear() });
+    } else {
+      this.mode.set('create');
+      this.editingId.set(null);
+      this.editingName.set('');
+      this.form.reset({ nombre: '', limite: 0, mes: today.getMonth() + 1, anio: today.getFullYear() });
+      this.selectedColor.set(BUDGET_COLORS[0]);
+    }
     this.dialogEl().nativeElement.showModal();
   }
 
@@ -67,15 +81,33 @@ export class BudgetModal {
   submit(): void {
     if (this.form.invalid) return;
     const v = this.form.getRawValue();
-    const dto: ApiPresupuestoDto = {
-      nombre: v.nombre,
-      color: this.selectedColor(),
-      limite: v.limite,
-      mes: v.mes,
-      anio: v.anio,
-    };
-    this.financeService.createPresupuesto(dto).subscribe(() => {
-      this.saved.emit();
+
+    if (this.mode() === 'edit') {
+      const id = this.editingId()!;
+      this.financeService.updatePresupuesto(id, v.limite).subscribe(() => {
+        this.saved.emit();
+        this.close();
+      });
+    } else {
+      const dto: ApiPresupuestoDto = {
+        nombre: v.nombre,
+        color: this.selectedColor(),
+        limite: v.limite,
+        mes: v.mes,
+        anio: v.anio,
+      };
+      this.financeService.createPresupuesto(dto).subscribe(() => {
+        this.saved.emit();
+        this.close();
+      });
+    }
+  }
+
+  deleteBudget(): void {
+    const id = this.editingId();
+    if (!id) return;
+    this.financeService.deletePresupuesto(id).subscribe(() => {
+      this.deleted.emit();
       this.close();
     });
   }

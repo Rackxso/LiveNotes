@@ -43,6 +43,7 @@ export class Finance {
   constructor() {
     this.finance.loadTransactions().subscribe();
     this.finance.loadSavingsGoals().subscribe();
+    this.finance.loadPresupuestos().subscribe();
     this.route.url.subscribe(segments => {
       const last = segments[segments.length - 1]?.path;
       this.vistaActual.set(this.urlToKey(last));

@@ -12,12 +12,16 @@ import { TransactionItem } from '../../components/finance/transaction-item/trans
 import { TransactionModal } from '../../components/finance/transaction-modal/transaction-modal';
 import { PrimaryButton } from '../../components/commons/primary-button/primary-button';
 
-type FilterKey = Transaction['categoryKey'] | 'all';
-
 interface TxGroup {
   label: string;
   dateKey: string;
   items: Transaction[];
+}
+
+interface FilterChip {
+  key: string;
+  label: string;
+  color: string;
 }
 
 @Component({
@@ -34,21 +38,28 @@ export class FinanceTransactions {
 
   readonly modal = viewChild.required<TransactionModal>('modal');
   readonly selectedTransaction = signal<Transaction | null>(null);
-  readonly activeFilter = signal<FilterKey>('all');
+  readonly activeFilter = signal<string>('all');
 
-  readonly filters: { key: FilterKey; labelKey: string; color: string }[] = [
-    { key: 'all',           labelKey: 'finance.cat.all',           color: 'var(--text-subcolor)' },
-    { key: 'food',          labelKey: 'finance.cat.food',          color: 'var(--accent-color)' },
-    { key: 'housing',       labelKey: 'finance.cat.housing',       color: 'var(--blue)' },
-    { key: 'entertainment', labelKey: 'finance.cat.entertainment', color: 'var(--purple)' },
-    { key: 'work',          labelKey: 'finance.cat.work',          color: 'var(--green)' },
-    { key: 'untracked',     labelKey: 'finance.cat.untracked',     color: 'var(--text-subcolor)' },
-  ];
+  readonly filters = computed<FilterChip[]>(() => {
+    const seen = new Map<string, string>();
+    for (const tx of this.finance.transactions()) {
+      if (!seen.has(tx.category)) {
+        seen.set(tx.category, tx.categoryColor || 'var(--primary-color)');
+      }
+    }
+    const chips: FilterChip[] = [
+      { key: 'all', label: this.t()('finance.cat.all'), color: 'var(--text-subcolor)' },
+    ];
+    for (const [category, color] of seen) {
+      chips.push({ key: category, label: category, color });
+    }
+    return chips;
+  });
 
   private readonly filteredTransactions = computed(() => {
     const txs = this.finance.transactions();
     const filter = this.activeFilter();
-    const list = filter === 'all' ? txs : txs.filter(t => t.categoryKey === filter);
+    const list = filter === 'all' ? txs : txs.filter(t => t.category === filter);
     return [...list].sort((a, b) => b.date.getTime() - a.date.getTime());
   });
 

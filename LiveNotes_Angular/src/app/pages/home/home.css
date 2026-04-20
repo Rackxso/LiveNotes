@@ -328,11 +328,9 @@ app-goal-progress {
   padding: 2px 8px;
   border-radius: 10px;
   font-weight: 500;
+  background: color-mix(in srgb, var(--cat-color, var(--primary-color)) 15%, transparent);
+  color: var(--cat-color, var(--primary-color));
 }
-
-.tx-cat.ent { background: color-mix(in srgb, var(--purple) 15%, transparent); color: var(--purple); }
-.tx-cat.hou { background: color-mix(in srgb, var(--blue)   15%, transparent); color: var(--blue);   }
-.tx-cat.job { background: color-mix(in srgb, var(--green)  15%, transparent); color: var(--green);  }
 
 .tx-amt { font-weight: 600; font-size: 12px; }
 .tx-amt.neg { color: var(--red);   }

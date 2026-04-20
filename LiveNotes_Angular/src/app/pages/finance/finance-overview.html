@@ -1,9 +1,29 @@
 <!-- Left column -->
 <div class="main-col">
+  <app-transaction-modal
+    #modal
+    [transaction]="selectedTransaction()"
+    (saved)="selectedTransaction.set(null)"
+    (deleted)="selectedTransaction.set(null)" />
   <div class="money-cards">
-    <app-money-card [label]="t()('finance.balance')"  amount="2.442,13" pct="3,7 %"  variant="green" />
-    <app-money-card [label]="t()('finance.expenses')" amount="457,87"   pct="1,2 %"  variant="red"   [pctUp]="false" />
-    <app-money-card [label]="t()('finance.income')"   amount="3.250,00" pct="40,5 %" variant="blue"  />
+    <app-money-card
+      [label]="t()('finance.balance')"
+      [amount]="totalBalance()"
+      [pct]="balancePct()"
+      [pctUp]="balancePctUp()"
+      variant="green" />
+    <app-money-card
+      [label]="t()('finance.expenses')"
+      [amount]="currentMonthExpenses()"
+      [pct]="expensesPct()"
+      [pctUp]="expensesPctUp()"
+      variant="red" />
+    <app-money-card
+      [label]="t()('finance.income')"
+      [amount]="currentMonthIncome()"
+      [pct]="incomePct()"
+      [pctUp]="incomePctUp()"
+      variant="blue" />
   </div>
 
   <div class="section-card">
@@ -13,10 +33,15 @@
   <div class="section-card">
     <div class="section-header">
       <h2 class="section-title">{{ t()('finance.recentMovements') }}</h2>
-      <a [routerLink]="['/finance/transactions']" class="see-more">{{ t()('finance.seeMore') }} →</a>
+      <div class="section-actions">
+        <button type="button" class="add-tx-btn" (click)="openCreate()">+ {{ t()('finance.add') }}</button>
+        <a [routerLink]="['/finance/transactions']" class="see-more">{{ t()('finance.seeMore') }} →</a>
+      </div>
     </div>
     @for (tx of recentTransactions(); track tx.id) {
-      <app-transaction-item [transaction]="tx" />
+      <button type="button" class="tx-btn" (click)="openView(tx)">
+        <app-transaction-item [transaction]="tx" />
+      </button>
     }
 
     @if (spendingInsight(); as insight) {

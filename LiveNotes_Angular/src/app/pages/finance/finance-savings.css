@@ -136,20 +136,21 @@
   opacity: 0.8;
 }
 
+
 /* ── Add goal placeholder ── */
 .add-goal {
   border: 2px dashed var(--primary-color);
   border-radius: 14px;
-  padding: 20px;
+  padding: 24px 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  align-self: end;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   background: transparent;
   transition: background 0.15s;
-  min-height: 110px;
 
   &:hover { background: var(--background-subcolor); }
   &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; border-radius: 14px; }

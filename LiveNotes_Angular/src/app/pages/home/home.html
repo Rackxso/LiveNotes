@@ -84,7 +84,7 @@
       @for (tx of recentTransactions(); track tx.id) {
         <div class="tx-row">
           <span class="tx-name">{{ tx.name }}</span>
-          <span class="tx-cat" [class]="'tx-cat ' + tx.categoryKey.slice(0,3)">{{ tx.category }}</span>
+          <span class="tx-cat" [style.--cat-color]="tx.categoryColor || 'var(--primary-color)'">{{ tx.category }}</span>
           <span class="tx-amt" [class.pos]="tx.amount > 0" [class.neg]="tx.amount < 0">
             {{ tx.amount > 0 ? '+' : '' }}{{ tx.amount | number:'1.0-0' }}€
           </span>

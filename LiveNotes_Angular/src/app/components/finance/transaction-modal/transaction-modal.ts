@@ -30,6 +30,7 @@ export class TransactionModal {
 
   readonly transaction = input<Transaction | null>(null);
   readonly saved = output<void>();
+  readonly deleted = output<void>();
 
   readonly budgetCategories = this.financeService.budgetCategories;
   readonly savingsGoals     = this.financeService.savingsGoals;
@@ -42,7 +43,7 @@ export class TransactionModal {
     name:          new FormControl('',     { validators: [Validators.required], nonNullable: true }),
     amount:        new FormControl(0,      { validators: [Validators.required, Validators.min(0.01)], nonNullable: true }),
     date:          new FormControl('',     { validators: [Validators.required], nonNullable: true }),
-    categoryKey:   new FormControl<Transaction['categoryKey']>('untracked', { nonNullable: true }),
+    categoryId:    new FormControl<string>('null', { nonNullable: true }),
     savingsGoalId: new FormControl<string>('null', { nonNullable: true }),
   });
 
@@ -75,7 +76,7 @@ export class TransactionModal {
       const yyyy = today.getFullYear();
       const mm   = String(today.getMonth() + 1).padStart(2, '0');
       const dd   = String(today.getDate()).padStart(2, '0');
-      this.form.reset({ categoryKey: 'untracked', savingsGoalId: 'null', date: `${yyyy}-${mm}-${dd}` });
+      this.form.reset({ categoryId: 'null', savingsGoalId: 'null', date: `${yyyy}-${mm}-${dd}` });
     }
     this.dialogEl().nativeElement.showModal();
   }
@@ -87,10 +88,10 @@ export class TransactionModal {
   setType(type: 'income' | 'expense'): void {
     this.selectedType.set(type);
     if (type === 'income') {
-      this.form.controls.categoryKey.setValue('work');
+      this.form.controls.categoryId.setValue('null');
       this.form.controls.savingsGoalId.setValue('null');
     } else {
-      this.form.controls.categoryKey.setValue('untracked');
+      this.form.controls.categoryId.setValue('null');
       this.form.controls.savingsGoalId.setValue('null');
     }
   }
@@ -99,6 +100,15 @@ export class TransactionModal {
     if (event.target === this.dialogEl().nativeElement) {
       this.close();
     }
+  }
+
+  deleteTransaction(): void {
+    const tx = this.transaction();
+    if (!tx) return;
+    this.financeService.deleteMovimiento(tx.id).subscribe(() => {
+      this.deleted.emit();
+      this.close();
+    });
   }
 
   submit(): void {
@@ -114,7 +124,7 @@ export class TransactionModal {
       tipo: type === 'income',
       importe: Math.abs(v.amount),
       metaId: type === 'income' && v.savingsGoalId !== 'null' ? v.savingsGoalId : undefined,
-      categorias: [],
+      categorias: v.categoryId !== 'null' ? [v.categoryId] : [],
     };
 
     this.financeService.createMovimiento(dto).subscribe(() => {

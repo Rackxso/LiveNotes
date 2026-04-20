@@ -1,7 +1,8 @@
 <app-transaction-modal
   #modal
   [transaction]="selectedTransaction()"
-  (saved)="selectedTransaction.set(null)" />
+  (saved)="selectedTransaction.set(null)"
+  (deleted)="selectedTransaction.set(null)" />
 
 <!-- Monthly summary + Add button -->
 <div class="month-summary">
@@ -22,13 +23,13 @@
 
 <!-- Filter chips -->
 <div class="filter-chips" role="group" [attr.aria-label]="t()('finance.filterBy')">
-  @for (f of filters; track f.key) {
+  @for (f of filters(); track f.key) {
     <button
       class="chip"
       [class.active]="activeFilter() === f.key"
       [style.--chip-color]="f.color"
       (click)="activeFilter.set(f.key)">
-      {{ t()(f.labelKey) }}
+      {{ f.label }}
     </button>
   }
 </div>

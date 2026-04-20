@@ -1,6 +1,6 @@
-<div class="tx-row">
+<div class="tx-row" [style.--cat-color]="categoryColor()" [style.--border-color]="borderColor()">
   <span class="tx-name">{{ transaction().name }}</span>
-  <span class="tx-cat" [class]="categoryClass()">{{ transaction().category }}</span>
+  <span class="tx-cat">{{ transaction().category }}</span>
   <span class="tx-date">{{ formattedDate() }}</span>
   <span class="tx-amt" [class]="amountClass()">{{ formattedAmount() }}</span>
 </div>
