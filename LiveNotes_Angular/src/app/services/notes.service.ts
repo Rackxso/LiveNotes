@@ -7,6 +7,7 @@ export interface Note {
   _id: string;
   titulo: string;
   contenido: string;
+  categoria: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -14,6 +15,7 @@ export interface Note {
 export interface NoteDto {
   titulo: string;
   contenido: string;
+  categoria?: string;
 }
 
 @Injectable({ providedIn: 'root' })

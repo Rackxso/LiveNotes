@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
-import { TodoService } from '../../services/todo.service';
+import { TodoService, TodoItem, SubItem } from '../../services/todo.service';
 
 @Component({
   selector: 'app-to-do',
@@ -13,6 +13,16 @@ export class ToDo implements OnInit {
 
   readonly searchQuery = input<string>('');
   readonly selectedList = signal<string>('all');
+  readonly newTaskText = signal<string>('');
+  readonly addingList = signal<boolean>(false);
+  readonly newListName = signal<string>('');
+  readonly pendingDeleteList = signal<string | null>(null);
+  readonly draggedId = signal<string | null>(null);
+  readonly localItemOrder = signal<string[]>([]);
+  readonly subItemMode = signal<boolean>(false);
+  readonly draggedSubId = signal<string | null>(null);
+  readonly draggedSubTodoId = signal<string | null>(null);
+  readonly localSubOrders = signal<Record<string, string[]>>({});
 
   readonly todos = this.todoService.todos;
 
@@ -21,7 +31,7 @@ export class ToDo implements OnInit {
   }
 
   readonly lists = computed(() => {
-    const unique = [...new Set(this.todos().map(t => t.idLista))];
+    const unique = [...new Set(this.todos().map(t => t.idLista).filter(l => l !== ''))];
     return unique;
   });
 
@@ -38,10 +48,215 @@ export class ToDo implements OnInit {
     return items;
   });
 
+  readonly displayTodos = computed(() => {
+    const order = this.localItemOrder();
+    const todos = this.filteredTodos();
+    if (order.length === 0) return todos;
+    const map = new Map(todos.map(t => [t._id, t]));
+    const orderedSet = new Set(order);
+    const ordered = order.map(id => map.get(id)).filter((t): t is TodoItem => !!t);
+    const extra = todos.filter(t => !orderedSet.has(t._id));
+    return [...ordered, ...extra];
+  });
+
   toggle(id: string): void {
     const todo = this.todos().find(t => t._id === id);
     if (!todo) return;
     this.todoService.updateTodo(id, { completado: !todo.completado }).subscribe();
+  }
+
+  toggleSubItem(todoId: string, subId: string): void {
+    const todo = this.todos().find(t => t._id === todoId);
+    const sub = todo?.subItems.find(s => s._id === subId);
+    if (!sub) return;
+    this.todoService.updateSubItem(todoId, subId, { completado: !sub.completado }).subscribe();
+  }
+
+  addTask(): void {
+    const text = this.newTaskText().trim();
+    if (!text) return;
+    const list = this.selectedList() === 'all' ? '' : this.selectedList();
+    this.todoService.createTodo({ idLista: list, texto: text }).subscribe();
+    this.newTaskText.set('');
+    this.subItemMode.set(false);
+  }
+
+  addAsSubItem(): void {
+    const text = this.newTaskText().trim();
+    if (!text) return;
+    const todos = this.displayTodos();
+    if (todos.length === 0) return;
+    const lastTodo = todos[todos.length - 1];
+    this.todoService.createSubItem(lastTodo._id, { texto: text }).subscribe();
+    this.newTaskText.set('');
+    this.subItemMode.set(false);
+  }
+
+  onQuickAddKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      if (this.subItemMode()) {
+        this.addAsSubItem();
+      } else {
+        this.addTask();
+      }
+    } else if (event.key === 'Tab') {
+      event.preventDefault();
+      if (event.shiftKey) {
+        this.subItemMode.set(false);
+      } else {
+        this.subItemMode.set(true);
+      }
+    } else if (event.key === 'Escape') {
+      this.subItemMode.set(false);
+    }
+  }
+
+  deleteTask(id: string): void {
+    this.todoService.deleteTodo(id).subscribe();
+  }
+
+  selectList(list: string): void {
+    this.selectedList.set(list);
+    this.localItemOrder.set([]);
+  }
+
+  startAddingList(): void {
+    this.addingList.set(true);
+    this.newListName.set('');
+  }
+
+  confirmNewList(): void {
+    const name = this.newListName().trim();
+    if (name) {
+      this.selectList(name);
+    }
+    this.addingList.set(false);
+  }
+
+  cancelNewList(): void {
+    this.addingList.set(false);
+  }
+
+  requestDeleteList(list: string, event: Event): void {
+    event.stopPropagation();
+    this.pendingDeleteList.set(list);
+  }
+
+  confirmDeleteWithItems(): void {
+    const list = this.pendingDeleteList();
+    if (!list) return;
+    this.todoService.deleteByList(list).subscribe(() => {
+      if (this.selectedList() === list) this.selectedList.set('all');
+    });
+    this.pendingDeleteList.set(null);
+  }
+
+  confirmDeleteKeepItems(): void {
+    const list = this.pendingDeleteList();
+    if (!list) return;
+    this.todoService.reassignList(list).subscribe(() => {
+      if (this.selectedList() === list) this.selectedList.set('all');
+    });
+    this.pendingDeleteList.set(null);
+  }
+
+  cancelDeleteList(): void {
+    this.pendingDeleteList.set(null);
+  }
+
+  onDragStart(event: DragEvent, id: string): void {
+    this.draggedId.set(id);
+    if (this.localItemOrder().length === 0) {
+      this.localItemOrder.set(this.displayTodos().map(t => t._id));
+    }
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+    }
+  }
+
+  onDragOver(event: DragEvent, targetId: string): void {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    const sourceId = this.draggedId();
+    if (!sourceId || sourceId === targetId) return;
+    const order = [...this.localItemOrder()];
+    const fromIdx = order.indexOf(sourceId);
+    const toIdx = order.indexOf(targetId);
+    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+    order.splice(fromIdx, 1);
+    order.splice(toIdx, 0, sourceId);
+    this.localItemOrder.set(order);
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    const order = this.localItemOrder();
+    if (order.length === 0) { this.draggedId.set(null); return; }
+    const items = order.map((id, idx) => ({ _id: id, order: idx }));
+    this.todoService.reorderTodos(items).subscribe();
+    this.draggedId.set(null);
+  }
+
+  onDragEnd(): void {
+    this.draggedId.set(null);
+  }
+
+  displaySubItems(todoId: string, subItems: SubItem[]): SubItem[] {
+    const localOrder = this.localSubOrders()[todoId];
+    if (localOrder && localOrder.length > 0) {
+      const map = new Map(subItems.map(s => [s._id, s]));
+      const orderedSet = new Set(localOrder);
+      const ordered = localOrder.map(id => map.get(id)).filter((s): s is SubItem => !!s);
+      const extra = subItems.filter(s => !orderedSet.has(s._id));
+      return [...ordered, ...extra];
+    }
+    return [...subItems].sort((a, b) => a.order - b.order);
+  }
+
+  onSubDragStart(event: DragEvent, todoId: string, subId: string): void {
+    event.stopPropagation();
+    this.draggedSubId.set(subId);
+    this.draggedSubTodoId.set(todoId);
+    const currentOrder = this.localSubOrders()[todoId];
+    if (!currentOrder || currentOrder.length === 0) {
+      const todo = this.todos().find(t => t._id === todoId);
+      if (todo) {
+        const ids = this.displaySubItems(todoId, todo.subItems).map(s => s._id);
+        this.localSubOrders.update(m => ({ ...m, [todoId]: ids }));
+      }
+    }
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+  }
+
+  onSubDragOver(event: DragEvent, todoId: string, targetSubId: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    const sourceId = this.draggedSubId();
+    if (!sourceId || sourceId === targetSubId || this.draggedSubTodoId() !== todoId) return;
+    const order = [...(this.localSubOrders()[todoId] ?? [])];
+    const fromIdx = order.indexOf(sourceId);
+    const toIdx = order.indexOf(targetSubId);
+    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+    order.splice(fromIdx, 1);
+    order.splice(toIdx, 0, sourceId);
+    this.localSubOrders.update(m => ({ ...m, [todoId]: order }));
+  }
+
+  onSubDrop(event: DragEvent, todoId: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const order = this.localSubOrders()[todoId];
+    if (!order || order.length === 0) { this.draggedSubId.set(null); return; }
+    const items = order.map((id, idx) => ({ _id: id, order: idx }));
+    this.todoService.reorderSubItems(todoId, items).subscribe();
+    this.draggedSubId.set(null);
+    this.draggedSubTodoId.set(null);
+  }
+
+  onSubDragEnd(): void {
+    this.draggedSubId.set(null);
+    this.draggedSubTodoId.set(null);
   }
 
   formatDate(fechaLimite: string | null): string {
@@ -53,9 +268,5 @@ export class ToDo implements OnInit {
     if (date.toDateString() === today.toDateString()) return 'Today';
     if (date.toDateString() === tomorrow.toDateString()) return 'Tomorrow';
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
-  }
-
-  selectList(list: string): void {
-    this.selectedList.set(list);
   }
 }

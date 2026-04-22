@@ -18,3 +18,9 @@
     flex-direction: column;
     overflow: hidden;
 }
+
+@media (max-width: 600px) {
+  .app-main {
+    padding-bottom: 60px;
+  }
+}

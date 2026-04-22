@@ -26,6 +26,16 @@
       </div>
 
       <div class="field">
+        <label for="note-category">Category</label>
+        <select id="note-category" formControlName="categoria" class="category-select">
+          <option value="">No category</option>
+          @for (cat of allCategories; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
         <label for="note-content">Content</label>
         <textarea
           id="note-content"

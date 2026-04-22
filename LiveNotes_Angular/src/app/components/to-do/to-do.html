@@ -1,14 +1,14 @@
-@if (lists().length > 1) {
-  <div class="list-tabs" role="tablist" aria-label="Filter by list">
-    <button
-      class="tab"
-      role="tab"
-      [class.active]="selectedList() === 'all'"
-      [attr.aria-selected]="selectedList() === 'all'"
-      (click)="selectList('all')">
-      All
-    </button>
-    @for (list of lists(); track list) {
+<div class="tabs-row" role="tablist" aria-label="Filter by list">
+  <button
+    class="tab"
+    role="tab"
+    [class.active]="selectedList() === 'all'"
+    [attr.aria-selected]="selectedList() === 'all'"
+    (click)="selectList('all')">
+    All
+  </button>
+  @for (list of lists(); track list) {
+    <div class="tab-wrapper">
       <button
         class="tab"
         role="tab"
@@ -17,32 +17,138 @@
         (click)="selectList(list)">
         {{ list }}
       </button>
+      <button
+        class="tab-close"
+        (click)="requestDeleteList(list, $event)"
+        [attr.aria-label]="'Delete list ' + list">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+  }
+  @if (addingList()) {
+    <input
+      class="tab-input"
+      type="text"
+      placeholder="List name"
+      [value]="newListName()"
+      (input)="newListName.set($any($event.target).value)"
+      (keydown.enter)="confirmNewList()"
+      (keydown.escape)="cancelNewList()"
+      (blur)="confirmNewList()"
+      aria-label="New list name" />
+  } @else {
+    <button
+      class="tab-add"
+      (click)="startAddingList()"
+      aria-label="Add new list">
+      +
+    </button>
+  }
+</div>
+
+<div class="tab-body">
+  <ul class="todo-list" role="list">
+    @for (item of displayTodos(); track item._id) {
+      <li
+        class="todo-item"
+        [class.done]="item.completado"
+        [class.dragging]="draggedId() === item._id"
+        [attr.draggable]="selectedList() !== 'all'"
+        (dragstart)="onDragStart($event, item._id)"
+        (dragover)="onDragOver($event, item._id)"
+        (drop)="onDrop($event)"
+        (dragend)="onDragEnd()">
+        <div class="todo-row">
+          <button
+            class="todo-check"
+            [class.checked]="item.completado"
+            (click)="toggle(item._id)"
+            [attr.aria-label]="(item.completado ? 'Mark incomplete: ' : 'Mark complete: ') + item.texto"
+            [attr.aria-pressed]="item.completado">
+            @if (item.completado) {
+              <i class="fa-solid fa-check" aria-hidden="true"></i>
+            }
+          </button>
+          <div class="todo-body">
+            <span class="todo-text">{{ item.texto }}</span>
+            @if (item.fechaLimite) {
+              <span class="todo-when">{{ formatDate(item.fechaLimite) }}</span>
+            }
+          </div>
+          <button
+            class="delete-btn"
+            (click)="deleteTask(item._id)"
+            aria-label="Delete task">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </div>
+        @if (item.subItems.length > 0) {
+          <ul class="sub-item-list" role="list">
+            @for (sub of displaySubItems(item._id, item.subItems); track sub._id) {
+              <li
+                class="sub-item"
+                [class.done]="sub.completado"
+                [class.dragging]="draggedSubId() === sub._id"
+                draggable="true"
+                (dragstart)="onSubDragStart($event, item._id, sub._id)"
+                (dragover)="onSubDragOver($event, item._id, sub._id)"
+                (drop)="onSubDrop($event, item._id)"
+                (dragend)="onSubDragEnd()">
+                <button
+                  class="todo-check small"
+                  [class.checked]="sub.completado"
+                  (click)="toggleSubItem(item._id, sub._id)"
+                  [attr.aria-label]="(sub.completado ? 'Mark incomplete: ' : 'Mark complete: ') + sub.texto"
+                  [attr.aria-pressed]="sub.completado">
+                  @if (sub.completado) {
+                    <i class="fa-solid fa-check" aria-hidden="true"></i>
+                  }
+                </button>
+                <span class="todo-text">{{ sub.texto }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </li>
     }
+    @empty {
+      <li class="empty-msg" role="listitem">No tasks</li>
+    }
+    <li class="quick-add" [class.sub-item-mode]="subItemMode()" role="listitem">
+      <i class="fa-solid fa-plus quick-add-icon" aria-hidden="true"></i>
+      <input
+        class="quick-add-input"
+        type="text"
+        [placeholder]="subItemMode() ? 'Sub-item… (Enter to confirm, Shift+Tab to cancel)' : 'Add task… (Tab → sub-item)'"
+        [value]="newTaskText()"
+        (input)="newTaskText.set($any($event.target).value)"
+        (keydown)="onQuickAddKeydown($event)"
+        aria-label="Add new task" />
+    </li>
+  </ul>
+</div>
+
+@if (pendingDeleteList()) {
+  <div
+    class="list-delete-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="delete-list-title"
+    (click)="cancelDeleteList()">
+    <div class="list-delete-modal" (click)="$event.stopPropagation()">
+      <h3 id="delete-list-title">Delete "{{ pendingDeleteList() }}"</h3>
+      <p class="delete-modal-desc">What do you want to do with the tasks in this list?</p>
+      <div class="delete-modal-actions">
+        <button class="dml-btn dml-danger" (click)="confirmDeleteWithItems()">
+          Delete list and all tasks
+        </button>
+        <button class="dml-btn dml-secondary" (click)="confirmDeleteKeepItems()">
+          Delete list, keep tasks in All
+        </button>
+        <button class="dml-btn dml-ghost" (click)="cancelDeleteList()">
+          Cancel
+        </button>
+      </div>
+    </div>
   </div>
 }
-
-<ul class="todo-list" role="list">
-  @for (item of filteredTodos(); track item._id) {
-    <li class="todo-item" [class.done]="item.completado">
-      <button
-        class="todo-check"
-        [class.checked]="item.completado"
-        (click)="toggle(item._id)"
-        [attr.aria-label]="(item.completado ? 'Mark incomplete: ' : 'Mark complete: ') + item.texto"
-        [attr.aria-pressed]="item.completado">
-        @if (item.completado) {
-          <i class="fa-solid fa-check" aria-hidden="true"></i>
-        }
-      </button>
-      <div class="todo-body">
-        <span class="todo-text">{{ item.texto }}</span>
-        @if (item.fechaLimite) {
-          <span class="todo-when">{{ formatDate(item.fechaLimite) }}</span>
-        }
-      </div>
-    </li>
-  }
-  @empty {
-    <li class="empty-msg" role="listitem">No tasks</li>
-  }
-</ul>

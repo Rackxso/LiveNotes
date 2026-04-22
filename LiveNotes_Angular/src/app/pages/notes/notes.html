@@ -27,7 +27,50 @@
       </button>
     </label>
 
-    <app-text-notes [searchQuery]="notesSearch()" class="notes-content" (addNote)="openAddNoteModal()" />
+    <div class="category-chips" role="group" aria-label="Filter by category">
+      <button
+        class="chip"
+        [class.active]="selectedCategory() === 'all'"
+        (click)="selectCategory('all')"
+        [attr.aria-pressed]="selectedCategory() === 'all'">
+        All
+      </button>
+      @for (cat of categories(); track cat) {
+        <button
+          class="chip"
+          [class.active]="selectedCategory() === cat"
+          (click)="selectCategory(cat)"
+          [attr.aria-pressed]="selectedCategory() === cat">
+          {{ cat }}
+        </button>
+      }
+      @if (addingCategory()) {
+        <input
+          class="chip-input"
+          type="text"
+          placeholder="Category name"
+          [value]="newCategoryInput()"
+          (input)="newCategoryInput.set($any($event.target).value)"
+          (keydown.enter)="confirmNewCategory()"
+          (keydown.escape)="cancelNewCategory()"
+          (blur)="confirmNewCategory()"
+          aria-label="New category name"
+          autofocus />
+      } @else {
+        <button
+          class="chip chip-add"
+          (click)="startAddingCategory()"
+          aria-label="Add category filter">
+          +
+        </button>
+      }
+    </div>
+
+    <app-text-notes
+      [searchQuery]="notesSearch()"
+      [selectedCategory]="selectedCategory()"
+      class="notes-content"
+      (addNote)="openAddNoteModal()" />
   </section>
 
   <!-- TO-DO PANEL -->
@@ -58,6 +101,7 @@
 
 @if (showAddNoteModal()) {
   <app-add-note-modal
+    [existingCategories]="categories()"
     (cerrar)="closeAddNoteModal()"
     (guardado)="closeAddNoteModal()" />
 }

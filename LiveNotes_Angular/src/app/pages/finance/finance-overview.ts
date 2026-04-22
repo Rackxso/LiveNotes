@@ -47,7 +47,7 @@ export class FinanceOverview {
   readonly totalSaved = this.finance.totalSaved;
 
   readonly totalBalance = computed(() =>
-    this.finance.transactions().reduce((sum, t) => sum + t.amount, 0)
+    this.currentMonthIncome() - this.currentMonthExpenses()
   );
 
   readonly currentMonthIncome = computed(() => {
@@ -78,12 +78,9 @@ export class FinanceOverview {
       .reduce((sum, t) => sum + Math.abs(t.amount), 0);
   });
 
-  private readonly prevBalance = computed(() => {
-    const currentMonthNet = this.finance.transactions()
-      .filter(t => t.date.getMonth() === this.nowM && t.date.getFullYear() === this.nowY)
-      .reduce((sum, t) => sum + t.amount, 0);
-    return this.totalBalance() - currentMonthNet;
-  });
+  private readonly prevBalance = computed(() =>
+    this.prevMonthIncome() - this.prevMonthExpenses()
+  );
 
   readonly balancePct    = computed(() => this.pctStr(this.prevBalance(), this.totalBalance()));
   readonly balancePctUp  = computed(() => this.totalBalance() >= this.prevBalance());

@@ -1,6 +1,9 @@
 <ul class="notes-grid" role="list">
   @for (note of filteredNotes(); track note._id) {
     <li class="note-card">
+      @if (note.categoria) {
+        <span class="note-category" [class]="categoryClass(note.categoria)">{{ note.categoria }}</span>
+      }
       <span class="note-title">{{ note.titulo }}</span>
       @if (note.contenido) {
         <span class="note-content">{{ note.contenido }}</span>
@@ -15,5 +18,6 @@
       (keydown.space)="addNote.emit()"
       aria-label="Add new note">
     <p>Add new note</p>
+    <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
   </li>
 </ul>

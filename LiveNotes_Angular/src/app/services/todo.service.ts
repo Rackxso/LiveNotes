@@ -10,6 +10,7 @@ export interface SubItem {
   prioridad: number;
   fechaLimite: string | null;
   etiquetas: string[];
+  order: number;
 }
 
 export interface TodoItem {
@@ -21,6 +22,7 @@ export interface TodoItem {
   fechaLimite: string | null;
   etiquetas: string[];
   subItems: SubItem[];
+  order: number;
 }
 
 export interface TodoDto {
@@ -100,6 +102,40 @@ export class TodoService {
           })
         )
       )
+    );
+  }
+
+  reorderSubItems(todoId: string, items: { _id: string; order: number }[]): Observable<TodoItem> {
+    return this.http.patch<TodoItem>(`${this.base}/${todoId}/subitems/reorder`, { items }).pipe(
+      tap(updated => this._todos.update(todos => todos.map(t => t._id === todoId ? updated : t)))
+    );
+  }
+
+  deleteByList(listName: string): Observable<unknown> {
+    return this.http.delete(`${this.base}/list/${encodeURIComponent(listName)}`).pipe(
+      tap(() => this._todos.update(todos => todos.filter(t => t.idLista !== listName)))
+    );
+  }
+
+  reassignList(listName: string): Observable<unknown> {
+    return this.http.patch(`${this.base}/list/${encodeURIComponent(listName)}/reassign`, {}).pipe(
+      tap(() => this._todos.update(todos =>
+        todos.map(t => t.idLista === listName ? { ...t, idLista: '' } : t)
+      ))
+    );
+  }
+
+  reorderTodos(items: { _id: string; order: number }[]): Observable<unknown> {
+    return this.http.patch(`${this.base}/reorder`, { items }).pipe(
+      tap(() => {
+        const orderMap = new Map(items.map(i => [i._id, i.order]));
+        this._todos.update(todos =>
+          todos.map(t => {
+            const newOrder = orderMap.get(t._id);
+            return newOrder !== undefined ? { ...t, order: newOrder } : t;
+          })
+        );
+      })
     );
   }
 }

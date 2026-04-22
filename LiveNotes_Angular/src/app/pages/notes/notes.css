@@ -10,14 +10,15 @@
   grid-template-columns: 1fr 1fr;
   flex: 1;
   min-height: 0;
-  gap: 1px;
-  background: var(--secondary-background-color);
+  gap: 20px;
+  padding: 20px;
   overflow: hidden;
 }
 
 /* ── Panel ────────────────────────────────────── */
 .panel {
-  background: var(--background-color);
+  background: var(--background-subcolor);
+  border-radius: 16px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -89,9 +90,64 @@
   &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; border-radius: 3px; }
 }
 
+/* ── Category chips ───────────────────────────── */
+.category-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.chip {
+  font-size: 12px;
+  font-family: var(--fuente-texto);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--background-subcolor);
+  background: transparent;
+  color: var(--text-subcolor);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: var(--background-subcolor);
+    color: var(--text-color);
+  }
+
+  &.active {
+    background: var(--background-subcolor);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    font-weight: 600;
+  }
+
+  &.chip-add {
+    font-size: 14px;
+    padding: 2px 10px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+}
+
+.chip-input {
+  font-size: 12px;
+  font-family: var(--fuente-texto);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--primary-color);
+  background: var(--background-subcolor);
+  color: var(--text-color);
+  outline: none;
+  width: 120px;
+
+  &::placeholder { color: var(--text-subcolor); }
+}
+
 /* ── Scrollable content areas ─────────────────── */
-.notes-content,
-.todos-content {
+.notes-content {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -100,9 +156,17 @@
   scrollbar-color: var(--background-subcolor) transparent;
 }
 
+.todos-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 @media only screen and (max-width: 600px) {
   .body {
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto auto;
     grid-template-columns: 1fr;
+    overflow-y: auto;
   }
 }

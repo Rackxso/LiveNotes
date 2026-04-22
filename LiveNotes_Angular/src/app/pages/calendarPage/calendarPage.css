@@ -7,7 +7,8 @@
 .cuerpo {
     display: grid;
     grid-template-columns: 3fr 1fr;
-    height: calc(100dvh - 61px);
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
 }
 app-month-view {

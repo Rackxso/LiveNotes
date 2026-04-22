@@ -61,7 +61,8 @@
 }
 
 .field input,
-.field textarea {
+.field textarea,
+.field .category-select {
   width: 100%;
   box-sizing: border-box;
   background: var(--background-subcolor);

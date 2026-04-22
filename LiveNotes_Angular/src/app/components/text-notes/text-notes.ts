@@ -12,6 +12,7 @@ export class TextNotes implements OnInit {
   private readonly notesService = inject(NotesService);
 
   readonly searchQuery = input<string>('');
+  readonly selectedCategory = input<string>('all');
   readonly addNote = output<void>();
 
   readonly notes = this.notesService.notes;
@@ -22,9 +23,25 @@ export class TextNotes implements OnInit {
 
   readonly filteredNotes = computed(() => {
     const q = this.searchQuery().toLowerCase().trim();
-    if (!q) return this.notes();
-    return this.notes().filter(n =>
-      n.titulo.toLowerCase().includes(q) || n.contenido.toLowerCase().includes(q)
-    );
+    const cat = this.selectedCategory();
+    let items = this.notes();
+    if (cat !== 'all') {
+      items = items.filter(n => n.categoria === cat);
+    }
+    if (q) {
+      items = items.filter(n =>
+        n.titulo.toLowerCase().includes(q) || n.contenido.toLowerCase().includes(q)
+      );
+    }
+    return items;
   });
+
+  categoryClass(categoria: string): string {
+    const map: Record<string, string> = {
+      work: 'cat-work',
+      personal: 'cat-personal',
+      health: 'cat-health',
+    };
+    return map[categoria?.toLowerCase()] ?? 'cat-default';
+  }
 }

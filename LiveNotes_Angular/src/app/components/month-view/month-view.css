@@ -65,7 +65,6 @@
     grid-template-rows: repeat(var(--filas), 1fr);
     flex: 1;
     min-height: 0;
-    max-height: calc(100dvh - 61px);
     overflow: hidden;
 }
 
