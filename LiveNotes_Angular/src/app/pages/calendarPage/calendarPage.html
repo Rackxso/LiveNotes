@@ -1,6 +1,7 @@
 <app-header
   [vistasPage]="vistasPage()"
   [vistaActiva]="vistaActivaTraducida()"
+  [iconosList]="vistasIconos"
   [name]="nombreVista()"
   [primaryButton]="primaryButton()"
   [secondaryButton]="secondaryButton()"
@@ -9,39 +10,50 @@
   [buttons]="true">
 </app-header>
 
-<div class="cuerpo">
-  @switch (vistaActual()) {
-    @case ('Week') {
-      <app-week-view
-        [eventos]="eventos()"
-        [diaSeleccionado]="diaSeleccionado()"
-        (diaSeleccionadoChange)="onDiaSeleccionado($event)">
-      </app-week-view>
+<div class="cuerpo" [class.sin-sheet]="vistaActual() !== 'Month'">
+  <div class="calendar-wrapper">
+    @switch (vistaActual()) {
+      @case ('Week') {
+        <app-week-view
+          [eventos]="eventos()"
+          [diaSeleccionado]="diaSeleccionado()"
+          (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+        </app-week-view>
+      }
+      @case ('Day') {
+        <app-day-view
+          [eventos]="eventos()"
+          [diaSeleccionado]="diaSeleccionado()"
+          (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+        </app-day-view>
+      }
+      @default {
+        <app-month-view
+          [eventos]="eventos()"
+          [diaSeleccionado]="diaSeleccionado()"
+          (diaSeleccionadoChange)="onDiaSeleccionado($event)"
+          (mesVisibleChange)="onMesVisibleChange($event)">
+        </app-month-view>
+      }
     }
-    @case ('Day') {
-      <app-day-view
-        [eventos]="eventos()"
-        [diaSeleccionado]="diaSeleccionado()"
-        (diaSeleccionadoChange)="onDiaSeleccionado($event)">
-      </app-day-view>
-    }
-    @default {
-      <app-month-view
-        [eventos]="eventos()"
-        [diaSeleccionado]="diaSeleccionado()"
-        (diaSeleccionadoChange)="onDiaSeleccionado($event)"
-        (mesVisibleChange)="onMesVisibleChange($event)">
-      </app-month-view>
-    }
-  }
+  </div>
 
-  <app-eventos
-    [diaSeleccionado]="diaSeleccionado()"
-    [vista]="vistaActual()"
-    [eventosDia]="eventosDia()"
-    [eventosSemana]="eventosSemana()"
-    [eventosMes]="eventosMes()"
-    (addEventoDia)="abrirModalDia()"/>
+  <div class="bottom-sheet" [class.open]="bottomSheetAbierto()">
+    <button class="sheet-handle"
+            (click)="toggleBottomSheet()"
+            [attr.aria-expanded]="bottomSheetAbierto()"
+            aria-controls="sheet-content">
+      <span class="handle-bar" aria-hidden="true"></span>
+    </button>
+    <app-eventos
+      id="sheet-content"
+      [diaSeleccionado]="diaSeleccionado()"
+      [vista]="vistaActual()"
+      [eventosDia]="eventosDia()"
+      [eventosSemana]="eventosSemana()"
+      [eventosMes]="eventosMes()"
+      (addEventoDia)="abrirModalDia()"/>
+  </div>
 </div>
 
 @if(modalAbierto()){

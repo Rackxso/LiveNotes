@@ -109,6 +109,29 @@ export class WeekView {
       return mismaFecha && this.horaDeEvento(e) === hora;
     });
 
+  readonly tieneEventos = (dia: Date): boolean =>
+    this.eventos().some(e =>
+      e.fecha.getDate() === dia.getDate() &&
+      e.fecha.getMonth() === dia.getMonth() &&
+      e.fecha.getFullYear() === dia.getFullYear()
+    );
+
+  readonly eventosDelDia = (dia: Date): Evento[] =>
+    this.eventos()
+      .filter(e =>
+        e.fecha.getDate() === dia.getDate() &&
+        e.fecha.getMonth() === dia.getMonth() &&
+        e.fecha.getFullYear() === dia.getFullYear()
+      )
+      .sort((a, b) => (a.hora ?? '').localeCompare(b.hora ?? ''));
+
+  readonly diaNombreCompleto = (dia: Date): string =>
+    dia.toLocaleDateString(this.i18n.locale(), {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    });
+
   readonly eventosSinHoraDia = (dia: Date): Evento[] =>
     this.eventos().filter(e =>
       !e.hora &&

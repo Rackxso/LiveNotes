@@ -41,24 +41,6 @@
         <input id="b-limite" type="number" formControlName="limite" min="0.01" step="0.01" />
       </div>
 
-      @if (mode() === 'create') {
-        <div class="field-row">
-          <div class="field">
-            <label for="b-mes">Mes</label>
-            <select id="b-mes" formControlName="mes">
-              @for (m of months; track m.value) {
-                <option [value]="m.value">{{ m.label }}</option>
-              }
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="b-anio">Año</label>
-            <input id="b-anio" type="number" formControlName="anio" min="2020" />
-          </div>
-        </div>
-      }
-
       <div class="form-actions">
         @if (mode() === 'edit') {
           <button type="button" class="delete-btn" (click)="deleteBudget()">Eliminar</button>

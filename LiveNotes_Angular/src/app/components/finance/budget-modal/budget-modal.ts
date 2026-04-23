@@ -37,34 +37,22 @@ export class BudgetModal {
 
   private readonly dialogEl = viewChild.required<ElementRef<HTMLDialogElement>>('dialogEl');
 
-  readonly months = [
-    { value: 1,  label: 'Enero' },     { value: 2,  label: 'Febrero' },
-    { value: 3,  label: 'Marzo' },     { value: 4,  label: 'Abril' },
-    { value: 5,  label: 'Mayo' },      { value: 6,  label: 'Junio' },
-    { value: 7,  label: 'Julio' },     { value: 8,  label: 'Agosto' },
-    { value: 9,  label: 'Septiembre' },{ value: 10, label: 'Octubre' },
-    { value: 11, label: 'Noviembre' }, { value: 12, label: 'Diciembre' },
-  ];
-
   readonly form = new FormGroup({
-    nombre: new FormControl('',   { validators: [Validators.required], nonNullable: true }),
-    limite: new FormControl(0,    { validators: [Validators.required, Validators.min(0.01)], nonNullable: true }),
-    mes:    new FormControl(new Date().getMonth() + 1, { validators: [Validators.required], nonNullable: true }),
-    anio:   new FormControl(new Date().getFullYear(),  { validators: [Validators.required], nonNullable: true }),
+    nombre: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+    limite: new FormControl(0,  { validators: [Validators.required, Validators.min(0.01)], nonNullable: true }),
   });
 
   open(budget?: { id: string; name: string; limite: number }): void {
-    const today = new Date();
     if (budget) {
       this.mode.set('edit');
       this.editingId.set(budget.id);
       this.editingName.set(budget.name);
-      this.form.reset({ nombre: budget.name, limite: budget.limite, mes: today.getMonth() + 1, anio: today.getFullYear() });
+      this.form.reset({ nombre: budget.name, limite: budget.limite });
     } else {
       this.mode.set('create');
       this.editingId.set(null);
       this.editingName.set('');
-      this.form.reset({ nombre: '', limite: 0, mes: today.getMonth() + 1, anio: today.getFullYear() });
+      this.form.reset({ nombre: '', limite: 0 });
       this.selectedColor.set(BUDGET_COLORS[0]);
     }
     this.dialogEl().nativeElement.showModal();
@@ -89,12 +77,13 @@ export class BudgetModal {
         this.close();
       });
     } else {
+      const today = new Date();
       const dto: ApiPresupuestoDto = {
         nombre: v.nombre,
         color: this.selectedColor(),
         limite: v.limite,
-        mes: v.mes,
-        anio: v.anio,
+        mes: today.getMonth() + 1,
+        anio: today.getFullYear(),
       };
       this.financeService.createPresupuesto(dto).subscribe(() => {
         this.saved.emit();

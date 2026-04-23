@@ -19,6 +19,9 @@
          (click)="seleccionarDia(dia)">
       <span class="dia-nombre">{{ diasSemana()[$index] }}</span>
       <span class="dia-num">{{ dia.getDate() }}</span>
+      @if (tieneEventos(dia)) {
+        <span class="dia-punto" aria-hidden="true"></span>
+      }
     </div>
   }
 </div>
@@ -52,4 +55,27 @@
       }
     }
   </div>
+</div>
+
+<div class="agenda-mobile" role="list" [attr.aria-label]="nombreSemana()">
+  @for (dia of diasDeSemana(); track $index) {
+    @if (tieneEventos(dia) || esHoy(dia) || esSeleccionado(dia)) {
+      <section class="agenda-grupo"
+               [class.hoy]="esHoy(dia)"
+               [class.seleccionado]="esSeleccionado(dia)"
+               role="listitem"
+               [attr.aria-label]="diaNombreCompleto(dia)">
+        <h4 class="agenda-fecha-header">{{ diaNombreCompleto(dia) }}</h4>
+        @if (eventosDelDia(dia).length === 0) {
+          <p class="agenda-vacio">{{ t()('calendar.noEvents') }}</p>
+        }
+        @for (ev of eventosDelDia(dia); track ev.id) {
+          <div class="agenda-item">
+            <span class="agenda-hora">{{ ev.hora ?? t()('calendar.allDay') }}</span>
+            <app-event-card [evento]="ev" />
+          </div>
+        }
+      </section>
+    }
+  }
 </div>

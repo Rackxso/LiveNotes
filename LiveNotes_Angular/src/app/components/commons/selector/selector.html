@@ -1,10 +1,14 @@
-<div class="menu">
+<div class="menu" [class.has-icons]="iconosList.length > 0">
     <div class="highlight"></div>
-    @for (vista of vistas; track vista) {
+    @for (vista of vistas; track vista; let i = $index) {
         <div
             [class.active]="vista === (vistaActivaLocal || vistaActiva || vistas[0])"
+            [attr.aria-label]="vista"
             (click)="cambiarvista(vista)">
-            {{ vista }}
+            @if (iconosList[i]) {
+                <i class="label-icon {{ iconosList[i] }}" aria-hidden="true"></i>
+            }
+            <span class="label-text">{{ vista }}</span>
         </div>
     }
 </div>

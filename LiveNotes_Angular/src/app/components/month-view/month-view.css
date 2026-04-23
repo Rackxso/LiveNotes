@@ -117,6 +117,10 @@
     }
 }
 
+.dia-punto {
+    display: none;
+}
+
 .pills {
     display: flex;
     flex-direction: column;
@@ -141,5 +145,29 @@
         border-left-color: var(--accent-subcolor);
         color: var(--accent-color);
         background: transparent;
+    }
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .mes h3 {
+        font-size: 20px;
+    }
+
+    .dia-punto {
+        display: block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        margin-top: 2px;
+    }
+
+    .pills {
+        display: none;
+    }
+
+    .dia .num-dia {
+        font-size: 13px;
     }
 }

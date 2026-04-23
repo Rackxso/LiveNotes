@@ -24,11 +24,13 @@ export class MoodTracker {
   readonly t = this.i18n.t;
 
   readonly moodEntries = this.calendarService.moodEntries;
-  readonly selectedMood = signal<string | null>(null);
+  readonly selectedMoods = signal<string[]>([]);
   readonly notes = signal('');
   readonly saving = signal(false);
 
   private readonly today = new Date();
+
+  readonly selectedDay = signal<number>(this.today.getDate());
 
   readonly MOODS: MoodOption[] = [
     { key: 'happy',     icon: 'fa-regular fa-face-smile',     color: 'var(--green)',        score: 5 },
@@ -60,14 +62,6 @@ export class MoodTracker {
       .replace(/^\w/, c => c.toUpperCase())
   );
 
-  readonly moodDistribution = computed(() =>
-    this.MOODS.map(m => ({
-      key: m.key,
-      color: m.color,
-      count: this.currentMonthEntries().filter(e => e.emotions?.[0] === m.key).length,
-    })).filter(m => m.count > 0)
-  );
-
   readonly currentMonthEntries = computed<MoodEntry[]>(() =>
     this.moodEntries().filter(e => {
       const d = new Date(e.date);
@@ -82,7 +76,23 @@ export class MoodTracker {
     })
   );
 
+  readonly selectedDayEntry = computed<MoodEntry | undefined>(() =>
+    this.currentMonthEntries().find(e => new Date(e.date).getDate() === this.selectedDay())
+  );
+
+  readonly isSelectedDayToday = computed(() => this.selectedDay() === this.today.getDate());
+
+  readonly formDisabled = computed(() => !this.isSelectedDayToday() || !!this.todayEntry());
+
   readonly alreadySaved = computed(() => !!this.todayEntry());
+
+  readonly moodDistribution = computed(() =>
+    this.MOODS.map(m => ({
+      key: m.key,
+      color: m.color,
+      count: this.currentMonthEntries().filter(e => e.emotions?.includes(m.key)).length,
+    })).filter(m => m.count > 0)
+  );
 
   readonly moodStreak = computed<number>(() => {
     const entries = this.moodEntries();
@@ -106,8 +116,9 @@ export class MoodTracker {
     if (entries.length === 0) return null;
     const counts = new Map<string, number>();
     for (const e of entries) {
-      const mood = e.emotions?.[0];
-      if (mood) counts.set(mood, (counts.get(mood) ?? 0) + 1);
+      for (const mood of (e.emotions ?? [])) {
+        counts.set(mood, (counts.get(mood) ?? 0) + 1);
+      }
     }
     let best: string | null = null;
     let bestCount = 0;
@@ -125,25 +136,47 @@ export class MoodTracker {
   });
 
   moodColorForDay(dayNum: number): string | null {
-    const entry = this.currentMonthEntries().find(e => {
-      const d = new Date(e.date);
-      return d.getDate() === dayNum;
+    const entry = this.currentMonthEntries().find(e => new Date(e.date).getDate() === dayNum);
+    if (!entry || !entry.emotions?.length) return null;
+    const colors = entry.emotions
+      .map(key => this.MOODS.find(m => m.key === key)?.color)
+      .filter((c): c is string => !!c);
+    if (colors.length === 0) return null;
+    if (colors.length === 1) return colors[0];
+    if (colors.length === 2) return `conic-gradient(${colors[0]} 50%, ${colors[1]} 50%)`;
+    return `conic-gradient(${colors[0]} 0% 33.33%, ${colors[1]} 33.33% 66.67%, ${colors[2]} 66.67% 100%)`;
+  }
+
+  isMoodSelected(key: string): boolean {
+    const entry = this.selectedDayEntry();
+    if (entry) return entry.emotions?.includes(key) ?? false;
+    return this.selectedMoods().includes(key);
+  }
+
+  toggleMood(key: string): void {
+    if (this.formDisabled()) return;
+    this.selectedMoods.update(moods => {
+      if (moods.includes(key)) return moods.filter(m => m !== key);
+      if (moods.length >= 3) return moods;
+      return [...moods, key];
     });
-    if (!entry || !entry.emotions?.[0]) return null;
-    const mood = this.MOODS.find(m => m.key === entry.emotions![0]);
-    return mood?.color ?? null;
+  }
+
+  selectDay(dayNum: number): void {
+    this.selectedDay.set(dayNum);
   }
 
   save(): void {
-    const mood = this.selectedMood();
-    if (!mood) return;
+    const moods = this.selectedMoods();
+    if (moods.length === 0) return;
     this.saving.set(true);
-    const m = this.MOODS.find(x => x.key === mood)!;
+    const scores = moods.map(k => this.MOODS.find(m => m.key === k)!.score);
+    const score = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
     const dateStr = `${this.today.getFullYear()}-${String(this.today.getMonth() + 1).padStart(2, '0')}-${String(this.today.getDate()).padStart(2, '0')}`;
     this.calendarService.createMoodEntry({
       date: dateStr,
-      score: m.score,
-      emotions: [mood],
+      score,
+      emotions: moods,
       notes: this.notes(),
     }).subscribe({
       complete: () => this.saving.set(false),

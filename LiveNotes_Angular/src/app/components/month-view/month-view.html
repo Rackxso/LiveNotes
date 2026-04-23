@@ -26,6 +26,9 @@
              [attr.aria-label]="nombreMes() + ' ' + dia"
              (click)="seleccionarDia(dia)">
             <span class="num-dia">{{ dia }}</span>
+            @if (eventosDeDia(dia).length > 0) {
+                <span class="dia-punto" aria-hidden="true"></span>
+            }
             <div class="pills">
                 @for (evento of eventosDeDia(dia); track evento.id) {
                     @if ($index < 2) {

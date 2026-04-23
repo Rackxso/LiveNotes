@@ -9,6 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class Selector {
   @Input() vistas: string[] = [];
   @Input() vistaActiva: string | null = null;
+  @Input() iconosList: string[] = [];
   @Output() vistaSeleccionada = new EventEmitter<string>();
   vistaActivaLocal: string | null = null;
 

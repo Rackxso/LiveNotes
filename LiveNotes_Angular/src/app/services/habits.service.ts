@@ -9,6 +9,7 @@ export interface Habit {
   rachaActual: number;
   rachaMasLarga: number;
   ultimoHecho: string | null;
+  completionDates?: string[];
 }
 
 export interface HabitDto {

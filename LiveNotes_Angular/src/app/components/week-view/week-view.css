@@ -211,3 +211,98 @@
     background-color: color-mix(in srgb, var(--primary-color) 5%, var(--background-subcolor));
   }
 }
+
+.dia-punto {
+  display: none;
+}
+
+.agenda-mobile {
+  display: none;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .columnas-header {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .gutter-header {
+    display: none;
+  }
+
+  .todo-el-dia-fila {
+    display: none;
+  }
+
+  .scroll-area {
+    display: none;
+  }
+
+  .dia-nombre {
+    font-size: 9px;
+  }
+
+  .dia-num {
+    font-size: 15px;
+  }
+
+  .dia-punto {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+  }
+
+  .agenda-mobile {
+    display: block;
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 12px;
+    min-height: 0;
+    background: var(--background-subcolor);
+  }
+
+  .agenda-grupo {
+    margin-bottom: 20px;
+  }
+
+  .agenda-fecha-header {
+    font-family: var(--fuente-titulo);
+    font-size: 13px;
+    color: var(--text-subcolor);
+    text-transform: capitalize;
+    padding: 6px 0 4px;
+    border-bottom: 1px solid var(--primary-subcolor);
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+
+  .agenda-grupo.hoy .agenda-fecha-header {
+    color: var(--primary-color);
+  }
+
+  .agenda-vacio {
+    font-family: var(--fuente-texto);
+    font-size: 13px;
+    color: var(--text-subcolor);
+    font-style: italic;
+    margin: 4px 0 8px;
+  }
+
+  .agenda-item {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: start;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .agenda-hora {
+    font-family: var(--fuente-texto);
+    font-size: 12px;
+    color: var(--text-subcolor);
+    padding-top: 6px;
+    text-align: right;
+  }
+}

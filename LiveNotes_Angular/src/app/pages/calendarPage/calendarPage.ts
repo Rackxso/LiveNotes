@@ -33,6 +33,8 @@ export class CalendarPage {
     this.t()('calendar.views.day'),
   ]);
 
+  readonly vistasIconos = ['fa-solid fa-calendar', 'fa-solid fa-calendar-week', 'fa-solid fa-calendar-day'];
+
   // Vista activa traducida para que el Selector la marque correctamente
   public vistaActivaTraducida = computed(() => {
     const map: Record<string, string> = {
@@ -155,6 +157,12 @@ export class CalendarPage {
     }
   }
 
+  readonly bottomSheetAbierto = signal(false);
+
+  toggleBottomSheet(): void {
+    this.bottomSheetAbierto.update(v => !v);
+  }
+
   public modalAbierto = signal<boolean>(false);
   public fechaModal = signal<Date | null>(null);
 
@@ -183,6 +191,9 @@ export class CalendarPage {
 
   onDiaSeleccionado(fecha: Date): void {
     this.diaSeleccionado.set(fecha);
+    if (this.vistaActual() === 'Month') {
+      this.bottomSheetAbierto.set(true);
+    }
   }
 
   onMesVisibleChange(val: { anyo: number; mes: number }): void {

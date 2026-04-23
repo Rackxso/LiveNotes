@@ -5,27 +5,35 @@
   <!-- NOTES PANEL -->
   <section class="panel" aria-label="Notes">
     <div class="panel-header">
-      <h2 class="panel-title">Notes</h2>
-      <app-primary-button
-        [config]="{texto: 'New note', icon: 'fa-solid fa-circle-plus'}"
-        (clicked)="openAddNoteModal()"
-        aria-label="Create new note" />
+      @if (notesSearchOpen()) {
+        <label class="search-inline" for="notes-search">
+          <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+          <input
+            id="notes-search"
+            type="search"
+            class="search-input"
+            placeholder="Search in your notes"
+            [value]="notesSearch()"
+            (input)="notesSearch.set($any($event.target).value)"
+            aria-label="Search notes"
+            autofocus />
+          <button class="search-close" type="button" (click)="closeNotesSearch()" aria-label="Close search">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </label>
+      } @else {
+        <h2 class="panel-title">Notes</h2>
+        <div class="header-actions">
+          <button class="search-toggle" type="button" (click)="notesSearchOpen.set(true)" aria-label="Search notes">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          </button>
+          <app-primary-button
+            [config]="{texto: 'New note', icon: 'fa-solid fa-circle-plus'}"
+            (clicked)="openAddNoteModal()"
+            aria-label="Create new note" />
+        </div>
+      }
     </div>
-
-    <label class="search-bar" for="notes-search">
-      <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
-      <input
-        id="notes-search"
-        type="search"
-        class="search-input"
-        placeholder="Search in your notes"
-        [value]="notesSearch()"
-        (input)="notesSearch.set($any($event.target).value)"
-        aria-label="Search notes" />
-      <button class="search-filter" type="button" aria-label="Filter notes">
-        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
-      </button>
-    </label>
 
     <div class="category-chips" role="group" aria-label="Filter by category">
       <button
@@ -76,23 +84,29 @@
   <!-- TO-DO PANEL -->
   <section class="panel" aria-label="To-do">
     <div class="panel-header">
-      <h2 class="panel-title">To-do</h2>
+      @if (todosSearchOpen()) {
+        <label class="search-inline" for="todos-search">
+          <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+          <input
+            id="todos-search"
+            type="search"
+            class="search-input"
+            placeholder="Search in your to-do's"
+            [value]="todosSearch()"
+            (input)="todosSearch.set($any($event.target).value)"
+            aria-label="Search to-dos"
+            autofocus />
+          <button class="search-close" type="button" (click)="closeTodosSearch()" aria-label="Close search">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </label>
+      } @else {
+        <h2 class="panel-title">To-do</h2>
+        <button class="search-toggle" type="button" (click)="todosSearchOpen.set(true)" aria-label="Search to-dos">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        </button>
+      }
     </div>
-
-    <label class="search-bar" for="todos-search">
-      <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
-      <input
-        id="todos-search"
-        type="search"
-        class="search-input"
-        placeholder="Search in your to-do's"
-        [value]="todosSearch()"
-        (input)="todosSearch.set($any($event.target).value)"
-        aria-label="Search to-dos" />
-      <button class="search-filter" type="button" aria-label="Filter to-dos">
-        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
-      </button>
-    </label>
 
     <app-to-do [searchQuery]="todosSearch()" class="todos-content" />
   </section>

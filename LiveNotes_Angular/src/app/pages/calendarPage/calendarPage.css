@@ -2,35 +2,116 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  --sheet-peek: 104px;
 }
 
 .cuerpo {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-}
-app-month-view {
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
-app-week-view {
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
+.calendar-wrapper {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
+.bottom-sheet {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-handle {
+  display: none;
+}
+
+.handle-bar {
+  display: block;
+  width: 40px;
+  height: 4px;
+  background: var(--primary-subcolor);
+  border-radius: 2px;
+}
+
+app-month-view,
+app-week-view,
 app-day-view {
-    min-height: 0;
-    height: 100%;
-    overflow: hidden;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 app-eventos {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .cuerpo {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: visible;
+  }
+
+  .calendar-wrapper {
+    flex: 1;
     min-height: 0;
-    height: 100%;
+    height: auto;
     overflow: hidden;
+    margin-bottom: var(--sheet-peek);
+  }
+
+  .bottom-sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65vh;
+    transform: translateY(calc(100% - var(--sheet-peek)));
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 50;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  .bottom-sheet.open {
+    transform: translateY(0);
+  }
+
+  .cuerpo.sin-sheet .calendar-wrapper {
+    margin-bottom: 0;
+  }
+
+  .cuerpo.sin-sheet .bottom-sheet {
+    display: none;
+  }
+
+  .sheet-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    border: none;
+    cursor: pointer;
+    background: var(--background-subcolor);
+    border-top: 1px solid var(--primary-subcolor);
+    border-radius: 16px 16px 0 0;
+    flex-shrink: 0;
+    width: 100%;
+    padding: 0;
+
+    &:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: -2px;
+    }
+  }
 }

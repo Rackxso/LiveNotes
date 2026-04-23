@@ -2,17 +2,23 @@
 
 <!-- Entry card -->
 <div class="mt-card">
-  <p class="mt-question">{{ t()('tracker.howFeeling') }}</p>
+  <p class="mt-question">
+    @if (isSelectedDayToday()) {
+      {{ t()('tracker.howFeeling') }}
+    } @else {
+      {{ currentMonthName() }} {{ selectedDay() }}
+    }
+  </p>
   <div class="mt-mood-row">
     <div class="mt-moods" role="group" [attr.aria-label]="t()('tracker.howFeeling')">
       @for (m of MOODS; track m.key) {
         <button
           class="mt-mood-btn"
-          [class.selected]="alreadySaved() ? todayEntry()?.emotions?.[0] === m.key : selectedMood() === m.key"
+          [class.selected]="isMoodSelected(m.key)"
           [style.--mood-color]="m.color"
-          (click)="!alreadySaved() && selectedMood.set(m.key)"
-          [disabled]="alreadySaved()"
-          [attr.aria-pressed]="selectedMood() === m.key"
+          (click)="toggleMood(m.key)"
+          [disabled]="formDisabled()"
+          [attr.aria-pressed]="isMoodSelected(m.key)"
           [attr.aria-label]="t()('tracker.mood' + (m.key | titlecase))">
           <i [class]="m.icon" aria-hidden="true"></i>
           <span>{{ t()('tracker.mood' + (m.key | titlecase)) }}</span>
@@ -22,15 +28,15 @@
     <div class="mt-right">
       <textarea
         class="mt-notes"
-        [value]="alreadySaved() ? (todayEntry()?.notes ?? '') : notes()"
+        [value]="selectedDayEntry()?.notes ?? (isSelectedDayToday() ? notes() : '')"
         (input)="onNotesInput($event)"
         [placeholder]="t()('tracker.whyFeeling')"
-        [disabled]="alreadySaved()"
+        [disabled]="formDisabled()"
         [attr.aria-label]="t()('tracker.whyFeeling')"></textarea>
       <app-primary-button
         class="small"
         [config]="{ texto: alreadySaved() ? t()('tracker.done') + ' ✓' : t()('tracker.saveEntry') }"
-        [disabled]="!selectedMood() || saving() || alreadySaved()"
+        [disabled]="selectedMoods().length === 0 || saving() || formDisabled()"
         (clicked)="save()" />
     </div>
   </div>
@@ -50,11 +56,14 @@
         @if (cell === null) {
           <span class="mt-cal-dot mt-cal-empty" role="presentation"></span>
         } @else {
-          <span
+          <button
             class="mt-cal-dot"
+            [class.selected-day]="cell === selectedDay()"
             [style.background]="moodColorForDay(cell) ?? 'var(--primary-subcolor)'"
             role="gridcell"
-            [attr.aria-label]="'Day ' + cell + (moodColorForDay(cell) ? ' logged' : '')"></span>
+            [attr.aria-pressed]="cell === selectedDay()"
+            [attr.aria-label]="'Day ' + cell + (moodColorForDay(cell) ? ' logged' : '')"
+            (click)="selectDay(cell)"></button>
         }
       }
     </div>

@@ -18,12 +18,25 @@
 .panel {
   overflow-y: auto;
   min-height: 0;
+  min-width: 0;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1000px) {
+  :host {
+    height: auto;
+    overflow: visible;
+  }
+
   .tracker-body {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
-    overflow-y: auto;
+    overflow: visible;
+    min-height: unset;
+    padding-bottom: 60px;
+  }
+
+  .panel {
+    overflow: visible;
+    min-height: unset;
   }
 }

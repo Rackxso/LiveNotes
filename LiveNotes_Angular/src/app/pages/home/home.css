@@ -366,11 +366,46 @@ app-goal-progress {
   flex-shrink: 0;
 }
 
-@media  (max-width: 600px) {
+@media (max-width: 600px) {
+  :host {
+    overflow-y: auto;
+  }
+
   .cuadricula {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, auto);
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: visible;
+  }
+
+  .quadrant {
+    overflow: visible;
+  }
+
+  /* Q2: Calendar en una sola columna */
+  .q2 {
+    grid-template-columns: 1fr;
+
+    app-mini-calendar {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .eventos-list {
+      grid-column: 1;
+      grid-row: 3;
+      overflow: visible;
+    }
+  }
+
+  /* Q4: Notas y pendientes apilados sin scroll */
+  .q4-cols {
+    grid-template-columns: 1fr;
+    overflow: visible;
+    min-height: unset;
+  }
+
+  .q4-col {
+    overflow: visible;
+    min-height: unset;
   }
 }

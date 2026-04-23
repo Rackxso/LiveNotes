@@ -6,7 +6,8 @@
       "Bash(xargs wc *)",
       "Bash(npx tsc *)",
       "Bash(xargs ls *)",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "Bash(grep -E \"\\\\.\\(ts|js\\)$\")"
     ]
   }
 }

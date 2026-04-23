@@ -14,6 +14,7 @@
     "today": "Hoy",
     "allDay": "Todo el día",
     "more": "más",
+    "noEvents": "Sin eventos",
     "views": {
       "month": "Mes",
       "week": "Semana",

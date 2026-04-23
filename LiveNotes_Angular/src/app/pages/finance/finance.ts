@@ -29,6 +29,8 @@ export class Finance {
     this.t()('finance.views.savings'),
   ]);
 
+  readonly vistasIconos = ['fa-solid fa-chart-pie', 'fa-solid fa-arrow-right-arrow-left', 'fa-solid fa-piggy-bank'];
+
   readonly vistaActivaTraducida = computed(() => {
     const map: Record<string, string> = {
       Overview:     'finance.views.overview',

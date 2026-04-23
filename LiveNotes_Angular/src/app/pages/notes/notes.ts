@@ -22,6 +22,8 @@ export class Notes {
 
   readonly notesSearch = signal('');
   readonly todosSearch = signal('');
+  readonly notesSearchOpen = signal(false);
+  readonly todosSearchOpen = signal(false);
   readonly showAddNoteModal = signal(false);
   readonly selectedCategory = signal<string>('all');
   readonly addingCategory = signal(false);
@@ -42,6 +44,16 @@ export class Notes {
 
   closeAddNoteModal(): void {
     this.showAddNoteModal.set(false);
+  }
+
+  closeNotesSearch(): void {
+    this.notesSearchOpen.set(false);
+    this.notesSearch.set('');
+  }
+
+  closeTodosSearch(): void {
+    this.todosSearchOpen.set(false);
+    this.todosSearch.set('');
   }
 
   selectCategory(cat: string): void {

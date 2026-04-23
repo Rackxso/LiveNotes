@@ -48,16 +48,14 @@ export class HabitTracker {
   }
 
   dotForDate(habit: Habit, date: Date): boolean {
-    if (!habit.ultimoHecho || habit.rachaActual <= 0) return false;
-    const last = new Date(habit.ultimoHecho);
-    last.setHours(0, 0, 0, 0);
+    if (!habit.completionDates?.length) return false;
     const check = new Date(date);
     check.setHours(0, 0, 0, 0);
-    if (check > last) return false;
-    const start = new Date(last);
-    start.setDate(last.getDate() - habit.rachaActual + 1);
-    start.setHours(0, 0, 0, 0);
-    return check >= start;
+    return habit.completionDates.some(d => {
+      const cd = new Date(d);
+      cd.setHours(0, 0, 0, 0);
+      return cd.getTime() === check.getTime();
+    });
   }
 
   isDoneToday(habit: Habit): boolean {
@@ -71,16 +69,13 @@ export class HabitTracker {
   }
 
   dotForDay(habit: Habit, dayNum: number): boolean {
-    if (!habit.ultimoHecho || habit.rachaActual <= 0) return false;
-    const last = new Date(habit.ultimoHecho);
-    const lastDay = last.getDate();
-    const lastMonth = last.getMonth();
-    const lastYear = last.getFullYear();
-
-    if (lastMonth !== this.today.getMonth() || lastYear !== this.today.getFullYear()) return false;
-
-    const streakStart = lastDay - habit.rachaActual + 1;
-    return dayNum >= streakStart && dayNum <= lastDay;
+    if (!habit.completionDates?.length) return false;
+    return habit.completionDates.some(d => {
+      const cd = new Date(d);
+      return cd.getMonth() === this.today.getMonth() &&
+             cd.getFullYear() === this.today.getFullYear() &&
+             cd.getDate() === dayNum;
+    });
   }
 
   mark(id: string): void {

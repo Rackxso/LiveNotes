@@ -1,6 +1,12 @@
+:host {
+    display: block;
+}
+
 .menu {
     display: grid;
     grid-template-columns: repeat(3, auto);
+    width: fit-content;
+    min-width: 120px;
     gap: 5px;
     background-color: var(--background-subcolor);
     padding: 7px;
@@ -18,6 +24,9 @@
         background: var(--background-subcolor);
         anchor-name: --menu-item;
         transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &.active {
             anchor-name: --active-item;
@@ -32,6 +41,10 @@
         }
     }
 
+    & .label-icon {
+        display: none;
+    }
+
     & .highlight {
         position: absolute;
         grid-column: 1 / -1;
@@ -44,5 +57,34 @@
         right: anchor(right);
         bottom: anchor(bottom);
         z-index: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .menu {
+        padding: 5px;
+        gap: 3px;
+
+        & div:not(.highlight) {
+            padding-inline: 10px;
+            padding-block: 6px;
+            font-size: 13px;
+        }
+    }
+
+    .menu.has-icons {
+        & div:not(.highlight) {
+            padding-inline: 12px;
+            padding-block: 8px;
+        }
+
+        & .label-icon {
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        & .label-text {
+            display: none;
+        }
     }
 }

@@ -99,3 +99,39 @@
     outline-offset: 2px;
   }
 }
+
+@media (max-width: 600px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .note-card {
+    flex-direction: row;
+    align-items: center;
+    min-height: unset;
+    padding: 8px 12px;
+    gap: 0;
+  }
+
+  .note-category { display: none; }
+  .note-content  { display: none; }
+
+  .note-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+  }
+
+  .addBlank {
+    flex-direction: row;
+    justify-content: center;
+    min-height: unset;
+    padding: 8px 12px;
+    gap: 8px;
+
+    p { font-size: 13px; }
+    i { font-size: 15px; }
+  }
+}

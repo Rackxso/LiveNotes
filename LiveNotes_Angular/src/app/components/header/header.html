@@ -4,9 +4,10 @@
         <app-selector
             [vistas]="vistasPage"
             [vistaActiva]="vistaActiva"
+            [iconosList]="iconosList"
             (vistaSeleccionada)="onVistaSeleccionada($event)">
         </app-selector>
-    }   
+    }
     @if(buttons){
     <div id="buttons">
         <app-secondary-button [config]="secondaryButton" (clicked)="secondaryClicked.emit()">
