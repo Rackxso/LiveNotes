@@ -19,10 +19,12 @@ export class ToDo implements OnInit {
   readonly pendingDeleteList = signal<string | null>(null);
   readonly draggedId = signal<string | null>(null);
   readonly localItemOrder = signal<string[]>([]);
-  readonly subItemMode = signal<boolean>(false);
   readonly draggedSubId = signal<string | null>(null);
   readonly draggedSubTodoId = signal<string | null>(null);
   readonly localSubOrders = signal<Record<string, string[]>>({});
+  readonly hoveredItemId = signal<string | null>(null);
+  readonly focusedInlineSubId = signal<string | null>(null);
+  readonly inlineSubTexts = signal<Record<string, string>>({});
 
   readonly todos = this.todoService.todos;
 
@@ -78,36 +80,11 @@ export class ToDo implements OnInit {
     const list = this.selectedList() === 'all' ? '' : this.selectedList();
     this.todoService.createTodo({ idLista: list, texto: text }).subscribe();
     this.newTaskText.set('');
-    this.subItemMode.set(false);
-  }
-
-  addAsSubItem(): void {
-    const text = this.newTaskText().trim();
-    if (!text) return;
-    const todos = this.displayTodos();
-    if (todos.length === 0) return;
-    const lastTodo = todos[todos.length - 1];
-    this.todoService.createSubItem(lastTodo._id, { texto: text }).subscribe();
-    this.newTaskText.set('');
-    this.subItemMode.set(false);
   }
 
   onQuickAddKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
-      if (this.subItemMode()) {
-        this.addAsSubItem();
-      } else {
-        this.addTask();
-      }
-    } else if (event.key === 'Tab') {
-      event.preventDefault();
-      if (event.shiftKey) {
-        this.subItemMode.set(false);
-      } else {
-        this.subItemMode.set(true);
-      }
-    } else if (event.key === 'Escape') {
-      this.subItemMode.set(false);
+      this.addTask();
     }
   }
 
@@ -119,6 +96,7 @@ export class ToDo implements OnInit {
     this.selectedList.set(list);
     this.localItemOrder.set([]);
   }
+
 
   startAddingList(): void {
     this.addingList.set(true);
@@ -257,6 +235,40 @@ export class ToDo implements OnInit {
   onSubDragEnd(): void {
     this.draggedSubId.set(null);
     this.draggedSubTodoId.set(null);
+  }
+
+  showInlineAdd(itemId: string): boolean {
+    return this.hoveredItemId() === itemId || this.focusedInlineSubId() === itemId;
+  }
+
+  onItemMouseLeave(itemId: string): void {
+    if (this.hoveredItemId() === itemId) this.hoveredItemId.set(null);
+  }
+
+  addInlineSubItem(todoId: string): void {
+    const text = (this.inlineSubTexts()[todoId] ?? '').trim();
+    if (!text) return;
+    this.todoService.createSubItem(todoId, { texto: text }).subscribe();
+    this.inlineSubTexts.update(m => ({ ...m, [todoId]: '' }));
+  }
+
+  onInlineSubKeydown(event: KeyboardEvent, todoId: string): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.addInlineSubItem(todoId);
+    } else if (event.key === 'Escape') {
+      this.inlineSubTexts.update(m => ({ ...m, [todoId]: '' }));
+      this.focusedInlineSubId.set(null);
+      (event.target as HTMLElement).blur();
+    }
+  }
+
+  getInlineSubText(todoId: string): string {
+    return this.inlineSubTexts()[todoId] ?? '';
+  }
+
+  setInlineSubText(todoId: string, value: string): void {
+    this.inlineSubTexts.update(m => ({ ...m, [todoId]: value }));
   }
 
   formatDate(fechaLimite: string | null): string {

@@ -53,11 +53,13 @@
         class="todo-item"
         [class.done]="item.completado"
         [class.dragging]="draggedId() === item._id"
-        [attr.draggable]="selectedList() !== 'all'"
+        draggable="true"
         (dragstart)="onDragStart($event, item._id)"
         (dragover)="onDragOver($event, item._id)"
         (drop)="onDrop($event)"
-        (dragend)="onDragEnd()">
+        (dragend)="onDragEnd()"
+        (mouseenter)="hoveredItemId.set(item._id)"
+        (mouseleave)="onItemMouseLeave(item._id)">
         <div class="todo-row">
           <button
             class="todo-check"
@@ -109,17 +111,32 @@
             }
           </ul>
         }
+        @if (showInlineAdd(item._id)) {
+          <div class="inline-sub-add">
+            <i class="fa-solid fa-plus inline-sub-icon" aria-hidden="true"></i>
+            <input
+              class="inline-sub-input"
+              type="text"
+              placeholder="Add sub-item…"
+              [value]="getInlineSubText(item._id)"
+              (input)="setInlineSubText(item._id, $any($event.target).value)"
+              (keydown)="onInlineSubKeydown($event, item._id)"
+              (focus)="focusedInlineSubId.set(item._id)"
+              (blur)="focusedInlineSubId.set(null)"
+              aria-label="Add sub-item" />
+          </div>
+        }
       </li>
     }
     @empty {
       <li class="empty-msg" role="listitem">No tasks</li>
     }
-    <li class="quick-add" [class.sub-item-mode]="subItemMode()" role="listitem">
+    <li class="quick-add" role="listitem">
       <i class="fa-solid fa-plus quick-add-icon" aria-hidden="true"></i>
       <input
         class="quick-add-input"
         type="text"
-        [placeholder]="subItemMode() ? 'Sub-item… (Enter to confirm, Shift+Tab to cancel)' : 'Add task… (Tab → sub-item)'"
+        placeholder="Add task…"
         [value]="newTaskText()"
         (input)="newTaskText.set($any($event.target).value)"
         (keydown)="onQuickAddKeydown($event)"

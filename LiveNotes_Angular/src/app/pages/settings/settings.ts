@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { PremiumService } from '../../services/premium.service';
 import { ThemeService, Theme } from '../../services/theme.service';
+import { I18nService } from '../../services/i18n.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -15,9 +15,9 @@ import { environment } from '../../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Settings {
-  readonly auth    = inject(AuthService);
-  readonly premium = inject(PremiumService);
-  readonly theme   = inject(ThemeService);
+  readonly auth  = inject(AuthService);
+  readonly theme = inject(ThemeService);
+  readonly i18n  = inject(I18nService);
   private readonly router = inject(Router);
   private readonly http   = inject(HttpClient);
 
@@ -27,23 +27,11 @@ export class Settings {
     { value: 'system', label: 'Sistema', icon: 'fa-solid fa-display' },
   ];
 
-  // Plan simulate
-  readonly toggling = signal(false);
-
   // Change password
   readonly showPasswordForm = signal(false);
   readonly oldPassword      = signal('');
   readonly passwordLoading  = signal(false);
   readonly passwordMsg      = signal<{ text: string; ok: boolean } | null>(null);
-
-  simulateToggle(): void {
-    if (this.toggling()) return;
-    this.toggling.set(true);
-    this.premium.simulateToggle().subscribe({
-      next:  () => this.toggling.set(false),
-      error: () => this.toggling.set(false),
-    });
-  }
 
   requestPasswordChange(): void {
     const email = this.auth.user()?.email;

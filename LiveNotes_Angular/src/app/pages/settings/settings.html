@@ -51,19 +51,6 @@
           </button>
         }
 
-        <div class="simulate-row">
-          <span class="simulate-label">Modo prueba</span>
-          <button
-            type="button"
-            class="btn-simulate"
-            (click)="simulateToggle()"
-            [disabled]="toggling()"
-          >
-            @if (toggling()) { Aplicando… }
-            @else if (auth.isPremium()) { Desactivar Premium (test) }
-            @else { Simular Premium (test) }
-          </button>
-        </div>
       </div>
     </section>
 
@@ -78,6 +65,28 @@
       </div>
     </section>
     -->
+
+    <!-- ── Idioma ───────────────────────────────────────────────────── -->
+    <section aria-labelledby="lang-heading">
+      <h2 id="lang-heading" class="section-label">Idioma</h2>
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="row-info">
+            <p class="row-title">Idioma de la aplicación</p>
+            <p class="row-desc">Selecciona el idioma en el que se muestra la app.</p>
+          </div>
+          <select
+            class="lang-select"
+            [value]="i18n.lang()"
+            (change)="i18n.setLang($any($event.target).value)"
+            aria-label="Idioma"
+          >
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+    </section>
 
     <!-- ── Apariencia ────────────────────────────────────────────────── -->
     <section aria-labelledby="theme-heading">

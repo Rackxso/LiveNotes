@@ -30,11 +30,32 @@
     }
   </nav>
 
-  <!-- Bottom group: secondary nav + lang -->
+  <!-- Bottom group: secondary nav -->
   <div class="nav-bottom">
     <div class="divider"></div>
 
+    @if (auth.isAdmin() && !adminService.showAdminUI()) {
+      <div class="preview-banner">
+        <span class="preview-banner__label">
+          Vista {{ adminService.viewMode() === 'free' ? 'Free' : 'Premium' }}
+        </span>
+        <button class="preview-banner__btn" (click)="adminService.setViewMode('admin')">
+          Salir
+        </button>
+      </div>
+    }
+
     <nav aria-label="Secondary">
+      @if (auth.isAdmin() && adminService.showAdminUI()) {
+        <a class="nav-item nav-item--admin"
+           routerLink="/admin"
+           routerLinkActive="active"
+           [title]="!expanded() ? 'Admin' : null"
+           aria-label="Admin">
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+          <span class="nav-label">Admin</span>
+        </a>
+      }
       @for (item of secondaryNav(); track item.route) {
         <a class="nav-item"
            [routerLink]="item.route"
@@ -47,8 +68,6 @@
         </a>
       }
     </nav>
-
-    <app-lang-selector [expanded]="expanded()" />
   </div>
 
   <div class="user-area">

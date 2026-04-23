@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { I18nService } from '../../../services/i18n.service';
 import { AuthService } from '../../../services/auth.service';
-import { LangSelector } from '../lang-selector/lang-selector';
+import { AdminService } from '../../../services/admin.service';
 
 export interface NavItem {
   label: string;
@@ -14,14 +14,15 @@ export interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, LangSelector],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
   private readonly i18n   = inject(I18nService);
-  private readonly auth   = inject(AuthService);
+  readonly auth           = inject(AuthService);
+  readonly adminService   = inject(AdminService);
   private readonly router = inject(Router);
   readonly t = this.i18n.t;
 

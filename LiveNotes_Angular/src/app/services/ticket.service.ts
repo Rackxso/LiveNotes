@@ -14,6 +14,10 @@ export interface Ticket extends CreateTicketDto {
   createdAt: string;
 }
 
+export interface AdminTicket extends Ticket {
+  usuario: { _id: string; name: string; email: string };
+}
+
 @Injectable({ providedIn: 'root' })
 export class TicketService {
   private readonly http = inject(HttpClient);
@@ -25,5 +29,17 @@ export class TicketService {
 
   getAll() {
     return this.http.get<Ticket[]>(this.base);
+  }
+
+  getAllAdmin() {
+    return this.http.get<AdminTicket[]>(`${this.base}/admin`);
+  }
+
+  deleteAdmin(id: string) {
+    return this.http.delete<{ message: string }>(`${this.base}/${id}`);
+  }
+
+  updateEstado(id: string, estado: AdminTicket['estado']) {
+    return this.http.patch<AdminTicket>(`${this.base}/${id}/estado`, { estado });
   }
 }

@@ -26,6 +26,7 @@ export class AuthService {
   readonly user = this._user.asReadonly();
   readonly isLoggedIn = computed(() => this._user() !== null);
   readonly isPremium = computed(() => (this._user()?.permisos ?? 1) >= 2);
+  readonly isAdmin   = computed(() => this._user()?.permisos === 13579);
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.base}/login`, { email, password }).pipe(
@@ -52,6 +53,11 @@ export class AuthService {
   updatePermisos(permisos: number): void {
     const user = this._user();
     if (user) this.setUser({ ...user, permisos });
+  }
+
+  updatePermisosTemporary(permisos: number): void {
+    const user = this._user();
+    if (user) this._user.set({ ...user, permisos });
   }
 
   clearUser(): void {

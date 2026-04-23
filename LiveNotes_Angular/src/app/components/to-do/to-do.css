@@ -295,6 +295,37 @@
   }
 }
 
+/* ── Inline sub-item add ───────────────────────── */
+.inline-sub-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 0 28px;
+}
+
+.inline-sub-icon {
+  font-size: 9px;
+  color: var(--text-subcolor);
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.inline-sub-input {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid var(--primary-subcolor);
+  background: transparent;
+  font-family: var(--fuente-texto);
+  font-size: 12px;
+  color: var(--text-color);
+  outline: none;
+  padding: 0 0 2px;
+  transition: border-color 0.15s;
+
+  &::placeholder { color: var(--text-subcolor); opacity: 0.6; }
+  &:focus { border-bottom-color: var(--primary-color); }
+}
+
 /* ── Empty state ───────────────────────────────── */
 .empty-msg {
   font-size: 12px;
@@ -318,12 +349,6 @@
   transition: opacity 0.15s;
 }
 
-.quick-add.sub-item-mode {
-  padding-left: 36px;
-
-  .quick-add-icon { opacity: 0.4; }
-  .quick-add-input { border-bottom-color: var(--primary-color); }
-}
 
 .quick-add-input {
   flex: 1;
