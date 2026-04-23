@@ -62,5 +62,15 @@ export const routes: Routes = [
         path: 'tracker',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/tracker/tracker').then(m => m.Tracker)
+    },
+    {
+        path: 'settings',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/settings/settings').then(m => m.Settings)
+    },
+    {
+        path: 'help',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/help/help').then(m => m.Help)
     }
 ];

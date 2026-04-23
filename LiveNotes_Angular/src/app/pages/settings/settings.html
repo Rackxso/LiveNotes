@@ -1,0 +1,177 @@
+<div class="settings-page">
+  <header class="settings-header">
+    <h1 class="settings-title">Configuración</h1>
+  </header>
+
+  <div class="settings-content">
+
+    <!-- ── Suscripción ────────────────────────────────────────────────── -->
+    <section aria-labelledby="plan-heading">
+      <h2 id="plan-heading" class="section-label">Suscripción</h2>
+
+      <div class="plan-hero" [class.is-premium]="auth.isPremium()">
+        <div class="plan-hero-top">
+          <div class="plan-crown" aria-hidden="true">
+            <i [class]="auth.isPremium() ? 'fa-solid fa-crown' : 'fa-solid fa-user'"></i>
+          </div>
+          <div class="plan-hero-text">
+            <p class="plan-hero-name">
+              {{ auth.isPremium() ? 'Premium' : 'Gratuito' }}
+              @if (auth.isPremium()) {
+                <span class="plan-badge" aria-label="Plan activo">Activo</span>
+              }
+            </p>
+            <p class="plan-hero-desc">
+              @if (auth.isPremium()) {
+                Presupuestos ilimitados y todas las funciones activas.
+              } @else {
+                Hasta 3 presupuestos por mes. Hazte premium para desbloquear todo.
+              }
+            </p>
+          </div>
+        </div>
+
+        <ul class="plan-features" aria-label="Funciones del plan">
+          @if (auth.isPremium()) {
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Hábitos, presupuestos y objetivos ilimitados</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Clases y grupos en el calendario</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Y mucho más…</li>
+          } @else {
+            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> Hábitos, presupuestos y objetivos ilimitados</li>
+            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> Clases y grupos en el calendario</li>
+            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> Y mucho más…</li>
+          }
+        </ul>
+
+        @if (!auth.isPremium()) {
+          <!-- [STRIPE] Sustituir por button con (click)="premium.createCheckoutSession()" cuando Stripe esté activo -->
+          <button type="button" class="btn-upgrade">
+            <i class="fa-solid fa-crown" aria-hidden="true"></i>
+            Activar Premium
+          </button>
+        }
+
+        <div class="simulate-row">
+          <span class="simulate-label">Modo prueba</span>
+          <button
+            type="button"
+            class="btn-simulate"
+            (click)="simulateToggle()"
+            [disabled]="toggling()"
+          >
+            @if (toggling()) { Aplicando… }
+            @else if (auth.isPremium()) { Desactivar Premium (test) }
+            @else { Simular Premium (test) }
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Métodos de pago ─────────────────────────────────────────── -->
+    <!-- [STRIPE] Descomenta cuando Stripe esté activo
+    <section aria-labelledby="payment-heading">
+      <h2 id="payment-heading" class="section-label">Métodos de pago</h2>
+      <div class="settings-card empty-card">
+        <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+        <p>No tienes métodos de pago guardados.</p>
+        <button type="button" class="btn-add-payment">Añadir método</button>
+      </div>
+    </section>
+    -->
+
+    <!-- ── Apariencia ────────────────────────────────────────────────── -->
+    <section aria-labelledby="theme-heading">
+      <h2 id="theme-heading" class="section-label">Apariencia</h2>
+
+      <div class="settings-card">
+        <div class="settings-row">
+          <div class="row-info">
+            <p class="row-title">Tema</p>
+            <p class="row-desc">Personaliza el aspecto de la app.</p>
+          </div>
+          <div class="theme-pills" role="group" aria-label="Seleccionar tema">
+            @for (t of themes; track t.value) {
+              <button
+                type="button"
+                class="theme-pill"
+                [class.active]="theme.theme() === t.value"
+                (click)="theme.set(t.value)"
+                [attr.aria-pressed]="theme.theme() === t.value"
+              >
+                <i [class]="t.icon" aria-hidden="true"></i>
+                {{ t.label }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Cuenta ─────────────────────────────────────────────────────── -->
+    <section aria-labelledby="account-heading">
+      <h2 id="account-heading" class="section-label">Cuenta</h2>
+
+      <div class="settings-card">
+
+        <!-- Cambiar contraseña -->
+        <div class="settings-row">
+          <div class="row-info">
+            <p class="row-title">Contraseña</p>
+            <p class="row-desc">Recibirás un email para confirmar el cambio.</p>
+          </div>
+          <button
+            type="button"
+            class="btn-action"
+            (click)="showPasswordForm.set(!showPasswordForm())"
+            [attr.aria-expanded]="showPasswordForm()"
+          >
+            Cambiar
+          </button>
+        </div>
+
+        @if (showPasswordForm()) {
+          <form class="password-form" (ngSubmit)="requestPasswordChange()">
+            <input
+              type="password"
+              class="password-input"
+              placeholder="Contraseña actual"
+              [value]="oldPassword()"
+              (input)="oldPassword.set($any($event.target).value)"
+              autocomplete="current-password"
+              aria-label="Contraseña actual"
+              required
+            />
+            <button
+              type="submit"
+              class="btn-action"
+              [disabled]="passwordLoading() || !oldPassword()"
+            >
+              {{ passwordLoading() ? 'Enviando…' : 'Enviar enlace' }}
+            </button>
+          </form>
+        }
+
+        @if (passwordMsg()) {
+          <p class="password-msg" [class.ok]="passwordMsg()!.ok" role="alert">
+            {{ passwordMsg()!.text }}
+          </p>
+        }
+
+        <div class="card-divider"></div>
+
+        <!-- Cerrar sesión -->
+        <div class="settings-row">
+          <div class="row-info">
+            <p class="row-title">Sesión</p>
+            <p class="row-desc">{{ auth.user()?.email }}</p>
+          </div>
+          <button type="button" class="btn-danger" (click)="logout()">
+            Cerrar sesión
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>

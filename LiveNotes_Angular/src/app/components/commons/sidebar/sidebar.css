@@ -252,6 +252,20 @@
   transition: opacity 0.2s var(--ease), max-width 0.25s var(--ease);
 }
 
+/* ── PREMIUM NAV ITEM ──────────────────────────────────── */
+.nav-item[href="/premium"] {
+  color: #f59e0b;
+
+  i { color: #f59e0b; }
+
+  &:hover { background: color-mix(in srgb, #f59e0b 15%, transparent); }
+
+  &.active {
+    background: color-mix(in srgb, #f59e0b 20%, var(--background-color));
+    color: #d97706;
+  }
+}
+
 /* ── USER AREA ─────────────────────────────────────────── */
 .user-area {
   position: relative;

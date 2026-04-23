@@ -1,0 +1,139 @@
+<div class="help-page">
+  <header class="help-header">
+    <h1 class="help-title">Ayuda y soporte</h1>
+    <p class="help-subtitle">¿Tienes un problema o una sugerencia? Cuéntanoslo.</p>
+  </header>
+
+  <div class="help-content">
+
+    <!-- ── Formulario de ticket ───────────────────────────────────────── -->
+    <section aria-labelledby="ticket-heading">
+      <h2 id="ticket-heading" class="section-label">Enviar ticket</h2>
+
+      <div class="help-card">
+        @if (submitted()) {
+          <div class="success-state" role="status">
+            <div class="success-icon" aria-hidden="true">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 class="success-title">¡Ticket enviado!</h3>
+            <p class="success-desc">Hemos recibido tu mensaje. Te responderemos lo antes posible.</p>
+            <button type="button" class="btn-primary" (click)="newTicket()">
+              Enviar otro ticket
+            </button>
+          </div>
+        } @else {
+          <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="asunto">Asunto</label>
+              <input
+                id="asunto"
+                type="text"
+                class="form-input"
+                formControlName="asunto"
+                placeholder="Describe brevemente el problema o sugerencia"
+                autocomplete="off"
+                [attr.aria-invalid]="form.controls.asunto.invalid && form.controls.asunto.touched"
+              />
+              @if (form.controls.asunto.hasError('required') && form.controls.asunto.touched) {
+                <span class="field-error" role="alert">El asunto es obligatorio.</span>
+              }
+              @if (form.controls.asunto.hasError('maxlength')) {
+                <span class="field-error" role="alert">Máximo 120 caracteres.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="categoria">Categoría</label>
+              <div class="select-wrapper">
+                <select
+                  id="categoria"
+                  class="form-select"
+                  formControlName="categoria"
+                  [attr.aria-invalid]="form.controls.categoria.invalid && form.controls.categoria.touched"
+                >
+                  <option value="" disabled>Selecciona una categoría</option>
+                  @for (cat of categorias; track cat.value) {
+                    <option [value]="cat.value">{{ cat.label }}</option>
+                  }
+                </select>
+                <i class="fa-solid fa-chevron-down select-arrow" aria-hidden="true"></i>
+              </div>
+              @if (form.controls.categoria.hasError('required') && form.controls.categoria.touched) {
+                <span class="field-error" role="alert">Selecciona una categoría.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="descripcion">Descripción</label>
+              <textarea
+                id="descripcion"
+                class="form-textarea"
+                formControlName="descripcion"
+                placeholder="Explica con detalle tu problema, error o sugerencia…"
+                rows="5"
+                [attr.aria-invalid]="form.controls.descripcion.invalid && form.controls.descripcion.touched"
+              ></textarea>
+              @if (form.controls.descripcion.hasError('required') && form.controls.descripcion.touched) {
+                <span class="field-error" role="alert">La descripción es obligatoria.</span>
+              }
+              @if (form.controls.descripcion.hasError('maxlength')) {
+                <span class="field-error" role="alert">Máximo 2000 caracteres.</span>
+              }
+            </div>
+
+            @if (error()) {
+              <p class="submit-error" role="alert">{{ error() }}</p>
+            }
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="btn-primary"
+                [disabled]="form.invalid || submitting()"
+                [attr.aria-busy]="submitting()"
+              >
+                @if (submitting()) { Enviando… } @else { Enviar ticket }
+              </button>
+            </div>
+          </form>
+        }
+      </div>
+    </section>
+
+    <!-- ── Historial de tickets ───────────────────────────────────────── -->
+    <section aria-labelledby="history-heading">
+      <div class="history-header">
+        <h2 id="history-heading" class="section-label">Mis tickets</h2>
+        <button type="button" class="btn-toggle" (click)="loadHistory()">
+          {{ showHistory() ? 'Ocultar' : 'Ver historial' }}
+          <i [class]="showHistory() ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      @if (showHistory()) {
+        <div class="help-card tickets-list">
+          @if (loadingTickets()) {
+            <p class="empty-msg">Cargando…</p>
+          } @else if (myTickets().length === 0) {
+            <p class="empty-msg">Aún no has enviado ningún ticket.</p>
+          } @else {
+            @for (ticket of myTickets(); track ticket._id) {
+              <div class="ticket-item">
+                <div class="ticket-top">
+                  <span class="ticket-subject">{{ ticket.asunto }}</span>
+                  <span class="ticket-badge" [class]="'badge-' + ticket.estado">
+                    {{ estadoLabel[ticket.estado] }}
+                  </span>
+                </div>
+                <p class="ticket-desc">{{ ticket.descripcion }}</p>
+                <span class="ticket-meta">{{ ticket.categoria }} · {{ ticket.createdAt | date:'dd/MM/yyyy' }}</span>
+              </div>
+            }
+          }
+        </div>
+      }
+    </section>
+
+  </div>
+</div>

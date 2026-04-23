@@ -1,0 +1,62 @@
+<dialog #dialogEl (click)="onBackdropClick($event)" aria-labelledby="paywall-title" aria-describedby="paywall-desc">
+  <div class="modal-panel">
+
+    <button type="button" class="modal-close" (click)="close()" aria-label="Cerrar">×</button>
+
+    <div class="crown-wrap" aria-hidden="true">
+      <i class="fa-solid fa-crown crown-icon"></i>
+    </div>
+
+    <h2 id="paywall-title" class="modal-title">Hazte Premium</h2>
+    <p id="paywall-desc" class="modal-subtitle">
+      Has alcanzado el límite de 3 presupuestos del plan gratuito.
+    </p>
+
+    <ul class="features" aria-label="Ventajas del plan premium">
+      <li>
+        <i class="fa-solid fa-check feature-check" aria-hidden="true"></i>
+        Presupuestos ilimitados
+      </li>
+      <li>
+        <i class="fa-solid fa-check feature-check" aria-hidden="true"></i>
+        Acceso a todas las categorías
+      </li>
+      <li>
+        <i class="fa-solid fa-check feature-check" aria-hidden="true"></i>
+        Exportación de datos
+      </li>
+      <li>
+        <i class="fa-solid fa-check feature-check" aria-hidden="true"></i>
+        Soporte prioritario
+      </li>
+    </ul>
+
+    <!-- [STRIPE] Descomenta cuando Stripe esté activo
+    <button type="button" class="btn-upgrade" (click)="upgrade()">
+      <i class="fa-solid fa-crown" aria-hidden="true"></i>
+      Activar Premium
+    </button>
+
+    <div class="divider" role="separator"><span>o</span></div>
+    -->
+
+    <button
+      type="button"
+      class="btn-simulate"
+      (click)="simulateToggle()"
+      [disabled]="toggling()"
+      aria-label="Simular activación premium para pruebas"
+    >
+      @if (toggling()) {
+        Aplicando…
+      } @else {
+        @if (auth.isPremium()) {
+          Desactivar Premium (test)
+        } @else {
+          Simular Premium (test)
+        }
+      }
+    </button>
+
+  </div>
+</dialog>

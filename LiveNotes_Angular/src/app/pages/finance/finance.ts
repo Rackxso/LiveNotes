@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { I18nService } from '../../services/i18n.service';
 import { FinanceService } from '../../services/finance.service';
+import { AuthService } from '../../services/auth.service';
 import { FinanceOverview } from './finance-overview';
 import { FinanceTransactions } from './finance-transactions';
 import { FinanceSavings } from './finance-savings';
@@ -19,6 +20,7 @@ export class Finance {
   private readonly router  = inject(Router);
   private readonly i18n    = inject(I18nService);
   private readonly finance = inject(FinanceService);
+  private readonly auth    = inject(AuthService);
   readonly t = this.i18n.t;
 
   readonly vistaActual = signal<string>('Overview');
@@ -49,6 +51,15 @@ export class Finance {
     this.route.url.subscribe(segments => {
       const last = segments[segments.length - 1]?.path;
       this.vistaActual.set(this.urlToKey(last));
+    });
+    this.route.queryParams.subscribe(params => {
+      if (params['upgraded'] === 'true') {
+        const email = this.auth.user()?.email;
+        if (email) {
+          this.auth.getUserInfo(email).subscribe();
+        }
+        this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      }
     });
   }
 

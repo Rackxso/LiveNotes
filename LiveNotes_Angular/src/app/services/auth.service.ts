@@ -7,6 +7,7 @@ import { FinanceService } from './finance.service';
 export interface AuthUser {
   email: string;
   name: string;
+  permisos: number;
 }
 
 interface LoginResponse {
@@ -24,6 +25,7 @@ export class AuthService {
   private readonly _user = signal<AuthUser | null>(this.readStorage());
   readonly user = this._user.asReadonly();
   readonly isLoggedIn = computed(() => this._user() !== null);
+  readonly isPremium = computed(() => (this._user()?.permisos ?? 1) >= 2);
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.base}/login`, { email, password }).pipe(
@@ -45,6 +47,11 @@ export class AuthService {
     return this.http.get<AuthUser>(`${this.base}/${email}/info`).pipe(
       tap(user => this.setUser(user))
     );
+  }
+
+  updatePermisos(permisos: number): void {
+    const user = this._user();
+    if (user) this.setUser({ ...user, permisos });
   }
 
   clearUser(): void {
