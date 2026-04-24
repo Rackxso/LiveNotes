@@ -1,15 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { TodoService, TodoItem, SubItem } from '../../services/todo.service';
+import { I18nService } from '../../services/i18n.service';
+import { TaskSortView } from './task-sort-view/task-sort-view';
 
 @Component({
   selector: 'app-to-do',
-  imports: [],
+  imports: [TaskSortView],
   templateUrl: './to-do.html',
   styleUrl: './to-do.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToDo implements OnInit {
   private readonly todoService = inject(TodoService);
+  readonly t = inject(I18nService).t;
 
   readonly searchQuery = input<string>('');
   readonly selectedList = signal<string>('all');
@@ -28,14 +31,38 @@ export class ToDo implements OnInit {
 
   readonly todos = this.todoService.todos;
 
-  ngOnInit(): void {
-    this.todoService.getTodos().subscribe();
+  private readonly _customLists = signal<string[]>(
+    JSON.parse(localStorage.getItem('ln_todo_lists') ?? '[]')
+  );
+
+  readonly sortViewOpen = signal(false);
+  readonly canOpenSortView = computed(() => this.selectedList() !== 'all');
+  readonly sortViewTasks = computed(() =>
+    this.displayTodos().filter(t => !t.completado)
+  );
+  readonly algoritmosPorLista = signal<Record<string, string>>({});
+  readonly algoritmoActual = computed(() => this.algoritmosPorLista()[this.selectedList()] ?? null);
+
+  onAlgoritmoAplicado(nombre: string): void {
+    this.algoritmosPorLista.update(m => ({ ...m, [this.selectedList()]: nombre }));
   }
 
-  readonly lists = computed(() => {
-    const unique = [...new Set(this.todos().map(t => t.idLista).filter(l => l !== ''))];
-    return unique;
-  });
+  readonly draggedListName = signal<string | null>(null);
+
+  ngOnInit(): void {
+    this.todoService.getTodos().subscribe(todos => {
+      const fromTodos = [...new Set(todos.map(t => t.idLista).filter(l => l !== ''))];
+      this._customLists.update(existing => {
+        const newLists = fromTodos.filter(l => !existing.includes(l));
+        if (newLists.length === 0) return existing;
+        const updated = [...existing, ...newLists];
+        localStorage.setItem('ln_todo_lists', JSON.stringify(updated));
+        return updated;
+      });
+    });
+  }
+
+  readonly lists = computed(() => this._customLists());
 
   readonly filteredTodos = computed(() => {
     let items = this.todos();
@@ -92,6 +119,10 @@ export class ToDo implements OnInit {
     this.todoService.deleteTodo(id).subscribe();
   }
 
+  deleteSubItem(todoId: string, subId: string): void {
+    this.todoService.deleteSubItem(todoId, subId).subscribe();
+  }
+
   selectList(list: string): void {
     this.selectedList.set(list);
     this.localItemOrder.set([]);
@@ -106,6 +137,12 @@ export class ToDo implements OnInit {
   confirmNewList(): void {
     const name = this.newListName().trim();
     if (name) {
+      this._customLists.update(lists => {
+        if (lists.includes(name)) return lists;
+        const updated = [...lists, name];
+        localStorage.setItem('ln_todo_lists', JSON.stringify(updated));
+        return updated;
+      });
       this.selectList(name);
     }
     this.addingList.set(false);
@@ -126,6 +163,7 @@ export class ToDo implements OnInit {
     this.todoService.deleteByList(list).subscribe(() => {
       if (this.selectedList() === list) this.selectedList.set('all');
     });
+    this.removeCustomList(list);
     this.pendingDeleteList.set(null);
   }
 
@@ -135,11 +173,50 @@ export class ToDo implements OnInit {
     this.todoService.reassignList(list).subscribe(() => {
       if (this.selectedList() === list) this.selectedList.set('all');
     });
+    this.removeCustomList(list);
     this.pendingDeleteList.set(null);
+  }
+
+  private removeCustomList(name: string): void {
+    this._customLists.update(lists => {
+      const updated = lists.filter(l => l !== name);
+      localStorage.setItem('ln_todo_lists', JSON.stringify(updated));
+      return updated;
+    });
   }
 
   cancelDeleteList(): void {
     this.pendingDeleteList.set(null);
+  }
+
+  onListDragStart(event: DragEvent, name: string): void {
+    this.draggedListName.set(name);
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+  }
+
+  onListDragOver(event: DragEvent, targetName: string): void {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    const source = this.draggedListName();
+    if (!source || source === targetName) return;
+    this._customLists.update(lists => {
+      const updated = [...lists];
+      const fromIdx = updated.indexOf(source);
+      const toIdx = updated.indexOf(targetName);
+      if (fromIdx === -1 || toIdx === -1) return lists;
+      updated.splice(fromIdx, 1);
+      updated.splice(toIdx, 0, source);
+      return updated;
+    });
+  }
+
+  onListDrop(): void {
+    localStorage.setItem('ln_todo_lists', JSON.stringify(this._customLists()));
+    this.draggedListName.set(null);
+  }
+
+  onListDragEnd(): void {
+    this.draggedListName.set(null);
   }
 
   onDragStart(event: DragEvent, id: string): void {

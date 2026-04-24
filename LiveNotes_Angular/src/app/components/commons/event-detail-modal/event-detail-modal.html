@@ -1,0 +1,44 @@
+<div class="overlay" (click)="onCerrar()" role="dialog" aria-modal="true" [attr.aria-label]="evento().titulo">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <div class="event-icon" aria-hidden="true">
+        <i class="fa-solid fa-calendar-day"></i>
+      </div>
+      <button class="close-btn" (click)="onCerrar()" aria-label="Cerrar">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <h2 class="event-title">{{ evento().titulo }}</h2>
+
+    <div class="event-meta">
+      <div class="meta-row">
+        <i class="fa-regular fa-calendar meta-icon" aria-hidden="true"></i>
+        <span>{{ fechaFormateada }}</span>
+      </div>
+      @if (evento().hora) {
+        <div class="meta-row">
+          <i class="fa-regular fa-clock meta-icon" aria-hidden="true"></i>
+          <span>{{ evento().hora }}</span>
+        </div>
+      }
+      @if (evento().descripcion) {
+        <div class="meta-row description-row">
+          <i class="fa-regular fa-note-sticky meta-icon" aria-hidden="true"></i>
+          <p class="event-desc">{{ evento().descripcion }}</p>
+        </div>
+      }
+    </div>
+
+    @if (mostrarEnlaceCalendario()) {
+      <div class="modal-footer">
+        <a routerLink="/calendar/month" class="cal-link" (click)="onCerrar()">
+          <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+          Ver en calendario
+        </a>
+      </div>
+    }
+
+  </div>
+</div>

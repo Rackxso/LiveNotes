@@ -4,10 +4,9 @@ import { Observable, EMPTY, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
-interface ToggleResponse { permisos: number; isPremium: boolean; }
-
-// [STRIPE] Descomenta cuando Stripe esté activo
-// interface CheckoutResponse { url: string; }
+interface ToggleResponse    { permisos: number; isPremium: boolean; }
+interface CheckoutResponse  { url: string; }
+interface PortalResponse    { url: string; }
 
 @Injectable({ providedIn: 'root' })
 export class PremiumService {
@@ -15,12 +14,13 @@ export class PremiumService {
   private readonly auth = inject(AuthService);
   private readonly base = `${environment.apiUrl}/stripe`;
 
-  // [STRIPE] Descomenta cuando Stripe esté activo
-  // createCheckoutSession(): void {
-  //   this.http.post<CheckoutResponse>(`${this.base}/create-checkout-session`, {}).subscribe(res => {
-  //     window.location.href = res.url;
-  //   });
-  // }
+  createCheckoutSession(): Observable<CheckoutResponse> {
+    return this.http.post<CheckoutResponse>(`${this.base}/create-checkout-session`, {});
+  }
+
+  createPortalSession(): Observable<PortalResponse> {
+    return this.http.post<PortalResponse>(`${this.base}/create-portal-session`, {});
+  }
 
   simulateToggle(): Observable<ToggleResponse> {
     if (!this.auth.user()) return EMPTY;

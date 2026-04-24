@@ -1,0 +1,117 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--primary-color) 30%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--background-color);
+  border: 1px solid var(--primary-subcolor);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-button);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.event-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-subcolor);
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--text-color);
+  }
+}
+
+.event-title {
+  font-family: var(--fuente-titulo);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 1.25rem;
+  line-height: 1.3;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.meta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  color: var(--text-subcolor);
+}
+
+.meta-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: var(--accent-color);
+  width: 14px;
+  text-align: center;
+}
+
+.event-desc {
+  margin: 0;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.modal-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--primary-subcolor);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--fuente-texto);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-color);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.15s;
+
+  &:hover {
+    background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  }
+}

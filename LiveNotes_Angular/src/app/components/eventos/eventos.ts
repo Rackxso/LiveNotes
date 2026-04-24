@@ -22,7 +22,8 @@ export class Eventos {
   readonly eventosDia     = input<Evento[]>([]);
   readonly eventosSemana  = input<Evento[]>([]);
   readonly eventosMes     = input<Evento[]>([]);
-  readonly addEventoDia   = output<void>();
+  readonly addEventoDia       = output<void>();
+  readonly eventoSeleccionado = output<Evento>();
 
   readonly eventCount = computed(() => {
     const n = this.eventosDia().length + this.eventosSemana().length + this.eventosMes().length;

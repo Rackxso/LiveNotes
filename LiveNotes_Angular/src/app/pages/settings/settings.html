@@ -44,27 +44,50 @@
         </ul>
 
         @if (!auth.isPremium()) {
-          <!-- [STRIPE] Sustituir por button con (click)="premium.createCheckoutSession()" cuando Stripe esté activo -->
-          <button type="button" class="btn-upgrade">
+          <button
+            type="button"
+            class="btn-upgrade"
+            (click)="upgrade()"
+            [disabled]="upgradeLoading()"
+            aria-label="Activar plan Premium"
+          >
             <i class="fa-solid fa-crown" aria-hidden="true"></i>
-            Activar Premium
+            {{ upgradeLoading() ? 'Redirigiendo…' : 'Activar Premium' }}
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="btn-upgrade"
+            (click)="manageSubscription()"
+            [disabled]="portalLoading()"
+            aria-label="Gestionar suscripción"
+          >
+            <i class="fa-solid fa-gear" aria-hidden="true"></i>
+            {{ portalLoading() ? 'Abriendo portal…' : 'Gestionar suscripción' }}
           </button>
         }
 
-      </div>
-    </section>
+        @if (planMsg()) {
+          <p class="plan-msg" [class.ok]="planMsg()!.ok" role="alert">
+            {{ planMsg()!.text }}
+          </p>
+        }
 
-    <!-- ── Métodos de pago ─────────────────────────────────────────── -->
-    <!-- [STRIPE] Descomenta cuando Stripe esté activo
-    <section aria-labelledby="payment-heading">
-      <h2 id="payment-heading" class="section-label">Métodos de pago</h2>
-      <div class="settings-card empty-card">
-        <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
-        <p>No tienes métodos de pago guardados.</p>
-        <button type="button" class="btn-add-payment">Añadir método</button>
+        @if (isDev) {
+          <div class="simulate-row">
+            <span class="simulate-label">Dev — simular cambio de plan</span>
+            <button
+              type="button"
+              class="btn-simulate"
+              (click)="simulateToggle()"
+              [disabled]="simulateLoading()"
+            >
+              {{ simulateLoading() ? 'Cambiando…' : (auth.isPremium() ? 'Bajar a Gratuito' : 'Subir a Premium') }}
+            </button>
+          </div>
+        }
       </div>
     </section>
-    -->
 
     <!-- ── Idioma ───────────────────────────────────────────────────── -->
     <section aria-labelledby="lang-heading">

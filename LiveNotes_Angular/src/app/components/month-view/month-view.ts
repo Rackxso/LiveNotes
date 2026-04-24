@@ -22,6 +22,7 @@ export class MonthView {
   // Outputs
   readonly diaSeleccionadoChange = output<Date>();
   readonly mesVisibleChange      = output<{ anyo: number; mes: number }>();
+  readonly eventoSeleccionado    = output<Evento>();
 
   readonly anyo = signal<number>(this.today.getFullYear());
   readonly mes = signal<number>(this.today.getMonth());

@@ -49,7 +49,7 @@
              [class.hoy]="esHoy(dia)"
              [attr.aria-label]="formatHora(hora) + ' ' + diasSemana()[$index] + ' ' + dia.getDate()">
           @for (evento of eventosDeDiaHora(dia, hora); track evento.id) {
-            <app-event-card [evento]="evento" />
+            <app-event-card [evento]="evento" (clicked)="eventoSeleccionado.emit($event)" />
           }
         </div>
       }
@@ -72,7 +72,7 @@
         @for (ev of eventosDelDia(dia); track ev.id) {
           <div class="agenda-item">
             <span class="agenda-hora">{{ ev.hora ?? t()('calendar.allDay') }}</span>
-            <app-event-card [evento]="ev" />
+            <app-event-card [evento]="ev" (clicked)="eventoSeleccionado.emit($event)" />
           </div>
         }
       </section>

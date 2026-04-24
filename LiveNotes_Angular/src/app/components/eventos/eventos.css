@@ -3,6 +3,7 @@
     flex-direction: column;
     min-height: 0;
     height: 100%;
+    background: var(--background-subcolor);
 }
 
 
@@ -48,8 +49,19 @@
     p {
         margin: 0;
     }
-    .eventoItem{
+    .eventoItem {
         padding-inline: 10px;
+    }
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .empty-msg {
+        font-family: var(--fuente-texto);
+        font-size: 12px;
+        color: var(--text-subcolor);
+        padding: 4px 10px 8px;
+        font-style: italic;
     }
 }
 
@@ -59,12 +71,15 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background: var(--background-subcolor);
-    border-top: 1px solid var(--primary-subcolor);
-    padding: 12px;
+    margin: 8px;
+    border-radius: 8px;
 
     p {
         margin: 0;
         font-family: var(--fuente-texto);
+        padding: 4px 8px;
+        border-radius: 8px;
+        transition: background 0.15s;
     }
+
 }

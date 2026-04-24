@@ -17,14 +17,16 @@
         <app-week-view
           [eventos]="eventos()"
           [diaSeleccionado]="diaSeleccionado()"
-          (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+          (diaSeleccionadoChange)="onDiaSeleccionado($event)"
+          (eventoSeleccionado)="abrirDetalleEvento($event)">
         </app-week-view>
       }
       @case ('Day') {
         <app-day-view
           [eventos]="eventos()"
           [diaSeleccionado]="diaSeleccionado()"
-          (diaSeleccionadoChange)="onDiaSeleccionado($event)">
+          (diaSeleccionadoChange)="onDiaSeleccionado($event)"
+          (eventoSeleccionado)="abrirDetalleEvento($event)">
         </app-day-view>
       }
       @default {
@@ -32,7 +34,8 @@
           [eventos]="eventos()"
           [diaSeleccionado]="diaSeleccionado()"
           (diaSeleccionadoChange)="onDiaSeleccionado($event)"
-          (mesVisibleChange)="onMesVisibleChange($event)">
+          (mesVisibleChange)="onMesVisibleChange($event)"
+          (eventoSeleccionado)="abrirDetalleEvento($event)">
         </app-month-view>
       }
     }
@@ -52,7 +55,8 @@
       [eventosDia]="eventosDia()"
       [eventosSemana]="eventosSemana()"
       [eventosMes]="eventosMes()"
-      (addEventoDia)="abrirModalDia()"/>
+      (addEventoDia)="abrirModalDia()"
+      (eventoSeleccionado)="abrirDetalleEvento($event)"/>
   </div>
 </div>
 
@@ -61,4 +65,11 @@
     [fechaInicial]="fechaModal()"
     (cerrar)="cerrarModal()"
     (guardar)="onGuardarEvento($event)"/>
+}
+
+@if (eventoSeleccionado(); as ev) {
+  <app-event-detail-modal
+    [evento]="ev"
+    [mostrarEnlaceCalendario]="false"
+    (cerrar)="cerrarDetalleEvento()" />
 }

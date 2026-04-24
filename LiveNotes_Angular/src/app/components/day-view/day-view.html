@@ -13,7 +13,7 @@
     <div class="all-day-label" aria-hidden="true">{{ t()('calendar.allDay') }}</div>
     <div class="all-day-events">
       @for (evento of eventosSinHora(); track evento.id) {
-        <app-event-card [evento]="evento" />
+        <app-event-card [evento]="evento" (clicked)="eventoSeleccionado.emit($event)" />
       }
     </div>
   </div>
@@ -27,7 +27,7 @@
            role="gridcell"
            [attr.aria-label]="formatHora(hora)">
         @for (evento of eventosDeHora(hora); track evento.id) {
-          <app-event-card [evento]="evento" />
+          <app-event-card [evento]="evento" (clicked)="eventoSeleccionado.emit($event)" />
         }
       </div>
     }

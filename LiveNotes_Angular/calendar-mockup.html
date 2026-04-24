@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Q2 Calendar — 4 Opciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+  /* ── Variables ────────────────────────────────────── */
+  :root {
+    --text-color: #2E1F12;
+    --text-subcolor: #4A2E18;
+    --accent-color: #7A5238;
+    --accent-subcolor: #8B5E3C;
+    --primary-color: #D4956A;
+    --primary-subcolor: #D9C4A8;
+    --secondary-background-color: #EBD8C4;
+    --background-subcolor: #F5EDE0;
+    --background-color: #FDF8F2;
+    --fuente-texto: "Outfit", sans-serif;
+    --fuente-titulo: "Fraunces", sans-serif;
+    --green: #5A8A60;
+    --red: #B85040;
+    --blue: #4A7FA5;
+  }
+
+  .dark {
+    --text-color: #E8D9C4;
+    --text-subcolor: #907060;
+    --accent-color: #D4A870;
+    --accent-subcolor: #A87D55;
+    --primary-color: #3A2D20;
+    --primary-subcolor: #2A1F15;
+    --secondary-background-color: #2A1F15;
+    --background-subcolor: #1E1710;
+    --background-color: #13100D;
+  }
+
+  /* ── Reset ────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--fuente-texto);
+    background: var(--background-color);
+    color: var(--text-color);
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  /* ── Page header ──────────────────────────────────── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .page-title {
+    font-family: var(--fuente-titulo);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+  .page-subtitle {
+    font-size: 12px;
+    color: var(--text-subcolor);
+    margin-top: 3px;
+  }
+  .theme-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-family: var(--fuente-texto);
+    color: var(--text-subcolor);
+    background: var(--background-subcolor);
+    border: 1px solid var(--primary-subcolor);
+    border-radius: 20px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .theme-btn:hover { background: var(--secondary-background-color); }
+
+  /* ── 2×2 Grid of options ──────────────────────────── */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .option-wrap { display: flex; flex-direction: column; gap: 10px; }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: var(--background-color);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .dark .option-badge { color: var(--text-color); }
+  .option-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+  .option-desc {
+    font-size: 11px;
+    color: var(--text-subcolor);
+    margin-top: 1px;
+  }
+
+  /* ── Each "quadrant" card ─────────────────────────── */
+  .quadrant {
+    background: var(--background-subcolor);
+    border-radius: 14px;
+    padding: 16px 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* Match real Q2 size: ~half viewport minus gaps/padding.
+       At 1280×720 real viewport: ≈ 582px × 290px */
+    aspect-ratio: 582 / 290;
+    width: 100%;
+    min-height: 0;
+  }
+
+  /* ── Shared inner pieces ──────────────────────────── */
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+  .q-title {
+    font-family: var(--fuente-titulo);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color);
+    font-style: italic;
+  }
+  .q-link {
+    font-size: 12px;
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  .q-link:hover { text-decoration: underline; }
+
+  /* ───────────────────────────────────────────────────
+     OPCIÓN A — Calendario full-width + chips de eventos
+  ─────────────────────────────────────────────────── */
+  .opt-a { gap: 0; }
+
+  .cal-full {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .cal-head-a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+  .cal-month-a {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: capitalize;
+  }
+  .cal-nav {
+    width: 20px; height: 20px;
+    border: none; background: transparent; cursor: pointer;
+    color: var(--text-subcolor);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 5px; font-size: 9px;
+    transition: background 0.15s;
+  }
+  .cal-nav:hover { background: var(--secondary-background-color); }
+
+  .cal-dow-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 3px;
+    flex-shrink: 0;
+  }
+  .cal-dow {
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-subcolor);
+    text-transform: uppercase;
+    padding-block: 2px;
+  }
+
+  .cal-grid-a {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .ca-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    font-family: var(--fuente-texto);
+    position: relative;
+    gap: 2px;
+    aspect-ratio: unset;
+  }
+  .ca-cell:hover { background: var(--secondary-background-color); }
+  .ca-cell.today {
+    background: var(--primary-color);
+    color: var(--background-color);
+    font-weight: 700;
+  }
+  .dark .ca-cell.today { color: var(--text-color); }
+  .ca-cell.selected {
+    background: var(--secondary-background-color);
+    font-weight: 600;
+  }
+  .ca-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    flex-shrink: 0;
+  }
+  .ca-cell.today .ca-dot { background: var(--background-color); opacity: 0.8; }
+  .dark .ca-cell.today .ca-dot { background: var(--text-color); }
+
+  .chips-row {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-top: 8px;
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+  .chips-row::-webkit-scrollbar { display: none; }
+  .ev-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: var(--secondary-background-color);
+    font-size: 10px;
+    color: var(--text-color);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ev-chip-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    flex-shrink: 0;
+  }
+  .ev-chip-date { color: var(--text-subcolor); font-size: 9px; }
+
+  /* ───────────────────────────────────────────────────
+     OPCIÓN B — Strip semanal + eventos del día
+  ─────────────────────────────────────────────────── */
+  .week-strip {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .ws-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 4px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    font-family: var(--fuente-texto);
+  }
+  .ws-day:hover { background: var(--secondary-background-color); }
+  .ws-day.ws-today {
+    background: var(--primary-color);
+  }
+  .ws-day.ws-selected {
+    background: var(--secondary-background-color);
+  }
+  .ws-dow {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-subcolor);
+    letter-spacing: 0.06em;
+  }
+  .ws-day.ws-today .ws-dow { color: var(--background-color); opacity: 0.75; }
+  .dark .ws-day.ws-today .ws-dow { color: var(--text-color); opacity: 0.6; }
+  .ws-num {
+    font-size: 17px;
+    font-weight: 700;
+    font-family: var(--fuente-titulo);
+    color: var(--text-color);
+    line-height: 1;
+  }
+  .ws-day.ws-today .ws-num { color: var(--background-color); }
+  .dark .ws-day.ws-today .ws-num { color: var(--text-color); }
+  .ws-dot-row {
+    display: flex;
+    gap: 2px;
+    height: 5px;
+    align-items: center;
+  }
+  .ws-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent-color);
+  }
+  .ws-day.ws-today .ws-dot { background: var(--background-color); opacity: 0.8; }
+  .dark .ws-day.ws-today .ws-dot { background: var(--text-color); }
+
+  .day-events {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+  }
+
+  .day-ev-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: var(--secondary-background-color);
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .day-ev-time {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-color);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    width: 40px;
+  }
+  .day-ev-bar {
+    width: 3px;
+    align-self: stretch;
+    border-radius: 2px;
+    background: var(--primary-color);
+    flex-shrink: 0;
+  }
+  .day-ev-info { flex: 1; min-width: 0; }
+  .day-ev-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .day-ev-sub {
+    font-size: 10px;
+    color: var(--text-subcolor);
+    margin-top: 1px;
+  }
+
+  .empty-b {
+    font-size: 12px;
+    color: var(--text-subcolor);
+    text-align: center;
+    padding: 20px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .empty-b i { font-size: 20px; opacity: 0.3; }
+
+  /* ───────────────────────────────────────────────────
+     OPCIÓN C — Agenda + mini-calendar compacto arriba
+  ─────────────────────────────────────────────────── */
+  .opt-c { gap: 0; }
+
+  .compact-cal {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+  }
+
+  .cc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .cc-month {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: capitalize;
+  }
+  .cc-nav-grp { display: flex; gap: 2px; }
+
+  .cc-strip {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .cc-strip::-webkit-scrollbar { display: none; }
+
+  .cc-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    font-family: var(--fuente-texto);
+    flex-shrink: 0;
+  }
+  .cc-day:hover { background: var(--secondary-background-color); }
+  .cc-day.cc-today {
+    background: var(--primary-color);
+  }
+  .cc-day.cc-selected {
+    background: var(--secondary-background-color);
+  }
+  .cc-wd {
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-subcolor);
+  }
+  .cc-day.cc-today .cc-wd { color: var(--background-color); opacity: 0.7; }
+  .dark .cc-day.cc-today .cc-wd { color: var(--text-color); }
+  .cc-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1;
+  }
+  .cc-day.cc-today .cc-num { color: var(--background-color); }
+  .dark .cc-day.cc-today .cc-num { color: var(--text-color); }
+  .cc-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent-color);
+  }
+  .cc-day.cc-today .cc-dot { background: var(--background-color); opacity: 0.8; }
+  .dark .cc-day.cc-today .cc-dot { background: var(--text-color); }
+
+  .agenda {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-height: 0;
+  }
+
+  .agenda-group-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 4px 0 2px;
+    flex-shrink: 0;
+  }
+
+  .agenda-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .agenda-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    flex-shrink: 0;
+  }
+  .agenda-title {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text-color);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .agenda-time {
+    font-size: 10px;
+    color: var(--text-subcolor);
+    flex-shrink: 0;
+  }
+  .agenda-tag {
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+    color: var(--accent-color);
+    flex-shrink: 0;
+  }
+
+  /* ───────────────────────────────────────────────────
+     OPCIÓN D — Calendario full-width grande + lista debajo con fechas
+  ─────────────────────────────────────────────────── */
+  .opt-d { gap: 0; }
+
+  .cal-full-d {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .cal-head-d {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+  .cal-month-d {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: capitalize;
+  }
+
+  .cal-grid-d {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .cd-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    font-family: var(--fuente-texto);
+    gap: 2px;
+  }
+  .cd-cell:hover { background: var(--secondary-background-color); }
+  .cd-cell.today {
+    background: var(--primary-color);
+    color: var(--background-color);
+    font-weight: 700;
+  }
+  .dark .cd-cell.today { color: var(--text-color); }
+  .cd-cell.selected {
+    background: var(--secondary-background-color);
+    font-weight: 600;
+  }
+  .cd-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent-color);
+  }
+  .cd-cell.today .cd-dot { background: var(--background-color); opacity: 0.8; }
+  .dark .cd-cell.today .cd-dot { background: var(--text-color); }
+
+  .ev-list-d {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-shrink: 0;
+    padding-top: 10px;
+    overflow-y: auto;
+    max-height: 80px;
+  }
+
+  .ev-row-d {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .ev-date-d {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .ev-title-d {
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+  }
+  .ev-hora-d {
+    font-size: 10px;
+    color: var(--text-subcolor);
+    white-space: nowrap;
+  }
+
+  /* ── Responsive ───────────────────────────────────── */
+  @media (max-width: 860px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .quadrant { aspect-ratio: 4 / 3; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="page-title">Opciones de rediseño — Q2 Calendario</div>
+    <div class="page-subtitle">Cada tarjeta reproduce el tamaño real del cuadrante en la pantalla home (1280 × 720 px aprox.)</div>
+  </div>
+  <button class="theme-btn" onclick="document.body.classList.toggle('dark')" aria-label="Cambiar tema">
+    <i class="fa-solid fa-circle-half-stroke"></i> Cambiar tema
+  </button>
+</div>
+
+<div class="options-grid">
+
+  <!-- ══════════════════════════════════════════════════
+       OPCIÓN A — Calendario full-width + chips de eventos
+  ══════════════════════════════════════════════════ -->
+  <div class="option-wrap">
+    <div class="option-label">
+      <div class="option-badge">A</div>
+      <div>
+        <div class="option-name">Calendario expandido + chips</div>
+        <div class="option-desc">El grid mensual ocupa todo el alto · los eventos aparecen como pills en una fila con scroll horizontal</div>
+      </div>
+    </div>
+
+    <div class="quadrant opt-a">
+      <div class="q-header">
+        <h2 class="q-title">Calendario</h2>
+        <a href="#" class="q-link">Ver todo →</a>
+      </div>
+
+      <div class="cal-full">
+        <div class="cal-head-a">
+          <button class="cal-nav"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="cal-month-a">abril 2026</span>
+          <button class="cal-nav"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="cal-dow-row">
+          <div class="cal-dow">D</div><div class="cal-dow">L</div><div class="cal-dow">M</div>
+          <div class="cal-dow">X</div><div class="cal-dow">J</div><div class="cal-dow">V</div>
+          <div class="cal-dow">S</div>
+        </div>
+        <div class="cal-grid-a">
+          <!-- Offset: Abril 2026 empieza Miércoles → offset 3 -->
+          <div class="ca-cell"></div><div class="ca-cell"></div><div class="ca-cell"></div>
+          <button class="ca-cell">1</button><button class="ca-cell">2<div class="ca-dot"></div></button>
+          <button class="ca-cell">3</button><button class="ca-cell">4</button>
+          <button class="ca-cell">5</button><button class="ca-cell">6</button>
+          <button class="ca-cell">7<div class="ca-dot"></div></button><button class="ca-cell">8</button>
+          <button class="ca-cell">9</button><button class="ca-cell">10</button><button class="ca-cell">11</button>
+          <button class="ca-cell">12</button><button class="ca-cell">13<div class="ca-dot"></div></button>
+          <button class="ca-cell">14</button><button class="ca-cell">15</button>
+          <button class="ca-cell">16</button><button class="ca-cell">17</button>
+          <button class="ca-cell">18</button><button class="ca-cell">19<div class="ca-dot"></div></button>
+          <button class="ca-cell">20</button><button class="ca-cell">21</button>
+          <button class="ca-cell">22</button><button class="ca-cell">23</button>
+          <button class="ca-cell today">24<div class="ca-dot"></div></button>
+          <button class="ca-cell">25</button><button class="ca-cell">26<div class="ca-dot"></div></button>
+          <button class="ca-cell">27</button><button class="ca-cell">28<div class="ca-dot"></div></button>
+          <button class="ca-cell selected">29</button>
+          <button class="ca-cell">30</button>
+          <div class="ca-cell"></div><div class="ca-cell"></div><div class="ca-cell"></div>
+          <div class="ca-cell"></div><div class="ca-cell"></div>
+        </div>
+      </div>
+
+      <div class="chips-row">
+        <div class="ev-chip"><div class="ev-chip-dot"></div> Dentista <span class="ev-chip-date">2 abr · 10:00</span></div>
+        <div class="ev-chip"><div class="ev-chip-dot"></div> Yoga <span class="ev-chip-date">7 abr · 08:30</span></div>
+        <div class="ev-chip"><div class="ev-chip-dot"></div> Revisión trimestral <span class="ev-chip-date">13 abr</span></div>
+        <div class="ev-chip"><div class="ev-chip-dot"></div> Cumpleaños Ana <span class="ev-chip-date">19 abr</span></div>
+        <div class="ev-chip"><div class="ev-chip-dot"></div> Vuelo a BCN <span class="ev-chip-date">26 abr · 07:15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       OPCIÓN B — Strip semanal + eventos del día
+  ══════════════════════════════════════════════════ -->
+  <div class="option-wrap">
+    <div class="option-label">
+      <div class="option-badge">B</div>
+      <div>
+        <div class="option-name">Strip semanal + eventos del día</div>
+        <div class="option-desc">7 días de la semana en fila grande · debajo: eventos del día seleccionado con hora y detalle</div>
+      </div>
+    </div>
+
+    <div class="quadrant">
+      <div class="q-header">
+        <h2 class="q-title">Calendario</h2>
+        <a href="#" class="q-link">Ver todo →</a>
+      </div>
+
+      <div class="week-strip">
+        <button class="ws-day">
+          <span class="ws-dow">Dom</span>
+          <span class="ws-num">19</span>
+          <div class="ws-dot-row"></div>
+        </button>
+        <button class="ws-day">
+          <span class="ws-dow">Lun</span>
+          <span class="ws-num">20</span>
+          <div class="ws-dot-row"><div class="ws-dot"></div></div>
+        </button>
+        <button class="ws-day">
+          <span class="ws-dow">Mar</span>
+          <span class="ws-num">21</span>
+          <div class="ws-dot-row"></div>
+        </button>
+        <button class="ws-day">
+          <span class="ws-dow">Mié</span>
+          <span class="ws-num">22</span>
+          <div class="ws-dot-row"><div class="ws-dot"></div></div>
+        </button>
+        <button class="ws-day">
+          <span class="ws-dow">Jue</span>
+          <span class="ws-num">23</span>
+          <div class="ws-dot-row"></div>
+        </button>
+        <button class="ws-day ws-today">
+          <span class="ws-dow">Vie</span>
+          <span class="ws-num">24</span>
+          <div class="ws-dot-row"><div class="ws-dot"></div><div class="ws-dot"></div></div>
+        </button>
+        <button class="ws-day ws-selected">
+          <span class="ws-dow">Sáb</span>
+          <span class="ws-num">25</span>
+          <div class="ws-dot-row"><div class="ws-dot"></div></div>
+        </button>
+      </div>
+
+      <div class="day-events">
+        <div class="day-ev-row">
+          <span class="day-ev-time">09:00</span>
+          <div class="day-ev-bar"></div>
+          <div class="day-ev-info">
+            <div class="day-ev-title">Reunión de equipo</div>
+            <div class="day-ev-sub">Sala B · 1 hora</div>
+          </div>
+        </div>
+        <div class="day-ev-row">
+          <span class="day-ev-time">12:30</span>
+          <div class="day-ev-bar"></div>
+          <div class="day-ev-info">
+            <div class="day-ev-title">Almuerzo con cliente</div>
+            <div class="day-ev-sub">Restaurante El Patio</div>
+          </div>
+        </div>
+        <div class="day-ev-row">
+          <span class="day-ev-time">18:00</span>
+          <div class="day-ev-bar"></div>
+          <div class="day-ev-info">
+            <div class="day-ev-title">Gym</div>
+            <div class="day-ev-sub">45 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       OPCIÓN C — Agenda + mini-calendar compacto arriba
+  ══════════════════════════════════════════════════ -->
+  <div class="option-wrap">
+    <div class="option-label">
+      <div class="option-badge">C</div>
+      <div>
+        <div class="option-name">Agenda + strip compacto</div>
+        <div class="option-desc">Fila horizontal de días del mes arriba · la mayor parte del espacio es una lista tipo agenda</div>
+      </div>
+    </div>
+
+    <div class="quadrant opt-c">
+      <div class="q-header">
+        <h2 class="q-title">Calendario</h2>
+        <a href="#" class="q-link">Ver todo →</a>
+      </div>
+
+      <div class="compact-cal">
+        <div class="cc-head">
+          <span class="cc-month">abril 2026</span>
+          <div class="cc-nav-grp">
+            <button class="cal-nav"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="cal-nav"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="cc-strip">
+          <button class="cc-day"><span class="cc-wd">L</span><span class="cc-num">1</span></button>
+          <button class="cc-day"><span class="cc-wd">M</span><span class="cc-num">2</span><div class="cc-dot"></div></button>
+          <button class="cc-day"><span class="cc-wd">X</span><span class="cc-num">3</span></button>
+          <button class="cc-day"><span class="cc-wd">J</span><span class="cc-num">4</span></button>
+          <button class="cc-day"><span class="cc-wd">V</span><span class="cc-num">5</span></button>
+          <button class="cc-day"><span class="cc-wd">S</span><span class="cc-num">6</span></button>
+          <button class="cc-day"><span class="cc-wd">D</span><span class="cc-num">7</span><div class="cc-dot"></div></button>
+          <button class="cc-day"><span class="cc-wd">L</span><span class="cc-num">8</span></button>
+          <button class="cc-day"><span class="cc-wd">M</span><span class="cc-num">9</span></button>
+          <button class="cc-day"><span class="cc-wd">X</span><span class="cc-num">10</span></button>
+          <button class="cc-day"><span class="cc-wd">J</span><span class="cc-num">11</span></button>
+          <button class="cc-day"><span class="cc-wd">V</span><span class="cc-num">12</span></button>
+          <button class="cc-day"><span class="cc-wd">S</span><span class="cc-num">13</span><div class="cc-dot"></div></button>
+          <button class="cc-day"><span class="cc-wd">D</span><span class="cc-num">14</span></button>
+          <button class="cc-day"><span class="cc-wd">L</span><span class="cc-num">15</span></button>
+          <button class="cc-day"><span class="cc-wd">M</span><span class="cc-num">16</span></button>
+          <button class="cc-day"><span class="cc-wd">X</span><span class="cc-num">17</span></button>
+          <button class="cc-day"><span class="cc-wd">J</span><span class="cc-num">18</span></button>
+          <button class="cc-day"><span class="cc-wd">V</span><span class="cc-num">19</span><div class="cc-dot"></div></button>
+          <button class="cc-day"><span class="cc-wd">S</span><span class="cc-num">20</span></button>
+          <button class="cc-day"><span class="cc-wd">D</span><span class="cc-num">21</span></button>
+          <button class="cc-day"><span class="cc-wd">L</span><span class="cc-num">22</span></button>
+          <button class="cc-day"><span class="cc-wd">M</span><span class="cc-num">23</span></button>
+          <button class="cc-day cc-today"><span class="cc-wd">X</span><span class="cc-num">24</span><div class="cc-dot"></div></button>
+          <button class="cc-day"><span class="cc-wd">J</span><span class="cc-num">25</span></button>
+          <button class="cc-day cc-selected"><span class="cc-wd">V</span><span class="cc-num">26</span><div class="cc-dot"></div></button>
+          <button class="cc-day"><span class="cc-wd">S</span><span class="cc-num">27</span></button>
+          <button class="cc-day"><span class="cc-wd">D</span><span class="cc-num">28</span><div class="cc-dot"></div></button>
+          <button class="cc-day"><span class="cc-wd">L</span><span class="cc-num">29</span></button>
+          <button class="cc-day"><span class="cc-wd">M</span><span class="cc-num">30</span></button>
+        </div>
+      </div>
+
+      <div class="agenda">
+        <div class="agenda-group-label">Hoy — vie 24 abr</div>
+        <div class="agenda-row">
+          <div class="agenda-dot"></div>
+          <span class="agenda-title">Stand-up diario</span>
+          <span class="agenda-time">09:00</span>
+          <span class="agenda-tag">Trabajo</span>
+        </div>
+        <div class="agenda-row">
+          <div class="agenda-dot"></div>
+          <span class="agenda-title">Dentista revisión</span>
+          <span class="agenda-time">11:30</span>
+          <span class="agenda-tag">Salud</span>
+        </div>
+
+        <div class="agenda-group-label">Mañana — sáb 25 abr</div>
+        <div class="agenda-row">
+          <div class="agenda-dot"></div>
+          <span class="agenda-title">Yoga con María</span>
+          <span class="agenda-time">08:30</span>
+          <span class="agenda-tag">Personal</span>
+        </div>
+
+        <div class="agenda-group-label">Próximos</div>
+        <div class="agenda-row">
+          <div class="agenda-dot"></div>
+          <span class="agenda-title">Revisión trimestral Q2</span>
+          <span class="agenda-time">26 abr</span>
+          <span class="agenda-tag">Trabajo</span>
+        </div>
+        <div class="agenda-row">
+          <div class="agenda-dot"></div>
+          <span class="agenda-title">Vuelo a Barcelona</span>
+          <span class="agenda-time">28 abr · 07:15</span>
+          <span class="agenda-tag">Viaje</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       OPCIÓN D — Calendario full-width + lista con fechas destacadas
+  ══════════════════════════════════════════════════ -->
+  <div class="option-wrap">
+    <div class="option-label">
+      <div class="option-badge">D</div>
+      <div>
+        <div class="option-name">Calendario grande + lista con fecha</div>
+        <div class="option-desc">Mini-calendar pasa a full-width con celdas más altas · eventos próximos debajo con fecha en negrita</div>
+      </div>
+    </div>
+
+    <div class="quadrant opt-d">
+      <div class="q-header">
+        <h2 class="q-title">Calendario</h2>
+        <a href="#" class="q-link">Ver todo →</a>
+      </div>
+
+      <div class="cal-full-d">
+        <div class="cal-head-d">
+          <button class="cal-nav"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="cal-month-d">abril 2026</span>
+          <button class="cal-nav"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="cal-dow-row">
+          <div class="cal-dow">D</div><div class="cal-dow">L</div><div class="cal-dow">M</div>
+          <div class="cal-dow">X</div><div class="cal-dow">J</div><div class="cal-dow">V</div>
+          <div class="cal-dow">S</div>
+        </div>
+        <div class="cal-grid-d">
+          <!-- offset 3 para Miércoles 1 abr -->
+          <div class="cd-cell"></div><div class="cd-cell"></div><div class="cd-cell"></div>
+          <button class="cd-cell">1</button>
+          <button class="cd-cell">2<div class="cd-dot"></div></button>
+          <button class="cd-cell">3</button><button class="cd-cell">4</button>
+          <button class="cd-cell">5</button><button class="cd-cell">6</button>
+          <button class="cd-cell">7<div class="cd-dot"></div></button>
+          <button class="cd-cell">8</button><button class="cd-cell">9</button>
+          <button class="cd-cell">10</button><button class="cd-cell">11</button>
+          <button class="cd-cell">12</button>
+          <button class="cd-cell">13<div class="cd-dot"></div></button>
+          <button class="cd-cell">14</button><button class="cd-cell">15</button>
+          <button class="cd-cell">16</button><button class="cd-cell">17</button>
+          <button class="cd-cell">18</button>
+          <button class="cd-cell">19<div class="cd-dot"></div></button>
+          <button class="cd-cell">20</button><button class="cd-cell">21</button>
+          <button class="cd-cell">22</button><button class="cd-cell">23</button>
+          <button class="cd-cell today">24<div class="cd-dot"></div></button>
+          <button class="cd-cell">25</button>
+          <button class="cd-cell selected">26<div class="cd-dot"></div></button>
+          <button class="cd-cell">27</button>
+          <button class="cd-cell">28<div class="cd-dot"></div></button>
+          <button class="cd-cell">29</button><button class="cd-cell">30</button>
+          <div class="cd-cell"></div><div class="cd-cell"></div><div class="cd-cell"></div>
+          <div class="cd-cell"></div><div class="cd-cell"></div>
+        </div>
+      </div>
+
+      <div class="ev-list-d">
+        <div class="ev-row-d">
+          <span class="ev-date-d">Hoy</span>
+          <span class="ev-title-d">Stand-up diario</span>
+          <span class="ev-hora-d">09:00</span>
+        </div>
+        <div class="ev-row-d">
+          <span class="ev-date-d">26 abr</span>
+          <span class="ev-title-d">Vuelo a Barcelona</span>
+          <span class="ev-hora-d">07:15</span>
+        </div>
+        <div class="ev-row-d">
+          <span class="ev-date-d">28 abr</span>
+          <span class="ev-title-d">Revisión trimestral Q2</span>
+          <span class="ev-hora-d">todo el día</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /options-grid -->
+
+</body>
+</html>

@@ -2,7 +2,6 @@
 
   <header class="admin-header">
     <h1 class="admin-title">Panel de administración</h1>
-    <span class="admin-badge">ADMIN</span>
   </header>
 
   <!-- ── HERRAMIENTAS DE DEPURACIÓN ─────────────────────────────── -->
@@ -70,18 +69,11 @@
     <h2 id="tickets-heading" class="section-label">Gestión de tickets</h2>
 
     <!-- Filtros -->
-    <div class="filter-bar" role="group" aria-label="Filtrar por estado">
-      @for (op of estadoOptions; track op) {
-        <button
-          type="button"
-          class="filter-btn"
-          [class.active]="estadoFilter() === op"
-          (click)="estadoFilter.set(op)"
-        >
-          {{ estadoLabel[op] }}
-        </button>
-      }
-    </div>
+    <app-selector
+      [vistas]="filterVistas"
+      [vistaActiva]="estadoLabel[estadoFilter()]"
+      (vistaSeleccionada)="estadoFilter.set(labelToFilter[$event])"
+    />
 
     @if (errorMsg()) {
       <p class="error-msg" role="alert">{{ errorMsg() }}</p>

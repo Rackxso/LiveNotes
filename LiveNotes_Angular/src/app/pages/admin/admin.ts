@@ -12,12 +12,13 @@ import { AuthService } from '../../services/auth.service';
 import { AdminService, ViewMode } from '../../services/admin.service';
 import { TicketService, AdminTicket } from '../../services/ticket.service';
 import { LangSelector } from '../../components/commons/lang-selector/lang-selector';
+import { Selector } from '../../components/commons/selector/selector';
 
 type EstadoFilter = 'todos' | 'abierto' | 'en_revision' | 'resuelto';
 
 @Component({
   selector: 'app-admin',
-  imports: [DatePipe, LangSelector],
+  imports: [DatePipe, LangSelector, Selector],
   templateUrl: './admin.html',
   styleUrl: './admin.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,6 +44,10 @@ export class AdminComponent implements OnInit {
   readonly estadoOptions: EstadoFilter[] = ['todos', 'abierto', 'en_revision', 'resuelto'];
   readonly estadoLabel: Record<string, string> = {
     todos: 'Todos', abierto: 'Abierto', en_revision: 'En revisión', resuelto: 'Resuelto',
+  };
+  readonly filterVistas = ['Todos', 'Abierto', 'En revisión', 'Resuelto'];
+  readonly labelToFilter: Record<string, EstadoFilter> = {
+    'Todos': 'todos', 'Abierto': 'abierto', 'En revisión': 'en_revision', 'Resuelto': 'resuelto',
   };
   readonly viewModes: { value: ViewMode; label: string }[] = [
     { value: 'admin',   label: 'Admin' },

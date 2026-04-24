@@ -19,6 +19,8 @@ export interface TodoItem {
   texto: string;
   completado: boolean;
   prioridad: number;
+  dificultad: number;
+  importancia: number;
   fechaLimite: string | null;
   etiquetas: string[];
   subItems: SubItem[];
@@ -29,6 +31,8 @@ export interface TodoDto {
   idLista: string;
   texto: string;
   prioridad?: number;
+  dificultad?: number;
+  importancia?: number;
   fechaLimite?: string;
   etiquetas?: string[];
 }
@@ -129,12 +133,13 @@ export class TodoService {
     return this.http.patch(`${this.base}/reorder`, { items }).pipe(
       tap(() => {
         const orderMap = new Map(items.map(i => [i._id, i.order]));
-        this._todos.update(todos =>
-          todos.map(t => {
+        this._todos.update(todos => {
+          const updated = todos.map(t => {
             const newOrder = orderMap.get(t._id);
             return newOrder !== undefined ? { ...t, order: newOrder } : t;
-          })
-        );
+          });
+          return updated.sort((a, b) => a.order - b.order);
+        });
       })
     );
   }

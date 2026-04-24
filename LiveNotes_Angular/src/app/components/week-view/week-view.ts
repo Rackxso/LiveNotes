@@ -34,6 +34,7 @@ export class WeekView {
 
   // Output
   readonly diaSeleccionadoChange = output<Date>();
+  readonly eventoSeleccionado    = output<Evento>();
 
   // Inicio de la semana mostrada (domingo)
   readonly inicioSemana = signal<Date>(

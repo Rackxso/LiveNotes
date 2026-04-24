@@ -35,25 +35,48 @@
   <section class="quadrant q2" aria-label="Calendario">
     <div class="q-header">
       <h2 class="q-title">Calendario</h2>
+      <div class="week-nav" role="group" aria-label="Navegación semanal">
+        <button class="week-nav-btn" (click)="irSemanaAnterior()" aria-label="Semana anterior">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <span class="week-label">{{ semanaLabel() }}</span>
+        <button class="week-nav-btn" (click)="irSemanaSiguiente()" aria-label="Semana siguiente">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
       <a routerLink="/calendar/month" class="q-link">Ver todo →</a>
     </div>
-    <div class="spacer"></div>
-    <app-mini-calendar
-      [eventos]="eventos()"
-      [diaSeleccionado]="diaSeleccionado()"
-      (diaSeleccionadoChange)="onDiaSeleccionado($event)"
-      (mesVisibleChange)="onMesVisibleChange($event)" />
 
-    <div class="eventos-list">
-      @for (ev of eventosDelMes(); track ev.id) {
-        <div class="evento-row">
-          <div class="evento-dot" aria-hidden="true"></div>
-          <span class="evento-titulo">{{ ev.titulo }}</span>
-          <span class="evento-hora">{{ eventoLabel(ev) }}</span>
-        </div>
+    <div class="week-strip" role="group" aria-label="Días de la semana">
+      @for (dia of diasSemana(); track dia.fecha.getTime()) {
+        <button
+          class="ws-day"
+          [class.ws-today]="esDiaHoy(dia.fecha)"
+          [class.ws-selected]="!esDiaHoy(dia.fecha) && esDiaSeleccionado(dia.fecha)"
+          (click)="onDiaSeleccionado(dia.fecha)"
+          [attr.aria-label]="dia.nombre + ' ' + dia.fecha.getDate()"
+          [attr.aria-pressed]="esDiaSeleccionado(dia.fecha)">
+          <span class="ws-dow">{{ dia.nombre }}</span>
+          <span class="ws-num">{{ dia.fecha.getDate() }}</span>
+          <div class="ws-dot-wrap" aria-hidden="true">
+            @if (tieneEventosDia(dia.fecha)) {
+              <div class="ws-dot"></div>
+            }
+          </div>
+        </button>
+      }
+    </div>
+
+    <div class="day-events" aria-live="polite">
+      @for (ev of eventosDiaSeleccionado(); track ev.id) {
+        <button class="day-ev-row" (click)="abrirEventoModal(ev)" [attr.aria-label]="'Ver evento: ' + ev.titulo">
+          <span class="day-ev-time">{{ ev.hora || '—' }}</span>
+          <div class="day-ev-bar" aria-hidden="true"></div>
+          <span class="day-ev-title">{{ ev.titulo }}</span>
+        </button>
       }
       @empty {
-        <p class="empty-msg">No hay eventos este mes</p>
+        <p class="empty-msg">No hay eventos este día</p>
       }
     </div>
   </section>
@@ -94,6 +117,13 @@
         <p class="empty-msg">Sin transacciones recientes</p>
       }
     </div>
+    @if (hasMoreTransactions()) {
+      <a routerLink="/finance" class="tx-more" aria-label="Ver todos los movimientos">
+        <span class="tx-more-dot"></span>
+        <span class="tx-more-dot"></span>
+        <span class="tx-more-dot"></span>
+      </a>
+    }
   </section>
 
   <!-- Q4: Notas & Tareas ──────────────────────────────── -->
@@ -121,4 +151,10 @@
   <app-add-note-modal
     (cerrar)="closeAddNoteModal()"
     (guardado)="closeAddNoteModal()" />
+}
+
+@if (eventoSeleccionado(); as ev) {
+  <app-event-detail-modal
+    [evento]="ev"
+    (cerrar)="cerrarEventoModal()" />
 }

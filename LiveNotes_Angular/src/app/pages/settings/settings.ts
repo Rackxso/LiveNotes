@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService, Theme } from '../../services/theme.service';
 import { I18nService } from '../../services/i18n.service';
+import { PremiumService } from '../../services/premium.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -14,12 +15,14 @@ import { environment } from '../../../environments/environment';
   styleUrl: './settings.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Settings {
-  readonly auth  = inject(AuthService);
-  readonly theme = inject(ThemeService);
-  readonly i18n  = inject(I18nService);
-  private readonly router = inject(Router);
-  private readonly http   = inject(HttpClient);
+export class Settings implements OnInit {
+  readonly auth    = inject(AuthService);
+  readonly theme   = inject(ThemeService);
+  readonly i18n    = inject(I18nService);
+  private readonly premium = inject(PremiumService);
+  private readonly router  = inject(Router);
+  private readonly route   = inject(ActivatedRoute);
+  private readonly http    = inject(HttpClient);
 
   readonly themes: { value: Theme; label: string; icon: string }[] = [
     { value: 'light',  label: 'Claro',   icon: 'fa-solid fa-sun' },
@@ -27,11 +30,65 @@ export class Settings {
     { value: 'system', label: 'Sistema', icon: 'fa-solid fa-display' },
   ];
 
+  // Stripe
+  readonly upgradeLoading  = signal(false);
+  readonly portalLoading   = signal(false);
+  readonly simulateLoading = signal(false);
+  readonly planMsg         = signal<{ text: string; ok: boolean } | null>(null);
+
   // Change password
   readonly showPasswordForm = signal(false);
   readonly oldPassword      = signal('');
   readonly passwordLoading  = signal(false);
   readonly passwordMsg      = signal<{ text: string; ok: boolean } | null>(null);
+
+  readonly isDev = !environment.production;
+
+  ngOnInit(): void {
+    const params = this.route.snapshot.queryParamMap;
+    if (params.has('upgraded')) {
+      this.planMsg.set({ text: '¡Bienvenido a Premium! Tu cuenta ya está activada.', ok: true });
+      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+    } else if (params.has('cancelled')) {
+      this.planMsg.set({ text: 'Pago cancelado. Puedes intentarlo de nuevo cuando quieras.', ok: false });
+      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+    }
+  }
+
+  upgrade(): void {
+    if (this.upgradeLoading()) return;
+    this.upgradeLoading.set(true);
+    this.planMsg.set(null);
+    this.premium.createCheckoutSession().subscribe({
+      next: (res) => { window.location.href = res.url; },
+      error: (err) => {
+        this.upgradeLoading.set(false);
+        this.planMsg.set({ text: err.error?.message ?? 'Error al iniciar el pago.', ok: false });
+      },
+    });
+  }
+
+  manageSubscription(): void {
+    if (this.portalLoading()) return;
+    this.portalLoading.set(true);
+    this.planMsg.set(null);
+    this.premium.createPortalSession().subscribe({
+      next: (res) => { window.location.href = res.url; },
+      error: (err) => {
+        this.portalLoading.set(false);
+        this.planMsg.set({ text: err.error?.message ?? 'Error al abrir el portal de facturación.', ok: false });
+      },
+    });
+  }
+
+  simulateToggle(): void {
+    if (this.simulateLoading()) return;
+    this.simulateLoading.set(true);
+    this.premium.simulateToggle().subscribe({
+      next: () => this.simulateLoading.set(false),
+      error: () => this.simulateLoading.set(false),
+    });
+  }
 
   requestPasswordChange(): void {
     const email = this.auth.user()?.email;

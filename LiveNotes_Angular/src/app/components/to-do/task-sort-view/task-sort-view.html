@@ -1,0 +1,114 @@
+<div
+  class="sort-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="sort-view-title"
+  (click)="cerrar.emit()">
+  <div class="sort-modal" (click)="$event.stopPropagation()">
+
+    <div class="sort-header">
+      <h2 id="sort-view-title" class="sort-title">{{ t()('todo.sort.title') }}</h2>
+      <button class="sort-close" (click)="cerrar.emit()" [attr.aria-label]="t()('todo.sort.close')">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    @if (phase() === 'setup') {
+      <p class="sort-desc">{{ t()('todo.sort.setupDesc') }}</p>
+
+      <div class="sort-body">
+        <table class="sort-table" [attr.aria-label]="t()('todo.sort.title')">
+          <thead>
+            <tr>
+              <th scope="col" class="col-task">{{ t()('todo.sort.colTask') }}</th>
+              <th scope="col" class="col-imp">{{ t()('todo.sort.colImportance') }}</th>
+              <th scope="col" class="col-dif">{{ t()('todo.sort.difficulty') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (task of localTasks(); track task._id) {
+              <tr class="sort-row">
+                <td class="sort-task-text">{{ task.texto }}</td>
+                <td class="sort-imp-cell">
+                  <div class="importancia-chips" role="group" [attr.aria-label]="t()('todo.sort.importanceOf') + ' ' + task.texto">
+                    @for (opt of importanciaOptions(); track opt.value) {
+                      <button
+                        class="imp-chip"
+                        [class.active]="task.importancia === opt.value"
+                        [attr.aria-pressed]="task.importancia === opt.value"
+                        [attr.aria-label]="opt.title"
+                        [title]="opt.title"
+                        (click)="setImportancia(task._id, opt.value)">
+                        {{ opt.label }}
+                      </button>
+                    }
+                  </div>
+                </td>
+                <td class="sort-dif-cell">
+                  <input
+                    [id]="'dif-' + task._id"
+                    class="dif-input"
+                    type="number"
+                    min="1"
+                    max="5"
+                    [value]="task.dificultad"
+                    (change)="setDificultad(task._id, +$any($event.target).value)"
+                    [attr.aria-label]="t()('todo.sort.difficultyOf') + ' ' + task.texto + ' ' + t()('todo.sort.difficultyRange')" />
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sort-footer">
+        <button class="algo-btn jumping-cat" (click)="runJumpingCat()">
+          <i class="fa-solid fa-cat" aria-hidden="true"></i>
+          JumpingCat
+        </button>
+        <button class="algo-btn balanced-flow" (click)="runBalancedFlow()">
+          <i class="fa-solid fa-brain" aria-hidden="true"></i>
+          BalancedFlow
+        </button>
+        <button class="algo-btn pila-score" (click)="runPilaScore()">
+          <i class="fa-solid fa-medal" aria-hidden="true"></i>
+          PilaScore
+        </button>
+      </div>
+    }
+
+    @if (phase() === 'preview') {
+      <p class="sort-desc">{{ t()('todo.sort.previewDesc') }}</p>
+
+      <div class="sort-body preview-body">
+        <ol class="preview-list">
+          @for (task of previewOrder()!; track task._id; let i = $index) {
+            <li class="preview-item">
+              <span class="preview-num">{{ i + 1 }}</span>
+              <span class="preview-text">{{ task.texto }}</span>
+              <span class="preview-badge" [class]="pilaBadgeClass(task.importancia)">
+                {{ pilaLabel(task.importancia) }}
+              </span>
+            </li>
+          }
+        </ol>
+      </div>
+
+      <div class="sort-footer">
+        <button class="algo-btn back-btn" (click)="backToSetup()">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          {{ t()('todo.sort.back') }}
+        </button>
+        <button class="algo-btn confirm-btn" [disabled]="saving()" (click)="confirmOrder()">
+          @if (saving()) {
+            <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+          } @else {
+            <i class="fa-solid fa-check" aria-hidden="true"></i>
+          }
+          {{ t()('todo.sort.apply') }}
+        </button>
+      </div>
+    }
+
+  </div>
+</div>

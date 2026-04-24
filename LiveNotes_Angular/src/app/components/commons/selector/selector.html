@@ -1,4 +1,4 @@
-<div class="menu" [class.has-icons]="iconosList.length > 0">
+<div class="menu" [class.has-icons]="iconosList.length > 0" [style.grid-template-columns]="'repeat(' + vistas.length + ', auto)'">
     <div class="highlight"></div>
     @for (vista of vistas; track vista; let i = $index) {
         <div

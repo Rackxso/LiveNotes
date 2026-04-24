@@ -23,6 +23,7 @@ export class DayView {
 
   // Output
   readonly diaSeleccionadoChange = output<Date>();
+  readonly eventoSeleccionado    = output<Evento>();
 
   readonly nombreDia = computed(() =>
     this.diaSeleccionado().toLocaleDateString(this.i18n.locale(), {

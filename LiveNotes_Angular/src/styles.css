@@ -9,6 +9,7 @@
     --secondary-background-color: #EBD8C4;
     --background-subcolor: #F5EDE0;
     --background-color: #FDF8F2;
+    --sidebar-bg: var(--primary-color);
 
     --shadow-soket: inset 0px 3px 2px 0px color-mix(in srgb, var(--text-subcolor) 25%, transparent);
     --shadow-button: 0px 3px 2px 0px color-mix(in srgb, var(--accent-subcolor) 25%, transparent);
@@ -28,16 +29,23 @@
     --text-subcolor: #907060;
     --accent-color: #D4A870;
     --accent-subcolor: #A87D55;
-    --primary-color: #3A2D20;
-    --secondary-background-color: #2A1F15;
-    --background-subcolor: #1E1710;
-    --background-color: #13100D;
+    --primary-color: #C4905A;
+    --primary-subcolor: #3D2C18;
+    --secondary-background-color: #2E2214;
+    --background-subcolor: #1C1409;
+    --background-color: #0F0B07;
+    --sidebar-bg: #0A0805;
 }
 
 html, body {
     height: 100%;
     margin: 0;
     background: var(--background-color);
+    font-family: var(--fuente-texto);
+}
+
+button, input, select, textarea {
+    font-family: inherit;
 }
 
 * {
@@ -66,7 +74,6 @@ app-root {
 
 p{
     color: var(--text-color);
-    font-family: var(--fuente-texto);
 }
 
 router-outlet + * {

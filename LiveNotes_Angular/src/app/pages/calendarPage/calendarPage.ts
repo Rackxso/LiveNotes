@@ -8,11 +8,12 @@ import { Eventos } from '../../components/eventos/eventos';
 import { EventosService } from '../../services/eventos.service';
 import { Evento } from '../../model/evento.model';
 import { AddEventModal } from '../../components/commons/add-event-modal/add-event-modal';
+import { EventDetailModal } from '../../components/commons/event-detail-modal/event-detail-modal';
 import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-calendar-page',
-  imports: [Header, MonthView, WeekView, DayView, AddEventModal, Eventos],
+  imports: [Header, MonthView, WeekView, DayView, AddEventModal, Eventos, EventDetailModal],
   templateUrl: './calendarPage.html',
   styleUrl: './calendarPage.css',
 })
@@ -165,6 +166,10 @@ export class CalendarPage {
 
   public modalAbierto = signal<boolean>(false);
   public fechaModal = signal<Date | null>(null);
+
+  readonly eventoSeleccionado = signal<Evento | null>(null);
+  abrirDetalleEvento(ev: Evento): void { this.eventoSeleccionado.set(ev); }
+  cerrarDetalleEvento(): void { this.eventoSeleccionado.set(null); }
 
   abrirModalHeader(): void {
     this.fechaModal.set(null);

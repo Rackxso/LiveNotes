@@ -5,16 +5,15 @@ import { I18nService } from '../../services/i18n.service';
 import { AuthService } from '../../services/auth.service';
 import { EventosService } from '../../services/eventos.service';
 import { FinanceService } from '../../services/finance.service';
-import { Evento } from '../../model/evento.model';
-import { MiniCalendar } from '../../components/commons/mini-calendar/mini-calendar';
 import { GoalProgress } from '../../components/commons/goal-progress/goal-progress';
 import { ToDo } from '../../components/to-do/to-do';
 import { TextNotes } from '../../components/text-notes/text-notes';
 import { AddNoteModal } from '../../components/commons/add-note-modal/add-note-modal';
+import { EventDetailModal } from '../../components/commons/event-detail-modal/event-detail-modal';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, DecimalPipe, MiniCalendar, GoalProgress, ToDo, TextNotes, AddNoteModal],
+  imports: [RouterLink, DecimalPipe, GoalProgress, ToDo, TextNotes, AddNoteModal, EventDetailModal],
   templateUrl: './home.html',
   styleUrl: './home.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +28,6 @@ export class Home {
   private readonly _today = new Date();
 
   readonly diaSeleccionado = signal<Date>(new Date());
-  readonly mesCalendario   = signal({ anyo: this._today.getFullYear(), mes: this._today.getMonth() });
 
   readonly userName = computed(() => this.auth.user()?.name ?? '');
   readonly eventos  = this.eventosService.eventos;
@@ -55,12 +53,87 @@ export class Home {
     );
   });
 
-  readonly eventosDelMes = computed((): Evento[] => {
-    const { anyo, mes } = this.mesCalendario();
-    return this.eventos()
-      .filter(e => e.fecha.getFullYear() === anyo && e.fecha.getMonth() === mes)
-      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
+  // ── Q2: Strip semanal ────────────────────────────────
+
+  readonly diasSemana = computed(() => {
+    const sel    = this.diaSeleccionado();
+    const locale = this.i18n.locale();
+    const dow    = sel.getDay(); // 0=Dom
+    // Offset para que el lunes sea el primer día
+    const offset = dow === 0 ? -6 : 1 - dow;
+    const lunes  = new Date(sel);
+    lunes.setDate(sel.getDate() + offset);
+    lunes.setHours(0, 0, 0, 0);
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(lunes);
+      d.setDate(lunes.getDate() + i);
+      return {
+        fecha:  d,
+        nombre: d.toLocaleDateString(locale, { weekday: 'short' })
+                  .replace('.', '')
+                  .slice(0, 3),
+      };
+    });
   });
+
+  readonly semanaLabel = computed(() => {
+    const dias   = this.diasSemana();
+    const inicio = dias[0].fecha;
+    const fin    = dias[6].fecha;
+    const locale = this.i18n.locale();
+    if (inicio.getMonth() === fin.getMonth()) {
+      return `${inicio.getDate()} – ${fin.toLocaleDateString(locale, { day: 'numeric', month: 'short' })}`;
+    }
+    return `${inicio.toLocaleDateString(locale, { day: 'numeric', month: 'short' })} – ${fin.toLocaleDateString(locale, { day: 'numeric', month: 'short' })}`;
+  });
+
+  readonly eventosDiaSeleccionado = computed(() => {
+    const sel = this.diaSeleccionado();
+    return this.eventos().filter(e =>
+      e.fecha.getDate()     === sel.getDate()     &&
+      e.fecha.getMonth()    === sel.getMonth()    &&
+      e.fecha.getFullYear() === sel.getFullYear()
+    );
+  });
+
+  readonly esDiaHoy = (fecha: Date): boolean => {
+    const t = this._today;
+    return fecha.getDate()     === t.getDate()     &&
+           fecha.getMonth()    === t.getMonth()    &&
+           fecha.getFullYear() === t.getFullYear();
+  };
+
+  readonly esDiaSeleccionado = (fecha: Date): boolean => {
+    const sel = this.diaSeleccionado();
+    return fecha.getDate()     === sel.getDate()     &&
+           fecha.getMonth()    === sel.getMonth()    &&
+           fecha.getFullYear() === sel.getFullYear();
+  };
+
+  readonly tieneEventosDia = (fecha: Date): boolean =>
+    this.eventos().some(e =>
+      e.fecha.getDate()     === fecha.getDate()     &&
+      e.fecha.getMonth()    === fecha.getMonth()    &&
+      e.fecha.getFullYear() === fecha.getFullYear()
+    );
+
+  irSemanaAnterior(): void {
+    this.diaSeleccionado.update(d => {
+      const nd = new Date(d);
+      nd.setDate(d.getDate() - 7);
+      return nd;
+    });
+  }
+
+  irSemanaSiguiente(): void {
+    this.diaSeleccionado.update(d => {
+      const nd = new Date(d);
+      nd.setDate(d.getDate() + 7);
+      return nd;
+    });
+  }
+
+  // ── Finanzas ─────────────────────────────────────────
 
   readonly currentMonthStats = computed(() => {
     const label = this._today.toLocaleString('en-US', { month: 'short' });
@@ -71,19 +144,18 @@ export class Home {
     this.financeService.transactions().slice(0, 3)
   );
 
-  readonly eventoLabel = (ev: Evento): string => {
-    const hoy   = this._today;
-    const esHoy =
-      ev.fecha.getDate()     === hoy.getDate()     &&
-      ev.fecha.getMonth()    === hoy.getMonth()    &&
-      ev.fecha.getFullYear() === hoy.getFullYear();
+  readonly hasMoreTransactions = computed(() =>
+    this.financeService.transactions().length > 3
+  );
 
-    const fecha = esHoy
-      ? ''
-      : ev.fecha.toLocaleDateString(this.i18n.locale(), { day: 'numeric', month: 'short' });
+  // ── Evento detalle ────────────────────────────────────
 
-    return [fecha, ev.hora].filter(Boolean).join(' · ');
-  };
+  readonly eventoSeleccionado = signal<import('../../model/evento.model').Evento | null>(null);
+
+  abrirEventoModal(ev: import('../../model/evento.model').Evento): void { this.eventoSeleccionado.set(ev); }
+  cerrarEventoModal(): void { this.eventoSeleccionado.set(null); }
+
+  // ── Notas ─────────────────────────────────────────────
 
   readonly showAddNoteModal = signal(false);
 
@@ -91,5 +163,4 @@ export class Home {
   closeAddNoteModal(): void { this.showAddNoteModal.set(false); }
 
   onDiaSeleccionado(fecha: Date): void { this.diaSeleccionado.set(fecha); }
-  onMesVisibleChange(val: { anyo: number; mes: number }): void { this.mesCalendario.set(val); }
 }

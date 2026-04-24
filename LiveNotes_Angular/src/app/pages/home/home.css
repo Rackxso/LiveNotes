@@ -174,66 +174,166 @@
   &.red { color: var(--red); }
 }
 
-/* ── Q2: CALENDAR ────────────────────────────────────── */
-.q2 {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-rows: auto 1fr;
-  gap: 0 16px;
-  align-content: start;
-
-  .q-header {
-    grid-column: 1 / -1;
-  }
-
-  app-mini-calendar {
-    grid-column: 1;
-    grid-row: 2;
-    align-self: start;
-  }
-
-  .eventos-list {
-    grid-column: 2;
-    grid-row: 2;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--secondary-background-color) transparent;
-  }
-}
-
-.eventos-list {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.evento-row {
-  display: flex;
+/* ── Q2: WEEK STRIP ──────────────────────────────────── */
+.q2 .q-header {
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  margin-bottom: 8px;
 }
 
-.evento-dot {
-  width: 6px;
-  height: 6px;
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.week-nav-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-subcolor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 0;
+  font-size: 9px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+
+  &:hover { background: var(--secondary-background-color); }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+}
+
+.week-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-subcolor);
+  text-transform: capitalize;
+  flex: 1;
+  text-align: center;
+}
+
+.week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  flex-shrink: 0;
+  margin-bottom: 10px;
+}
+
+.ws-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 2px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: var(--fuente-texto);
+  transition: background 0.15s;
+
+  &:hover { background: var(--secondary-background-color); }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; border-radius: 10px; }
+}
+
+.ws-day.ws-today { background: var(--primary-color); }
+.ws-day.ws-selected { background: var(--secondary-background-color); }
+
+.ws-dow {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-subcolor);
+  letter-spacing: 0.04em;
+}
+.ws-day.ws-today .ws-dow { color: var(--background-color); opacity: 0.75; }
+
+.ws-num {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--fuente-titulo);
+  color: var(--text-color);
+  line-height: 1;
+}
+.ws-day.ws-today .ws-num { color: var(--background-color); }
+
+.ws-dot-wrap {
+  height: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-dot {
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: var(--accent-color);
-  flex-shrink: 0;
+}
+.ws-day.ws-today .ws-dot { background: var(--background-color); opacity: 0.8; }
+
+.day-events {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary-background-color) transparent;
 }
 
-.evento-titulo {
+.day-ev-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--secondary-background-color);
+  border-radius: 10px;
+  flex-shrink: 0;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--fuente-texto);
+  transition: background 0.15s;
+
+  &:hover { background: color-mix(in srgb, var(--primary-color) 15%, var(--secondary-background-color)); }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+}
+
+.day-ev-time {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-color);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+  width: 38px;
+}
+
+.day-ev-bar {
+  width: 3px;
+  align-self: stretch;
+  border-radius: 2px;
+  background: var(--primary-color);
+  flex-shrink: 0;
+  min-height: 14px;
+}
+
+.day-ev-title {
   flex: 1;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.evento-hora {
-  font-size: 11px;
-  color: var(--text-subcolor);
-  flex-shrink: 0;
 }
 
 .empty-msg {
@@ -336,6 +436,27 @@ app-goal-progress {
 .tx-amt.neg { color: var(--red);   }
 .tx-amt.pos { color: var(--green); }
 
+.tx-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  text-decoration: none;
+
+  &:hover .tx-more-dot { opacity: 0.5; }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; border-radius: 4px; }
+}
+
+.tx-more-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  transition: opacity 0.15s;
+}
+
 /* ── Q4: NOTES & TODOS ───────────────────────────────── */
 .q4-cols {
   flex: 1;
@@ -379,22 +500,6 @@ app-goal-progress {
 
   .quadrant {
     overflow: visible;
-  }
-
-  /* Q2: Calendar en una sola columna */
-  .q2 {
-    grid-template-columns: 1fr;
-
-    app-mini-calendar {
-      grid-column: 1;
-      grid-row: 2;
-    }
-
-    .eventos-list {
-      grid-column: 1;
-      grid-row: 3;
-      overflow: visible;
-    }
   }
 
   /* Q4: Notas y pendientes apilados sin scroll */

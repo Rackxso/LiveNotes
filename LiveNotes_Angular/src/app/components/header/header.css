@@ -7,7 +7,7 @@
 }
 
 .titulo{
-    font-family: "Fraunces", serif;
+    font-family: var(--fuente-titulo);
     font-size: 1.5rem;
     font-style: italic;
     color: var(--text-subcolor);
@@ -21,7 +21,7 @@
     padding: 7px;
     border-radius: 10px;
     box-shadow: var(--shadow-soket);
-    font-family: "Outfit", sans-serif;
+    font-family: var(--fuente-texto);
     transition: all 0.2s ease-in-out;
 
     & div:not(.highlight){

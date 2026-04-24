@@ -170,6 +170,16 @@ section {
   &:focus-visible { outline: 2px solid #f59e0b; outline-offset: 2px; }
 }
 
+.plan-msg {
+  margin: 0;
+  font-family: var(--fuente-texto);
+  font-size: 13px;
+  color: var(--red);
+  text-align: center;
+
+  &.ok { color: var(--green); }
+}
+
 .simulate-row {
   display: flex;
   align-items: center;
@@ -266,6 +276,11 @@ section {
   transition: border-color 0.2s;
 
   &:focus { border-color: var(--primary-color); }
+
+  & option {
+    background: var(--background-subcolor);
+    color: var(--text-color);
+  }
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────────── */

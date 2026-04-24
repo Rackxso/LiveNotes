@@ -93,6 +93,15 @@
   }
 }
 
+.tab-wrapper[draggable='true'] {
+  cursor: grab;
+}
+
+.tab-wrapper.tab-dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
 .tab-add {
   font-size: 18px;
   line-height: 1;
@@ -107,6 +116,40 @@
   transition: color 0.15s;
 
   &:hover { color: var(--text-color); }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+.algo-badge {
+  font-size: 10px;
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
+  border-radius: 20px;
+  padding: 2px 8px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+.tab-sort-btn {
+  font-size: 13px;
+  background: none;
+  border: none;
+  color: var(--text-subcolor);
+  cursor: pointer;
+  padding: 4px 6px;
+  margin-left: 4px;
+  margin-bottom: 2px;
+  transition: color 0.15s;
+
+  &:hover { color: var(--accent-color); }
 
   &:focus-visible {
     outline: 2px solid var(--accent-color);
@@ -259,7 +302,8 @@
   }
 }
 
-.todo-item:hover .delete-btn {
+.todo-item:hover > .todo-row > .delete-btn,
+.sub-item:hover > .delete-btn {
   color: var(--text-subcolor);
 
   &:hover { color: var(--red); }
@@ -282,7 +326,7 @@
   font-size: 12px;
   cursor: grab;
 
-  .todo-text { color: var(--text-subcolor); }
+  .todo-text { color: var(--text-subcolor); flex: 1; min-width: 0; }
 
   &.done .todo-text {
     text-decoration: line-through;
