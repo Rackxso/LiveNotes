@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat /c/Users/ourena/proyecto/LiveNotes/LiveNotes_Angular/src/app/pages/notes/*.ts)",
+      "Bash(npx ng:*)",
+      "Bash(xargs wc *)",
+      "Bash(npx tsc *)",
+      "Bash(xargs ls *)",
+      "Bash(xargs grep *)",
+      "Bash(grep -E \"\\\\.\\(ts|js\\)$\")",
+      "Bash(npm install *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); proj=list\\(d['projects'].keys\\(\\)\\)[0]; print\\('Project name:', proj\\); print\\('outputPath:', d['projects'][proj]['architect']['build']['options'].get\\('outputPath', 'not found'\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); proj=list\\(d['projects'].keys\\(\\)\\)[0]; print\\('Project name:', proj\\); print\\('outputPath:', d['projects'][proj]['architect']['build']['options'].get\\('outputPath', 'not found'\\)\\)\")"
+    ]
+  }
+}
