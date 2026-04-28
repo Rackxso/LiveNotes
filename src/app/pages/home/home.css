@@ -279,14 +279,86 @@
 .ws-day.ws-today .ws-dot { background: var(--background-color); opacity: 0.8; }
 
 .day-events {
-  flex: 1;
+  flex-shrink: 0;
+  max-height: 110px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-height: 0;
   scrollbar-width: thin;
   scrollbar-color: var(--secondary-background-color) transparent;
+}
+
+.upcoming-divider {
+  height: 1px;
+  background: var(--secondary-background-color);
+  margin: 10px 0 6px;
+  flex-shrink: 0;
+}
+
+.upcoming-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-subcolor);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 6px;
+}
+
+.upcoming-events {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary-background-color) transparent;
+}
+
+.upcoming-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: var(--secondary-background-color);
+  border-radius: 8px;
+  flex-shrink: 0;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--fuente-texto);
+  transition: background 0.15s;
+
+  &:hover { background: color-mix(in srgb, var(--primary-color) 15%, var(--secondary-background-color)); }
+  &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+}
+
+.upcoming-date {
+  font-size: 10px;
+  color: var(--accent-color);
+  font-weight: 600;
+  flex-shrink: 0;
+  text-transform: capitalize;
+  min-width: 80px;
+}
+
+.upcoming-time {
+  font-size: 10px;
+  color: var(--text-subcolor);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.upcoming-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .day-ev-row {

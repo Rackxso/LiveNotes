@@ -97,6 +97,24 @@ export class Home {
     );
   });
 
+  readonly proximosEventos = computed(() => {
+    const hoyInicio = new Date(
+      this._today.getFullYear(),
+      this._today.getMonth(),
+      this._today.getDate()
+    );
+    return this.eventos()
+      .filter(e => e.fecha >= hoyInicio)
+      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
+      .slice(0, 4);
+  });
+
+  formatUpcomingDate(fecha: Date): string {
+    return fecha.toLocaleDateString(this.i18n.locale(), {
+      weekday: 'short', day: 'numeric', month: 'short',
+    });
+  }
+
   readonly esDiaHoy = (fecha: Date): boolean => {
     const t = this._today;
     return fecha.getDate()     === t.getDate()     &&

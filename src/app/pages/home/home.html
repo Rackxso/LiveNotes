@@ -79,6 +79,23 @@
         <p class="empty-msg">No hay eventos este día</p>
       }
     </div>
+
+    <div class="upcoming-divider" aria-hidden="true"></div>
+    <div class="upcoming-events">
+      <p class="upcoming-label">Próximos eventos</p>
+      @for (ev of proximosEventos(); track ev.id) {
+        <button class="upcoming-row" (click)="abrirEventoModal(ev)" [attr.aria-label]="'Ver evento: ' + ev.titulo">
+          <span class="upcoming-date">{{ formatUpcomingDate(ev.fecha) }}</span>
+          @if (ev.hora) {
+            <span class="upcoming-time">{{ ev.hora }}</span>
+          }
+          <span class="upcoming-name">{{ ev.titulo }}</span>
+        </button>
+      }
+      @empty {
+        <p class="empty-msg">Sin próximos eventos</p>
+      }
+    </div>
   </section>
 
   <!-- Q3: Finanzas ────────────────────────────────────── -->
