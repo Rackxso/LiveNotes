@@ -78,7 +78,8 @@
       [searchQuery]="notesSearch()"
       [selectedCategory]="selectedCategory()"
       class="notes-content"
-      (addNote)="openAddNoteModal()" />
+      (addNote)="openAddNoteModal()"
+      (editNote)="openEditNoteModal($event)" />
   </section>
 
   <!-- TO-DO PANEL -->
@@ -115,6 +116,7 @@
 
 @if (showAddNoteModal()) {
   <app-add-note-modal
+    [note]="editingNote()"
     [existingCategories]="categories()"
     (cerrar)="closeAddNoteModal()"
     (guardado)="closeAddNoteModal()" />

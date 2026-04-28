@@ -2,7 +2,7 @@
   <div class="modal" (click)="$event.stopPropagation()">
 
     <div class="modal-header">
-      <h2 id="add-note-title">New note</h2>
+      <h2 id="add-note-title">{{ isEditing ? 'Edit note' : 'New note' }}</h2>
       <button class="close-btn" type="button" aria-label="Close" (click)="onCerrar()">✕</button>
     </div>
 
@@ -49,7 +49,7 @@
 
       <div class="modal-footer">
         <app-secondary-button class="small" [config]="{texto: 'Cancel'}" (clicked)="onCerrar()" />
-        <app-primary-button class="small" [config]="{texto: 'Save note', type: 'submit'}" />
+        <app-primary-button class="small" [config]="{texto: isEditing ? 'Save changes' : 'Save note', type: 'submit'}" />
       </div>
 
     </form>

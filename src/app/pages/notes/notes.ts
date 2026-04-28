@@ -5,7 +5,7 @@ import { TextNotes } from '../../components/text-notes/text-notes';
 import { AddNoteModal } from '../../components/commons/add-note-modal/add-note-modal';
 import { PrimaryButton } from '../../components/commons/primary-button/primary-button';
 import { I18nService } from '../../services/i18n.service';
-import { NotesService } from '../../services/notes.service';
+import { NotesService, Note } from '../../services/notes.service';
 
 @Component({
   selector: 'app-notes',
@@ -38,12 +38,21 @@ export class Notes {
     return unique;
   });
 
+  readonly editingNote = signal<Note | null>(null);
+
   openAddNoteModal(): void {
+    this.editingNote.set(null);
+    this.showAddNoteModal.set(true);
+  }
+
+  openEditNoteModal(note: Note): void {
+    this.editingNote.set(note);
     this.showAddNoteModal.set(true);
   }
 
   closeAddNoteModal(): void {
     this.showAddNoteModal.set(false);
+    this.editingNote.set(null);
   }
 
   closeNotesSearch(): void {

@@ -15,11 +15,15 @@ export class App {
   private readonly router = inject(Router);
   private readonly posthog = inject(PosthogService);
 
+  private isAuthUrl(url: string): boolean {
+    return url.startsWith('/login') || url.startsWith('/register');
+  }
+
   protected readonly isAuthPage = toSignal(
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
-      map(e => (e as NavigationEnd).urlAfterRedirects.startsWith('/login')),
-      startWith(this.router.url.startsWith('/login'))
+      map(e => this.isAuthUrl((e as NavigationEnd).urlAfterRedirects)),
+      startWith(this.isAuthUrl(this.router.url))
     ),
     { initialValue: false }
   );

@@ -5,6 +5,7 @@ import { I18nService } from '../../services/i18n.service';
 import { AuthService } from '../../services/auth.service';
 import { EventosService } from '../../services/eventos.service';
 import { FinanceService } from '../../services/finance.service';
+import { Note } from '../../services/notes.service';
 import { GoalProgress } from '../../components/commons/goal-progress/goal-progress';
 import { ToDo } from '../../components/to-do/to-do';
 import { TextNotes } from '../../components/text-notes/text-notes';
@@ -158,9 +159,11 @@ export class Home {
   // ── Notas ─────────────────────────────────────────────
 
   readonly showAddNoteModal = signal(false);
+  readonly editingNote = signal<Note | null>(null);
 
-  openAddNoteModal(): void  { this.showAddNoteModal.set(true);  }
-  closeAddNoteModal(): void { this.showAddNoteModal.set(false); }
+  openAddNoteModal(): void  { this.editingNote.set(null); this.showAddNoteModal.set(true); }
+  closeAddNoteModal(): void { this.showAddNoteModal.set(false); this.editingNote.set(null); }
+  openEditNoteModal(note: Note): void { this.editingNote.set(note); this.showAddNoteModal.set(true); }
 
   onDiaSeleccionado(fecha: Date): void { this.diaSeleccionado.set(fecha); }
 }

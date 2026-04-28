@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NotesService, NoteDto } from '../../../services/notes.service';
+import { NotesService, NoteDto, Note } from '../../../services/notes.service';
 import { PrimaryButton } from '../primary-button/primary-button';
 import { SecondaryButton } from '../secondary-button/secondary-button';
 
@@ -14,6 +14,7 @@ import { SecondaryButton } from '../secondary-button/secondary-button';
 export class AddNoteModal {
   private readonly notesService = inject(NotesService);
 
+  readonly note = input<Note | null>(null);
   readonly existingCategories = input<string[]>([]);
   readonly cerrar = output<void>();
   readonly guardado = output<void>();
@@ -25,6 +26,19 @@ export class AddNoteModal {
     contenido: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(2000)] }),
     categoria: new FormControl('', { nonNullable: true }),
   });
+
+  constructor() {
+    effect(() => {
+      const n = this.note();
+      if (n) {
+        this.form.patchValue({ titulo: n.titulo, contenido: n.contenido, categoria: n.categoria ?? '' });
+      } else {
+        this.form.reset();
+      }
+    });
+  }
+
+  get isEditing(): boolean { return !!this.note(); }
 
   get allCategories(): string[] {
     const extras = this.existingCategories().filter(
@@ -43,7 +57,12 @@ export class AddNoteModal {
       contenido: this.form.controls.contenido.value.trim(),
       categoria: this.form.controls.categoria.value.trim(),
     };
-    this.notesService.createNote(dto).subscribe({
+    const n = this.note();
+    const request$ = n
+      ? this.notesService.updateNote(n._id, dto)
+      : this.notesService.createNote(dto);
+
+    request$.subscribe({
       next: () => {
         this.guardado.emit();
         this.onCerrar();

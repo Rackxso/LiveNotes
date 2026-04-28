@@ -1,6 +1,12 @@
 <ul class="notes-grid" role="list">
   @for (note of filteredNotes(); track note._id) {
-    <li class="note-card">
+    <li class="note-card"
+        role="button"
+        tabindex="0"
+        (click)="editNote.emit(note)"
+        (keydown.enter)="editNote.emit(note)"
+        (keydown.space)="editNote.emit(note)"
+        [attr.aria-label]="'Edit note: ' + note.titulo">
       @if (note.categoria) {
         <span class="note-category" [class]="categoryClass(note.categoria)">{{ note.categoria }}</span>
       }

@@ -43,9 +43,7 @@
             Te hemos enviado un enlace de verificación a tu email.
             Activa tu cuenta y luego inicia sesión.
           </p>
-          <a routerLink="/login" class="btn-primary" style="display:block;text-align:center;text-decoration:none;margin-top:24px;">
-            Ir al login
-          </a>
+          <app-primary-button [config]="{ texto: 'Ir al login', url: 'login' }" />
         </div>
       } @else {
         <h1 class="form-title">Crea tu <em>cuenta</em></h1>
@@ -153,14 +151,10 @@
             <div class="form-error" role="alert">{{ error() }}</div>
           }
 
-          <button
-            type="submit"
-            class="btn-primary"
+          <app-primary-button
+            [config]="{ texto: loading() ? 'Creando cuenta…' : 'Crear cuenta', type: 'submit' }"
             [disabled]="loading()"
-            [attr.aria-busy]="loading()"
-          >
-            {{ loading() ? 'Creando cuenta…' : 'Crear cuenta' }}
-          </button>
+          />
 
         </form>
 

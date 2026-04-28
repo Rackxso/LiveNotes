@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, output } from '@angular/core';
-import { NotesService } from '../../services/notes.service';
+import { NotesService, Note } from '../../services/notes.service';
 
 @Component({
   selector: 'app-text-notes',
@@ -14,6 +14,7 @@ export class TextNotes implements OnInit {
   readonly searchQuery = input<string>('');
   readonly selectedCategory = input<string>('all');
   readonly addNote = output<void>();
+  readonly editNote = output<Note>();
 
   readonly notes = this.notesService.notes;
 
