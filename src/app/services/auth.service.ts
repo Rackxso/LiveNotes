@@ -12,9 +12,13 @@ export interface AuthUser {
 
 interface LoginResponse {
   user: AuthUser;
+  accessToken: string;
+  refreshToken: string;
 }
 
-const STORAGE_KEY = 'ln_user';
+const STORAGE_KEY   = 'ln_user';
+const TOKEN_KEY     = 'ln_token';
+const REFRESH_KEY   = 'ln_refresh';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -30,8 +34,24 @@ export class AuthService {
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.base}/login`, { email, password }).pipe(
-      tap(res => this.setUser(res.user))
+      tap(res => {
+        this.setUser(res.user);
+        localStorage.setItem(TOKEN_KEY, res.accessToken);
+        localStorage.setItem(REFRESH_KEY, res.refreshToken);
+      })
     );
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(TOKEN_KEY);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(REFRESH_KEY);
+  }
+
+  setToken(token: string): void {
+    localStorage.setItem(TOKEN_KEY, token);
   }
 
   register(name: string, email: string, password: string): Observable<unknown> {
@@ -39,7 +59,8 @@ export class AuthService {
   }
 
   logout(): Observable<unknown> {
-    return this.http.post(`${this.base}/logout`, {}).pipe(
+    const refreshToken = this.getRefreshToken();
+    return this.http.post(`${this.base}/logout`, { refreshToken }).pipe(
       tap(() => this.clearUser())
     );
   }
@@ -63,6 +84,8 @@ export class AuthService {
   clearUser(): void {
     this._user.set(null);
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_KEY);
     this.financeService.resetState();
   }
 
