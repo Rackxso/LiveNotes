@@ -1,0 +1,150 @@
+:host {
+  display: block !important;
+  height: 100dvh !important;
+  overflow: hidden;
+}
+
+.confirm-shell {
+  display: flex;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ── Panel izquierdo (reutiliza estilo del login) ── */
+.brand-panel {
+  width: 42%;
+  flex-shrink: 0;
+  background: linear-gradient(
+    160deg,
+    var(--text-color) 0%,
+    var(--accent-color) 45%,
+    var(--primary-color) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 52px 48px;
+  overflow: hidden;
+  position: relative;
+}
+
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 100% 100%, rgba(255,255,255,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.brand-logo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo-mark {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fuente-titulo);
+  font-size: 22px;
+  color: white;
+  font-weight: 500;
+}
+
+.brand-logo-name {
+  font-family: var(--fuente-titulo);
+  font-size: 22px;
+  color: white;
+  letter-spacing: -0.3px;
+}
+
+.brand-tagline {
+  font-family: var(--fuente-titulo);
+  font-size: 40px;
+  font-weight: 500;
+  color: white;
+  line-height: 1.15;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-tagline em {
+  font-style: italic;
+  opacity: 0.7;
+  display: block;
+}
+
+/* ── Panel derecho ── */
+.form-panel {
+  flex: 1;
+  background: var(--background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 64px;
+}
+
+.confirm-card {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.confirm-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.confirm-title {
+  font-family: var(--fuente-titulo);
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0 0 12px;
+  line-height: 1.2;
+}
+
+.confirm-title em {
+  font-style: italic;
+  color: var(--primary-color);
+}
+
+.confirm-message {
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  color: var(--accent-color);
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.confirm-btn {
+  display: inline-block;
+  padding: 13px 32px;
+  background: var(--primary-color);
+  color: white;
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.confirm-btn:hover {
+  opacity: 0.88;
+}
+
+@media (max-width: 768px) {
+  .brand-panel { display: none; }
+  .form-panel { padding: 40px 24px; }
+}

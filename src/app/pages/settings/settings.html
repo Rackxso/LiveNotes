@@ -173,10 +173,20 @@
               aria-label="Contraseña actual"
               required
             />
+            <input
+              type="password"
+              class="password-input"
+              placeholder="Nueva contraseña"
+              [value]="newPassword()"
+              (input)="newPassword.set($any($event.target).value)"
+              autocomplete="new-password"
+              aria-label="Nueva contraseña"
+              required
+            />
             <button
               type="submit"
               class="btn-action"
-              [disabled]="passwordLoading() || !oldPassword()"
+              [disabled]="passwordLoading() || !oldPassword() || !newPassword()"
             >
               {{ passwordLoading() ? 'Enviando…' : 'Enviar enlace' }}
             </button>

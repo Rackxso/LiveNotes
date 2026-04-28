@@ -15,6 +15,19 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/auth/register').then(m => m.Register)
     },
     {
+        path: 'forgot-password',
+        canActivate: [loggedInGuard],
+        loadComponent: () => import('./pages/auth/forgot-password').then(m => m.ForgotPassword)
+    },
+    {
+        path: 'reset-password/:token',
+        loadComponent: () => import('./pages/auth/reset-password').then(m => m.ResetPassword)
+    },
+    {
+        path: 'email-confirmado',
+        loadComponent: () => import('./pages/email-confirmado/email-confirmado').then(m => m.EmailConfirmado)
+    },
+    {
         path: '',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/home/home').then(m => m.Home)

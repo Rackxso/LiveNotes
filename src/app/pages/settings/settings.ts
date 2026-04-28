@@ -39,6 +39,7 @@ export class Settings implements OnInit {
   // Change password
   readonly showPasswordForm = signal(false);
   readonly oldPassword      = signal('');
+  readonly newPassword      = signal('');
   readonly passwordLoading  = signal(false);
   readonly passwordMsg      = signal<{ text: string; ok: boolean } | null>(null);
 
@@ -92,14 +93,18 @@ export class Settings implements OnInit {
 
   requestPasswordChange(): void {
     const email = this.auth.user()?.email;
-    if (!email || !this.oldPassword() || this.passwordLoading()) return;
+    if (!email || !this.oldPassword() || !this.newPassword() || this.passwordLoading()) return;
     this.passwordLoading.set(true);
     this.passwordMsg.set(null);
-    this.http.put(`${environment.apiUrl}/user/${email}/password`, { oldPassword: this.oldPassword() }).subscribe({
+    this.http.put(`${environment.apiUrl}/user/${email}/password`, {
+      oldPassword: this.oldPassword(),
+      newPassword: this.newPassword()
+    }).subscribe({
       next: () => {
         this.passwordLoading.set(false);
         this.passwordMsg.set({ text: 'Revisa tu email para confirmar el cambio.', ok: true });
         this.oldPassword.set('');
+        this.newPassword.set('');
         this.showPasswordForm.set(false);
       },
       error: (err) => {
