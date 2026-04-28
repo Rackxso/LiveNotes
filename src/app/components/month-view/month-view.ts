@@ -27,10 +27,10 @@ export class MonthView {
   readonly anyo = signal<number>(this.today.getFullYear());
   readonly mes = signal<number>(this.today.getMonth());
 
-  /** Días de la semana localizados (Dom/Sun, Lun/Mon, …) */
+  /** Días de la semana localizados (Lun/Mon, …, Dom/Sun) */
   readonly diasSemana = computed<string[]>(() => {
     const locale = this.i18n.locale();
-    const base = new Date(2006, 0, 1); // 1 ene 2006 era domingo
+    const base = new Date(2006, 0, 2); // 2 ene 2006 era lunes
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(base);
       d.setDate(base.getDate() + i);
@@ -52,7 +52,7 @@ export class MonthView {
   );
 
   readonly offsetInicio = computed(() =>
-    new Date(this.anyo(), this.mes(), 1).getDay()
+    (new Date(this.anyo(), this.mes(), 1).getDay() + 6) % 7
   );
 
   readonly celdasVacias = computed(() =>

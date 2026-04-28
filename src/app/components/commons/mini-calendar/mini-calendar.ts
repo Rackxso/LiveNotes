@@ -24,7 +24,7 @@ export class MiniCalendar {
 
   readonly diasSemana = computed<string[]>(() => {
     const locale = this.i18n.locale();
-    const base = new Date(2006, 0, 1);
+    const base = new Date(2006, 0, 2); // 2 ene 2006 era lunes
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(base);
       d.setDate(base.getDate() + i);
@@ -42,7 +42,7 @@ export class MiniCalendar {
   );
 
   readonly offsetInicio = computed(() =>
-    new Date(this.anyo(), this.mes(), 1).getDay()
+    (new Date(this.anyo(), this.mes(), 1).getDay() + 6) % 7
   );
 
   readonly celdasVacias = computed(() =>

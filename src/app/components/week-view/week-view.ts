@@ -17,10 +17,10 @@ export class WeekView {
   private readonly today = new Date();
   readonly horas = Array.from({ length: 24 }, (_, i) => i);
 
-  /** Días de la semana localizados (Dom/Sun, Lun/Mon, …) */
+  /** Días de la semana localizados (Lun/Mon, …, Dom/Sun) */
   readonly diasSemana = computed<string[]>(() => {
     const locale = this.i18n.locale();
-    const base = new Date(2006, 0, 1); // 1 ene 2006 era domingo
+    const base = new Date(2006, 0, 2); // 2 ene 2006 era lunes
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(base);
       d.setDate(base.getDate() + i);
@@ -36,11 +36,11 @@ export class WeekView {
   readonly diaSeleccionadoChange = output<Date>();
   readonly eventoSeleccionado    = output<Evento>();
 
-  // Inicio de la semana mostrada (domingo)
+  // Inicio de la semana mostrada (lunes)
   readonly inicioSemana = signal<Date>(
     (() => {
       const d = new Date();
-      d.setDate(d.getDate() - d.getDay());
+      d.setDate(d.getDate() - (d.getDay() + 6) % 7);
       d.setHours(0, 0, 0, 0);
       return d;
     })()
@@ -50,7 +50,7 @@ export class WeekView {
     effect(() => {
       const sel = this.diaSeleccionado();
       const d = new Date(sel);
-      d.setDate(d.getDate() - d.getDay());
+      d.setDate(d.getDate() - (d.getDay() + 6) % 7);
       d.setHours(0, 0, 0, 0);
       this.inicioSemana.set(d);
     });
@@ -159,7 +159,7 @@ export class WeekView {
 
   irAHoy(): void {
     const d = new Date();
-    d.setDate(d.getDate() - d.getDay());
+    d.setDate(d.getDate() - (d.getDay() + 6) % 7);
     d.setHours(0, 0, 0, 0);
     this.inicioSemana.set(d);
   }
