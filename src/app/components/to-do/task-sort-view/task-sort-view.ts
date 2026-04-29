@@ -20,6 +20,13 @@ const PILA_BADGE_CLASS: Record<number, string> = {
   3: 'badge-baja',
 };
 
+const IMP_CHIP_CLASS: Record<number, string> = {
+  0: 'chip-critica',
+  1: 'chip-alta',
+  2: 'chip-media',
+  3: 'chip-baja',
+};
+
 @Component({
   selector: 'app-task-sort-view',
   templateUrl: './task-sort-view.html',
@@ -34,49 +41,124 @@ export class TaskSortView implements OnInit {
   readonly cerrar = output<void>();
   readonly aplicado = output<string>();
 
+  readonly importanciaOrder = signal<TodoItem[]>([]);
+  readonly dificultadOrder = signal<TodoItem[]>([]);
   readonly localTasks = signal<TodoItem[]>([]);
   readonly previewOrder = signal<TodoItem[] | null>(null);
   readonly phase = signal<'setup' | 'preview'>('setup');
   readonly saving = signal(false);
   private lastAlgorithm = '';
 
-  readonly pila0 = computed(() => this.localTasks().filter(t => t.importancia === 0));
-  readonly pila1 = computed(() => this.localTasks().filter(t => t.importancia === 1));
-  readonly pila2 = computed(() => this.localTasks().filter(t => t.importancia === 2));
-  readonly pila3 = computed(() => this.localTasks().filter(t => t.importancia === 3));
+  readonly draggedImpId = signal<string | null>(null);
+  readonly draggedDifId = signal<string | null>(null);
 
-  readonly pilas = computed(() => {
-    const t = this.t();
-    return [
-      { label: t('todo.sort.critica'), tasks: this.pila0(), index: 0 },
-      { label: t('todo.sort.alta'),    tasks: this.pila1(), index: 1 },
-      { label: t('todo.sort.media'),   tasks: this.pila2(), index: 2 },
-      { label: t('todo.sort.baja'),    tasks: this.pila3(), index: 3 },
-    ];
+  // Maps task _id → computed group value based on current position
+  readonly impGroupMap = computed(() => {
+    const order = this.importanciaOrder();
+    const n = Math.max(order.length, 1);
+    return new Map(order.map((t, i) => [t._id, Math.min(3, Math.floor(i * 4 / n))]));
+  });
+
+  readonly difGroupMap = computed(() => {
+    const order = this.dificultadOrder();
+    const n = Math.max(order.length, 1);
+    return new Map(order.map((t, i) => [t._id, 5 - Math.min(4, Math.floor(i * 5 / n))]));
   });
 
   ngOnInit(): void {
-    this.localTasks.set(
-      this.tasks().map(t => ({
-        ...t,
-        dificultad: t.dificultad ?? 3,
-        importancia: t.importancia ?? 3,
-      }))
-    );
+    const tasks = this.tasks();
+    this.importanciaOrder.set([...tasks].sort((a, b) => (a.importancia ?? 3) - (b.importancia ?? 3)));
+    this.dificultadOrder.set([...tasks].sort((a, b) => (b.dificultad ?? 3) - (a.dificultad ?? 3)));
+    this.localTasks.set(tasks.map(t => ({ ...t, dificultad: t.dificultad ?? 3, importancia: t.importancia ?? 3 })));
   }
 
-  setImportancia(id: string, value: number): void {
-    this.localTasks.update(tasks =>
-      tasks.map(t => t._id === id ? { ...t, importancia: value } : t)
-    );
+  // ── Importancia column ────────────────────────────────────────────────────
+
+  moveImp(id: string, dir: -1 | 1): void {
+    this.importanciaOrder.update(list => {
+      const arr = [...list];
+      const idx = arr.findIndex(t => t._id === id);
+      const newIdx = idx + dir;
+      if (newIdx < 0 || newIdx >= arr.length) return list;
+      [arr[idx], arr[newIdx]] = [arr[newIdx], arr[idx]];
+      return arr;
+    });
   }
 
-  setDificultad(id: string, value: number): void {
-    const clamped = Math.max(1, Math.min(5, value));
-    this.localTasks.update(tasks =>
-      tasks.map(t => t._id === id ? { ...t, dificultad: clamped } : t)
-    );
+  onImpDragStart(event: DragEvent, id: string): void {
+    this.draggedImpId.set(id);
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
   }
+
+  onImpDragOver(event: DragEvent, targetId: string): void {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    const sourceId = this.draggedImpId();
+    if (!sourceId || sourceId === targetId) return;
+    this.importanciaOrder.update(list => {
+      const arr = [...list];
+      const fromIdx = arr.findIndex(t => t._id === sourceId);
+      const toIdx = arr.findIndex(t => t._id === targetId);
+      if (fromIdx === -1 || toIdx === -1) return list;
+      const [item] = arr.splice(fromIdx, 1);
+      arr.splice(toIdx, 0, item);
+      return arr;
+    });
+  }
+
+  onImpDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.draggedImpId.set(null);
+  }
+
+  onImpDragEnd(): void {
+    this.draggedImpId.set(null);
+  }
+
+  // ── Dificultad column ─────────────────────────────────────────────────────
+
+  moveDif(id: string, dir: -1 | 1): void {
+    this.dificultadOrder.update(list => {
+      const arr = [...list];
+      const idx = arr.findIndex(t => t._id === id);
+      const newIdx = idx + dir;
+      if (newIdx < 0 || newIdx >= arr.length) return list;
+      [arr[idx], arr[newIdx]] = [arr[newIdx], arr[idx]];
+      return arr;
+    });
+  }
+
+  onDifDragStart(event: DragEvent, id: string): void {
+    this.draggedDifId.set(id);
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+  }
+
+  onDifDragOver(event: DragEvent, targetId: string): void {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    const sourceId = this.draggedDifId();
+    if (!sourceId || sourceId === targetId) return;
+    this.dificultadOrder.update(list => {
+      const arr = [...list];
+      const fromIdx = arr.findIndex(t => t._id === sourceId);
+      const toIdx = arr.findIndex(t => t._id === targetId);
+      if (fromIdx === -1 || toIdx === -1) return list;
+      const [item] = arr.splice(fromIdx, 1);
+      arr.splice(toIdx, 0, item);
+      return arr;
+    });
+  }
+
+  onDifDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.draggedDifId.set(null);
+  }
+
+  onDifDragEnd(): void {
+    this.draggedDifId.set(null);
+  }
+
+  // ── Algorithms ────────────────────────────────────────────────────────────
 
   runJumpingCat(): void {
     this.lastAlgorithm = 'JumpingCat';
@@ -93,14 +175,35 @@ export class TaskSortView implements OnInit {
     this.runAlgorithm(pilaScore);
   }
 
+  // Converts column positions → importancia (0–3) and dificultad (1–5) by equal-sized groups,
+  // updates localTasks so confirmOrder can persist the values, and returns the enriched list.
+  private applyPositionsToValues(): TodoItem[] {
+    const impOrder = this.importanciaOrder();
+    const difOrder = this.dificultadOrder();
+    const nImp = Math.max(impOrder.length, 1);
+    const nDif = Math.max(difOrder.length, 1);
+
+    const impMap = new Map(impOrder.map((t, i) => [t._id, Math.min(3, Math.floor(i * 4 / nImp))]));
+    const difMap = new Map(difOrder.map((t, i) => [t._id, 5 - Math.min(4, Math.floor(i * 5 / nDif))]));
+
+    const result = this.tasks().map(t => ({
+      ...t,
+      importancia: impMap.get(t._id) ?? t.importancia ?? 3,
+      dificultad:  difMap.get(t._id) ?? t.dificultad  ?? 3,
+    }));
+    this.localTasks.set(result);
+    return result;
+  }
+
   private runAlgorithm(fn: (tasks: SortableTodo[]) => SortableTodo[]): void {
-    const sortable = this.localTasks().map(t => ({
-      _id: t._id,
+    const tasksWithValues = this.applyPositionsToValues();
+    const sortable = tasksWithValues.map(t => ({
+      _id:        t._id,
       importancia: t.importancia,
-      dificultad: t.dificultad,
+      dificultad:  t.dificultad,
     }));
     const sorted = fn(sortable);
-    const taskMap = new Map(this.localTasks().map(t => [t._id, t]));
+    const taskMap = new Map(tasksWithValues.map(t => [t._id, t]));
     const ordered = sorted.map(s => taskMap.get(s._id)).filter((t): t is TodoItem => !!t);
     this.previewOrder.set(ordered);
     this.phase.set('preview');
@@ -157,13 +260,11 @@ export class TaskSortView implements OnInit {
     return PILA_BADGE_CLASS[importancia] ?? 'badge-baja';
   }
 
-  readonly importanciaOptions = computed(() => {
-    const t = this.t();
-    return [
-      { value: 0, label: 'C', title: t('todo.sort.critica') },
-      { value: 1, label: 'A', title: t('todo.sort.alta') },
-      { value: 2, label: 'M', title: t('todo.sort.media') },
-      { value: 3, label: 'B', title: t('todo.sort.baja') },
-    ];
-  });
+  impChipClass(group: number): string {
+    return IMP_CHIP_CLASS[group] ?? 'chip-baja';
+  }
+
+  impGroupLabel(group: number): string {
+    return (['C', 'A', 'M', 'B'] as const)[group] ?? 'B';
+  }
 }

@@ -1,9 +1,14 @@
 <div class="nota">
     <div class="slot1">
         <h4>{{ evento().titulo }}</h4>
-        @if (evento().hora) {
-            <p class="hora">{{ evento().hora }}</p>
-        }
+        <div class="meta">
+            @if (mostrarFecha()) {
+                <p class="fecha">{{ evento().fecha | date:'EEE d':undefined:locale() }}</p>
+            }
+            @if (evento().hora) {
+                <p class="hora">{{ evento().hora }}</p>
+            }
+        </div>
     </div>
     @if (evento().descripcion) {
         <div class="descripcion">{{ evento().descripcion }}</div>

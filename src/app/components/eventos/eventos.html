@@ -15,14 +15,14 @@
 
     <p>{{ t()('eventos.thisWeek') }}</p>
     @for (ev of eventosSemana(); track ev.id) {
-      <app-event-card class="eventoItem" [evento]="ev" (clicked)="eventoSeleccionado.emit($event)" />
+      <app-event-card class="eventoItem" [evento]="ev" [mostrarFecha]="true" (clicked)="eventoSeleccionado.emit($event)" />
     } @empty {
       <p class="empty-msg">{{ t()('eventos.noWeek') }}</p>
     }
 
     <p>{{ t()('eventos.thisMonth') }}</p>
     @for (ev of eventosMes(); track ev.id) {
-      <app-event-card class="eventoItem" [evento]="ev" (clicked)="eventoSeleccionado.emit($event)" />
+      <app-event-card class="eventoItem" [evento]="ev" [mostrarFecha]="true" (clicked)="eventoSeleccionado.emit($event)" />
     } @empty {
       <p class="empty-msg">{{ t()('eventos.noMonth') }}</p>
     }
