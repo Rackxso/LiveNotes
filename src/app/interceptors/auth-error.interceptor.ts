@@ -23,11 +23,16 @@ function doRefresh(req: HttpRequest<unknown>, next: HttpHandlerFn, auth: AuthSer
       const retried = req.clone({ setHeaders: { Authorization: `Bearer ${res.accessToken}` } });
       return next(retried);
     }),
-    catchError(() => {
+    catchError((err) => {
       refreshing = false;
-      auth.clearUser();
-      router.navigate(['/login']);
-      return EMPTY;
+      // Solo desloguear si el refresh token es realmente inválido (401/403).
+      // Errores de red (status 0) o del servidor (5xx) no deben expulsar al usuario.
+      if (err?.status === 401 || err?.status === 403) {
+        auth.clearUser();
+        router.navigate(['/login']);
+        return EMPTY;
+      }
+      return throwError(() => err);
     })
   );
 }

@@ -152,6 +152,56 @@
     "en": "EN",
     "es": "ES"
   },
+  "settings": {
+    "pageTitle": "Configuración",
+    "subscription": {
+      "title": "Suscripción",
+      "planPremium": "Premium",
+      "planFree": "Gratuito",
+      "badgeActive": "Activo",
+      "descPremium": "Presupuestos ilimitados y todas las funciones activas.",
+      "descFree": "Hasta 3 presupuestos por mes. Hazte premium para desbloquear todo.",
+      "featureUnlimited": "Hábitos, presupuestos y objetivos ilimitados",
+      "featureCalendar": "Clases y grupos en el calendario",
+      "featureMore": "Y mucho más…",
+      "btnUpgrade": "Activar Premium",
+      "btnManage": "Gestionar suscripción",
+      "btnRedirecting": "Redirigiendo…",
+      "btnOpening": "Abriendo portal…",
+      "msgWelcomePremium": "¡Bienvenido a Premium! Tu cuenta ya está activada.",
+      "msgCancelled": "Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",
+      "devLabel": "Dev — simular cambio de plan",
+      "devChanging": "Cambiando…",
+      "devDowngrade": "Bajar a Gratuito",
+      "devUpgrade": "Subir a Premium"
+    },
+    "language": {
+      "title": "Idioma",
+      "rowTitle": "Idioma de la aplicación",
+      "rowDesc": "Selecciona el idioma en el que se muestra la app."
+    },
+    "appearance": {
+      "title": "Apariencia",
+      "rowTitle": "Tema",
+      "rowDesc": "Personaliza el aspecto de la app.",
+      "themeLight": "Claro",
+      "themeDark": "Oscuro",
+      "themeSystem": "Sistema"
+    },
+    "account": {
+      "title": "Cuenta",
+      "passwordTitle": "Contraseña",
+      "passwordDesc": "Recibirás un email para confirmar el cambio.",
+      "passwordChange": "Cambiar",
+      "passwordCurrentPlaceholder": "Contraseña actual",
+      "passwordNewPlaceholder": "Nueva contraseña",
+      "passwordSubmit": "Enviar enlace",
+      "passwordSending": "Enviando…",
+      "passwordConfirmMsg": "Revisa tu email para confirmar el cambio.",
+      "sessionTitle": "Sesión",
+      "logout": "Cerrar sesión"
+    }
+  },
   "todo": {
     "all": "Todas",
     "listNamePlaceholder": "Nombre de lista",

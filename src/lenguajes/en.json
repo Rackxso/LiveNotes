@@ -152,6 +152,56 @@
     "en": "EN",
     "es": "ES"
   },
+  "settings": {
+    "pageTitle": "Settings",
+    "subscription": {
+      "title": "Subscription",
+      "planPremium": "Premium",
+      "planFree": "Free",
+      "badgeActive": "Active",
+      "descPremium": "Unlimited budgets and all features active.",
+      "descFree": "Up to 3 budgets per month. Go premium to unlock everything.",
+      "featureUnlimited": "Unlimited habits, budgets and goals",
+      "featureCalendar": "Classes and groups in the calendar",
+      "featureMore": "And much more…",
+      "btnUpgrade": "Activate Premium",
+      "btnManage": "Manage subscription",
+      "btnRedirecting": "Redirecting…",
+      "btnOpening": "Opening portal…",
+      "msgWelcomePremium": "Welcome to Premium! Your account is now active.",
+      "msgCancelled": "Payment cancelled. You can try again whenever you want.",
+      "devLabel": "Dev — simulate plan change",
+      "devChanging": "Changing…",
+      "devDowngrade": "Downgrade to Free",
+      "devUpgrade": "Upgrade to Premium"
+    },
+    "language": {
+      "title": "Language",
+      "rowTitle": "App language",
+      "rowDesc": "Select the language in which the app is displayed."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "rowTitle": "Theme",
+      "rowDesc": "Customize the look of the app.",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeSystem": "System"
+    },
+    "account": {
+      "title": "Account",
+      "passwordTitle": "Password",
+      "passwordDesc": "You will receive an email to confirm the change.",
+      "passwordChange": "Change",
+      "passwordCurrentPlaceholder": "Current password",
+      "passwordNewPlaceholder": "New password",
+      "passwordSubmit": "Send link",
+      "passwordSending": "Sending…",
+      "passwordConfirmMsg": "Check your email to confirm the change.",
+      "sessionTitle": "Session",
+      "logout": "Log out"
+    }
+  },
   "todo": {
     "all": "All",
     "listNamePlaceholder": "List name",

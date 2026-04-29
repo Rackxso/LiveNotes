@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -19,15 +19,16 @@ export class Settings implements OnInit {
   readonly auth    = inject(AuthService);
   readonly theme   = inject(ThemeService);
   readonly i18n    = inject(I18nService);
+  readonly t       = this.i18n.t;
   private readonly premium = inject(PremiumService);
   private readonly router  = inject(Router);
   private readonly route   = inject(ActivatedRoute);
   private readonly http    = inject(HttpClient);
 
-  readonly themes: { value: Theme; label: string; icon: string }[] = [
-    { value: 'light',  label: 'Claro',   icon: 'fa-solid fa-sun' },
-    { value: 'dark',   label: 'Oscuro',  icon: 'fa-solid fa-moon' },
-    { value: 'system', label: 'Sistema', icon: 'fa-solid fa-display' },
+  readonly themes: { value: Theme; labelKey: string; icon: string }[] = [
+    { value: 'light',  labelKey: 'settings.appearance.themeLight',  icon: 'fa-solid fa-sun' },
+    { value: 'dark',   labelKey: 'settings.appearance.themeDark',   icon: 'fa-solid fa-moon' },
+    { value: 'system', labelKey: 'settings.appearance.themeSystem', icon: 'fa-solid fa-display' },
   ];
 
   // Stripe
@@ -48,10 +49,10 @@ export class Settings implements OnInit {
   ngOnInit(): void {
     const params = this.route.snapshot.queryParamMap;
     if (params.has('upgraded')) {
-      this.planMsg.set({ text: '¡Bienvenido a Premium! Tu cuenta ya está activada.', ok: true });
+      this.planMsg.set({ text: this.t()('settings.subscription.msgWelcomePremium'), ok: true });
       this.router.navigate([], { queryParams: {}, replaceUrl: true });
     } else if (params.has('cancelled')) {
-      this.planMsg.set({ text: 'Pago cancelado. Puedes intentarlo de nuevo cuando quieras.', ok: false });
+      this.planMsg.set({ text: this.t()('settings.subscription.msgCancelled'), ok: false });
       this.router.navigate([], { queryParams: {}, replaceUrl: true });
     }
   }
@@ -102,7 +103,7 @@ export class Settings implements OnInit {
     }).subscribe({
       next: () => {
         this.passwordLoading.set(false);
-        this.passwordMsg.set({ text: 'Revisa tu email para confirmar el cambio.', ok: true });
+        this.passwordMsg.set({ text: this.t()('settings.account.passwordConfirmMsg'), ok: true });
         this.oldPassword.set('');
         this.newPassword.set('');
         this.showPasswordForm.set(false);

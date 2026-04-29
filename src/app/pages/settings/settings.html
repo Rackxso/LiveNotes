@@ -1,13 +1,13 @@
 <div class="settings-page">
   <header class="settings-header">
-    <h1 class="settings-title">Configuración</h1>
+    <h1 class="settings-title">{{ t()('settings.pageTitle') }}</h1>
   </header>
 
   <div class="settings-content">
 
     <!-- ── Suscripción ────────────────────────────────────────────────── -->
     <section aria-labelledby="plan-heading">
-      <h2 id="plan-heading" class="section-label">Suscripción</h2>
+      <h2 id="plan-heading" class="section-label">{{ t()('settings.subscription.title') }}</h2>
 
       <div class="plan-hero" [class.is-premium]="auth.isPremium()">
         <div class="plan-hero-top">
@@ -16,30 +16,30 @@
           </div>
           <div class="plan-hero-text">
             <p class="plan-hero-name">
-              {{ auth.isPremium() ? 'Premium' : 'Gratuito' }}
+              {{ auth.isPremium() ? t()('settings.subscription.planPremium') : t()('settings.subscription.planFree') }}
               @if (auth.isPremium()) {
-                <span class="plan-badge" aria-label="Plan activo">Activo</span>
+                <span class="plan-badge" [attr.aria-label]="t()('settings.subscription.badgeActive')">{{ t()('settings.subscription.badgeActive') }}</span>
               }
             </p>
             <p class="plan-hero-desc">
               @if (auth.isPremium()) {
-                Presupuestos ilimitados y todas las funciones activas.
+                {{ t()('settings.subscription.descPremium') }}
               } @else {
-                Hasta 3 presupuestos por mes. Hazte premium para desbloquear todo.
+                {{ t()('settings.subscription.descFree') }}
               }
             </p>
           </div>
         </div>
 
-        <ul class="plan-features" aria-label="Funciones del plan">
+        <ul class="plan-features" [attr.aria-label]="t()('settings.subscription.title')">
           @if (auth.isPremium()) {
-            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Hábitos, presupuestos y objetivos ilimitados</li>
-            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Clases y grupos en el calendario</li>
-            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Y mucho más…</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> {{ t()('settings.subscription.featureUnlimited') }}</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> {{ t()('settings.subscription.featureCalendar') }}</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> {{ t()('settings.subscription.featureMore') }}</li>
           } @else {
-            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> Hábitos, presupuestos y objetivos ilimitados</li>
-            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> Clases y grupos en el calendario</li>
-            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> Y mucho más…</li>
+            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> {{ t()('settings.subscription.featureUnlimited') }}</li>
+            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> {{ t()('settings.subscription.featureCalendar') }}</li>
+            <li><i class="fa-solid fa-lock" aria-hidden="true"></i> {{ t()('settings.subscription.featureMore') }}</li>
           }
         </ul>
 
@@ -49,10 +49,10 @@
             class="btn-upgrade"
             (click)="upgrade()"
             [disabled]="upgradeLoading()"
-            aria-label="Activar plan Premium"
+            [attr.aria-label]="t()('settings.subscription.btnUpgrade')"
           >
             <i class="fa-solid fa-crown" aria-hidden="true"></i>
-            {{ upgradeLoading() ? 'Redirigiendo…' : 'Activar Premium' }}
+            {{ upgradeLoading() ? t()('settings.subscription.btnRedirecting') : t()('settings.subscription.btnUpgrade') }}
           </button>
         } @else {
           <button
@@ -60,10 +60,10 @@
             class="btn-upgrade"
             (click)="manageSubscription()"
             [disabled]="portalLoading()"
-            aria-label="Gestionar suscripción"
+            [attr.aria-label]="t()('settings.subscription.btnManage')"
           >
             <i class="fa-solid fa-gear" aria-hidden="true"></i>
-            {{ portalLoading() ? 'Abriendo portal…' : 'Gestionar suscripción' }}
+            {{ portalLoading() ? t()('settings.subscription.btnOpening') : t()('settings.subscription.btnManage') }}
           </button>
         }
 
@@ -75,14 +75,14 @@
 
         @if (isDev) {
           <div class="simulate-row">
-            <span class="simulate-label">Dev — simular cambio de plan</span>
+            <span class="simulate-label">{{ t()('settings.subscription.devLabel') }}</span>
             <button
               type="button"
               class="btn-simulate"
               (click)="simulateToggle()"
               [disabled]="simulateLoading()"
             >
-              {{ simulateLoading() ? 'Cambiando…' : (auth.isPremium() ? 'Bajar a Gratuito' : 'Subir a Premium') }}
+              {{ simulateLoading() ? t()('settings.subscription.devChanging') : (auth.isPremium() ? t()('settings.subscription.devDowngrade') : t()('settings.subscription.devUpgrade')) }}
             </button>
           </div>
         }
@@ -91,18 +91,18 @@
 
     <!-- ── Idioma ───────────────────────────────────────────────────── -->
     <section aria-labelledby="lang-heading">
-      <h2 id="lang-heading" class="section-label">Idioma</h2>
+      <h2 id="lang-heading" class="section-label">{{ t()('settings.language.title') }}</h2>
       <div class="settings-card">
         <div class="settings-row">
           <div class="row-info">
-            <p class="row-title">Idioma de la aplicación</p>
-            <p class="row-desc">Selecciona el idioma en el que se muestra la app.</p>
+            <p class="row-title">{{ t()('settings.language.rowTitle') }}</p>
+            <p class="row-desc">{{ t()('settings.language.rowDesc') }}</p>
           </div>
           <select
             class="lang-select"
             [value]="i18n.lang()"
             (change)="i18n.setLang($any($event.target).value)"
-            aria-label="Idioma"
+            [attr.aria-label]="t()('settings.language.title')"
           >
             <option value="es">Español</option>
             <option value="en">English</option>
@@ -113,25 +113,25 @@
 
     <!-- ── Apariencia ────────────────────────────────────────────────── -->
     <section aria-labelledby="theme-heading">
-      <h2 id="theme-heading" class="section-label">Apariencia</h2>
+      <h2 id="theme-heading" class="section-label">{{ t()('settings.appearance.title') }}</h2>
 
       <div class="settings-card">
         <div class="settings-row">
           <div class="row-info">
-            <p class="row-title">Tema</p>
-            <p class="row-desc">Personaliza el aspecto de la app.</p>
+            <p class="row-title">{{ t()('settings.appearance.rowTitle') }}</p>
+            <p class="row-desc">{{ t()('settings.appearance.rowDesc') }}</p>
           </div>
-          <div class="theme-pills" role="group" aria-label="Seleccionar tema">
-            @for (t of themes; track t.value) {
+          <div class="theme-pills" role="group" [attr.aria-label]="t()('settings.appearance.rowTitle')">
+            @for (th of themes; track th.value) {
               <button
                 type="button"
                 class="theme-pill"
-                [class.active]="theme.theme() === t.value"
-                (click)="theme.set(t.value)"
-                [attr.aria-pressed]="theme.theme() === t.value"
+                [class.active]="theme.theme() === th.value"
+                (click)="theme.set(th.value)"
+                [attr.aria-pressed]="theme.theme() === th.value"
               >
-                <i [class]="t.icon" aria-hidden="true"></i>
-                {{ t.label }}
+                <i [class]="th.icon" aria-hidden="true"></i>
+                {{ t()(th.labelKey) }}
               </button>
             }
           </div>
@@ -141,15 +141,15 @@
 
     <!-- ── Cuenta ─────────────────────────────────────────────────────── -->
     <section aria-labelledby="account-heading">
-      <h2 id="account-heading" class="section-label">Cuenta</h2>
+      <h2 id="account-heading" class="section-label">{{ t()('settings.account.title') }}</h2>
 
       <div class="settings-card">
 
         <!-- Cambiar contraseña -->
         <div class="settings-row">
           <div class="row-info">
-            <p class="row-title">Contraseña</p>
-            <p class="row-desc">Recibirás un email para confirmar el cambio.</p>
+            <p class="row-title">{{ t()('settings.account.passwordTitle') }}</p>
+            <p class="row-desc">{{ t()('settings.account.passwordDesc') }}</p>
           </div>
           <button
             type="button"
@@ -157,7 +157,7 @@
             (click)="showPasswordForm.set(!showPasswordForm())"
             [attr.aria-expanded]="showPasswordForm()"
           >
-            Cambiar
+            {{ t()('settings.account.passwordChange') }}
           </button>
         </div>
 
@@ -166,21 +166,21 @@
             <input
               type="password"
               class="password-input"
-              placeholder="Contraseña actual"
+              [placeholder]="t()('settings.account.passwordCurrentPlaceholder')"
               [value]="oldPassword()"
               (input)="oldPassword.set($any($event.target).value)"
               autocomplete="current-password"
-              aria-label="Contraseña actual"
+              [attr.aria-label]="t()('settings.account.passwordCurrentPlaceholder')"
               required
             />
             <input
               type="password"
               class="password-input"
-              placeholder="Nueva contraseña"
+              [placeholder]="t()('settings.account.passwordNewPlaceholder')"
               [value]="newPassword()"
               (input)="newPassword.set($any($event.target).value)"
               autocomplete="new-password"
-              aria-label="Nueva contraseña"
+              [attr.aria-label]="t()('settings.account.passwordNewPlaceholder')"
               required
             />
             <button
@@ -188,7 +188,7 @@
               class="btn-action"
               [disabled]="passwordLoading() || !oldPassword() || !newPassword()"
             >
-              {{ passwordLoading() ? 'Enviando…' : 'Enviar enlace' }}
+              {{ passwordLoading() ? t()('settings.account.passwordSending') : t()('settings.account.passwordSubmit') }}
             </button>
           </form>
         }
@@ -204,11 +204,11 @@
         <!-- Cerrar sesión -->
         <div class="settings-row">
           <div class="row-info">
-            <p class="row-title">Sesión</p>
+            <p class="row-title">{{ t()('settings.account.sessionTitle') }}</p>
             <p class="row-desc">{{ auth.user()?.email }}</p>
           </div>
           <button type="button" class="btn-danger" (click)="logout()">
-            Cerrar sesión
+            {{ t()('settings.account.logout') }}
           </button>
         </div>
 
