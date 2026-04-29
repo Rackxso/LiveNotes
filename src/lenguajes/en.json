@@ -152,6 +152,24 @@
     "en": "EN",
     "es": "ES"
   },
+  "home": {
+    "greeting": "Hello,",
+    "youHave": "You have",
+    "today": "today",
+    "statsSaved": "Saved",
+    "statsNoData": "No data",
+    "weekNav": "Weekly navigation",
+    "weekDays": "Days of the week",
+    "noEventsDay": "No events today",
+    "upcomingEvents": "Upcoming events",
+    "noUpcomingEvents": "No upcoming events",
+    "viewEvent": "View event: ",
+    "noRecentTransactions": "No recent transactions",
+    "viewAllMovements": "View all movements",
+    "notesAndTasks": "Notes & Tasks",
+    "pending": "Pending",
+    "seeAll": "See all →"
+  },
   "settings": {
     "pageTitle": "Settings",
     "subscription": {

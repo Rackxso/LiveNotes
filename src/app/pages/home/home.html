@@ -1,30 +1,30 @@
 <div class="cuadricula">
 
   <!-- Q1: Saludo ─────────────────────────────────────── -->
-  <section class="quadrant q1" aria-label="Saludo">
+  <section class="quadrant q1" [attr.aria-label]="t()('home.greeting')">
     <p class="greeting-date">{{ fechaHoy() }}</p>
-    <h1 class="greeting-name">Hola, <em>{{ userName() }}</em> 👋</h1>
+    <h1 class="greeting-name">{{ t()('home.greeting') }} <em>{{ userName() }}</em> 👋</h1>
     <p class="greeting-sub">
-      Tienes {{ eventosHoy().length }} evento{{ eventosHoy().length === 1 ? '' : 's' }} hoy
+      {{ t()('home.youHave') }} {{ eventosHoy().length }} {{ eventosHoy().length === 1 ? t()('eventos.event_one') : t()('eventos.event_other') }} {{ t()('home.today') }}
     </p>
 
     <div class="quick-stats">
       @if (currentMonthStats(); as stats) {
         <div class="stat-pill">
-          <span class="stat-label">Ingresos</span>
+          <span class="stat-label">{{ t()('finance.income') }}</span>
           <span class="stat-val green">€{{ stats.income | number:'1.0-0' }}</span>
         </div>
         <div class="stat-pill">
-          <span class="stat-label">Gastos</span>
+          <span class="stat-label">{{ t()('finance.expenses') }}</span>
           <span class="stat-val red">€{{ stats.expenses | number:'1.0-0' }}</span>
         </div>
         <div class="stat-pill">
-          <span class="stat-label">Ahorrado</span>
+          <span class="stat-label">{{ t()('home.statsSaved') }}</span>
           <span class="stat-val">€{{ stats.saved | number:'1.0-0' }}</span>
         </div>
       } @else {
         <div class="stat-pill">
-          <span class="stat-label">Sin datos</span>
+          <span class="stat-label">{{ t()('home.statsNoData') }}</span>
           <span class="stat-val">—</span>
         </div>
       }
@@ -32,22 +32,22 @@
   </section>
 
   <!-- Q2: Calendario ──────────────────────────────────── -->
-  <section class="quadrant q2" aria-label="Calendario">
+  <section class="quadrant q2" [attr.aria-label]="t()('calendar.pageTitle')">
     <div class="q-header">
-      <h2 class="q-title">Calendario</h2>
-      <div class="week-nav" role="group" aria-label="Navegación semanal">
-        <button class="week-nav-btn" (click)="irSemanaAnterior()" aria-label="Semana anterior">
+      <h2 class="q-title">{{ t()('calendar.pageTitle') }}</h2>
+      <div class="week-nav" role="group" [attr.aria-label]="t()('home.weekNav')">
+        <button class="week-nav-btn" (click)="irSemanaAnterior()" [attr.aria-label]="t()('week.prevWeek')">
           <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
         </button>
         <span class="week-label">{{ semanaLabel() }}</span>
-        <button class="week-nav-btn" (click)="irSemanaSiguiente()" aria-label="Semana siguiente">
+        <button class="week-nav-btn" (click)="irSemanaSiguiente()" [attr.aria-label]="t()('week.nextWeek')">
           <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
         </button>
       </div>
-      <a routerLink="/calendar/month" class="q-link">Ver todo →</a>
+      <a routerLink="/calendar/month" class="q-link">{{ t()('home.seeAll') }}</a>
     </div>
 
-    <div class="week-strip" role="group" aria-label="Días de la semana">
+    <div class="week-strip" role="group" [attr.aria-label]="t()('home.weekDays')">
       @for (dia of diasSemana(); track dia.fecha.getTime()) {
         <button
           class="ws-day"
@@ -69,22 +69,22 @@
 
     <div class="day-events" aria-live="polite">
       @for (ev of eventosDiaSeleccionado(); track ev.id) {
-        <button class="day-ev-row" (click)="abrirEventoModal(ev)" [attr.aria-label]="'Ver evento: ' + ev.titulo">
+        <button class="day-ev-row" (click)="abrirEventoModal(ev)" [attr.aria-label]="t()('home.viewEvent') + ev.titulo">
           <span class="day-ev-time">{{ ev.hora || '—' }}</span>
           <div class="day-ev-bar" aria-hidden="true"></div>
           <span class="day-ev-title">{{ ev.titulo }}</span>
         </button>
       }
       @empty {
-        <p class="empty-msg">No hay eventos este día</p>
+        <p class="empty-msg">{{ t()('home.noEventsDay') }}</p>
       }
     </div>
 
     <div class="upcoming-divider" aria-hidden="true"></div>
     <div class="upcoming-events">
-      <p class="upcoming-label">Próximos eventos</p>
+      <p class="upcoming-label">{{ t()('home.upcomingEvents') }}</p>
       @for (ev of proximosEventos(); track ev.id) {
-        <button class="upcoming-row" (click)="abrirEventoModal(ev)" [attr.aria-label]="'Ver evento: ' + ev.titulo">
+        <button class="upcoming-row" (click)="abrirEventoModal(ev)" [attr.aria-label]="t()('home.viewEvent') + ev.titulo">
           <span class="upcoming-date">{{ formatUpcomingDate(ev.fecha) }}</span>
           @if (ev.hora) {
             <span class="upcoming-time">{{ ev.hora }}</span>
@@ -93,26 +93,26 @@
         </button>
       }
       @empty {
-        <p class="empty-msg">Sin próximos eventos</p>
+        <p class="empty-msg">{{ t()('home.noUpcomingEvents') }}</p>
       }
     </div>
   </section>
 
   <!-- Q3: Finanzas ────────────────────────────────────── -->
-  <section class="quadrant q3" aria-label="Finanzas">
+  <section class="quadrant q3" [attr.aria-label]="t()('finance.pageTitle')">
     <div class="q-header">
-      <h2 class="q-title">Finanzas</h2>
-      <a routerLink="/finance" class="q-link">Ver todo →</a>
+      <h2 class="q-title">{{ t()('finance.pageTitle') }}</h2>
+      <a routerLink="/finance" class="q-link">{{ t()('home.seeAll') }}</a>
     </div>
 
     @if (currentMonthStats(); as stats) {
       <div class="finance-summary">
         <div class="fin-card green">
-          <span class="fin-label">Ingresos</span>
+          <span class="fin-label">{{ t()('finance.income') }}</span>
           <span class="fin-val">€{{ stats.income | number:'1.2-2' }}</span>
         </div>
         <div class="fin-card red">
-          <span class="fin-label">Gastos</span>
+          <span class="fin-label">{{ t()('finance.expenses') }}</span>
           <span class="fin-val">€{{ stats.expenses | number:'1.2-2' }}</span>
         </div>
       </div>
@@ -131,11 +131,11 @@
         </div>
       }
       @empty {
-        <p class="empty-msg">Sin transacciones recientes</p>
+        <p class="empty-msg">{{ t()('home.noRecentTransactions') }}</p>
       }
     </div>
     @if (hasMoreTransactions()) {
-      <a routerLink="/finance" class="tx-more" aria-label="Ver todos los movimientos">
+      <a routerLink="/finance" class="tx-more" [attr.aria-label]="t()('home.viewAllMovements')">
         <span class="tx-more-dot"></span>
         <span class="tx-more-dot"></span>
         <span class="tx-more-dot"></span>
@@ -144,19 +144,19 @@
   </section>
 
   <!-- Q4: Notas & Tareas ──────────────────────────────── -->
-  <section class="quadrant q4" aria-label="Notas y tareas">
+  <section class="quadrant q4" [attr.aria-label]="t()('home.notesAndTasks')">
     <div class="q-header">
-      <h2 class="q-title">Notas &amp; Tareas</h2>
-      <a routerLink="/notes" class="q-link">Ver todo →</a>
+      <h2 class="q-title">{{ t()('home.notesAndTasks') }}</h2>
+      <a routerLink="/notes" class="q-link">{{ t()('home.seeAll') }}</a>
     </div>
 
     <div class="q4-cols">
       <div class="q4-col">
-        <h3 class="q4-col-title">Notas</h3>
+        <h3 class="q4-col-title">{{ t()('notes.pageTitle') }}</h3>
         <app-text-notes (addNote)="openAddNoteModal()" (editNote)="openEditNoteModal($event)" />
       </div>
       <div class="q4-col">
-        <h3 class="q4-col-title">Pendientes</h3>
+        <h3 class="q4-col-title">{{ t()('home.pending') }}</h3>
         <app-to-do />
       </div>
     </div>
