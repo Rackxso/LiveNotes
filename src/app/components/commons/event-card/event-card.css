@@ -30,6 +30,22 @@
             color: var(--text-color);
         }
 
+        .meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .fecha {
+            margin: 0;
+            font-family: var(--fuente-texto);
+            font-size: 11px;
+            color: var(--text-subcolor);
+            white-space: nowrap;
+            text-transform: capitalize;
+        }
+
         .hora {
             margin: 0;
             font-family: var(--fuente-texto);

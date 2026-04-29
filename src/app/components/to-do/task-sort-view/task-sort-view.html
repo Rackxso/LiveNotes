@@ -16,49 +16,92 @@
     @if (phase() === 'setup') {
       <p class="sort-desc">{{ t()('todo.sort.setupDesc') }}</p>
 
-      <div class="sort-body">
-        <table class="sort-table" [attr.aria-label]="t()('todo.sort.title')">
-          <thead>
-            <tr>
-              <th scope="col" class="col-task">{{ t()('todo.sort.colTask') }}</th>
-              <th scope="col" class="col-imp">{{ t()('todo.sort.colImportance') }}</th>
-              <th scope="col" class="col-dif">{{ t()('todo.sort.difficulty') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (task of localTasks(); track task._id) {
-              <tr class="sort-row">
-                <td class="sort-task-text">{{ task.texto }}</td>
-                <td class="sort-imp-cell">
-                  <div class="importancia-chips" role="group" [attr.aria-label]="t()('todo.sort.importanceOf') + ' ' + task.texto">
-                    @for (opt of importanciaOptions(); track opt.value) {
-                      <button
-                        class="imp-chip"
-                        [class.active]="task.importancia === opt.value"
-                        [attr.aria-pressed]="task.importancia === opt.value"
-                        [attr.aria-label]="opt.title"
-                        [title]="opt.title"
-                        (click)="setImportancia(task._id, opt.value)">
-                        {{ opt.label }}
-                      </button>
-                    }
-                  </div>
-                </td>
-                <td class="sort-dif-cell">
-                  <input
-                    [id]="'dif-' + task._id"
-                    class="dif-input"
-                    type="number"
-                    min="1"
-                    max="5"
-                    [value]="task.dificultad"
-                    (change)="setDificultad(task._id, +$any($event.target).value)"
-                    [attr.aria-label]="t()('todo.sort.difficultyOf') + ' ' + task.texto + ' ' + t()('todo.sort.difficultyRange')" />
-                </td>
-              </tr>
+      <div class="sort-body sort-columns-body">
+
+        <!-- ── Importancia column ── -->
+        <div class="sort-column">
+          <div class="sort-col-header">
+            <span class="col-title">{{ t()('todo.sort.colImportance') }}</span>
+            <span class="col-hint">1 = {{ t()('todo.sort.critica') }}</span>
+          </div>
+          <div class="sort-col-list"
+               (dragover)="$event.preventDefault()"
+               (drop)="onImpDrop($event)">
+            @for (task of importanciaOrder(); track task._id; let i = $index; let first = $first; let last = $last) {
+              <div class="sort-card"
+                   [class.is-dragging]="draggedImpId() === task._id"
+                   draggable="true"
+                   (dragstart)="onImpDragStart($event, task._id)"
+                   (dragover)="onImpDragOver($event, task._id)"
+                   (dragend)="onImpDragEnd()">
+                <i class="fa-solid fa-grip-vertical drag-handle" aria-hidden="true"></i>
+                <span class="card-rank">{{ i + 1 }}</span>
+                <span class="card-text" [title]="task.texto">{{ task.texto }}</span>
+                <span class="card-group-badge" [class]="impChipClass(impGroupMap().get(task._id) ?? 3)">
+                  {{ impGroupLabel(impGroupMap().get(task._id) ?? 3) }}
+                </span>
+                <div class="card-arrows">
+                  <button class="arrow-btn"
+                          [disabled]="first"
+                          (click)="moveImp(task._id, -1)"
+                          aria-label="Subir">
+                    <i class="fa-solid fa-chevron-up"></i>
+                  </button>
+                  <button class="arrow-btn"
+                          [disabled]="last"
+                          (click)="moveImp(task._id, 1)"
+                          aria-label="Bajar">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </button>
+                </div>
+              </div>
             }
-          </tbody>
-        </table>
+          </div>
+        </div>
+
+        <div class="sort-col-divider" aria-hidden="true"></div>
+
+        <!-- ── Dificultad column ── -->
+        <div class="sort-column">
+          <div class="sort-col-header">
+            <span class="col-title">{{ t()('todo.sort.difficulty') }}</span>
+            <span class="col-hint">1 = {{ t()('todo.sort.masDificil') ?? 'más difícil' }}</span>
+          </div>
+          <div class="sort-col-list"
+               (dragover)="$event.preventDefault()"
+               (drop)="onDifDrop($event)">
+            @for (task of dificultadOrder(); track task._id; let i = $index; let first = $first; let last = $last) {
+              <div class="sort-card"
+                   [class.is-dragging]="draggedDifId() === task._id"
+                   draggable="true"
+                   (dragstart)="onDifDragStart($event, task._id)"
+                   (dragover)="onDifDragOver($event, task._id)"
+                   (dragend)="onDifDragEnd()">
+                <i class="fa-solid fa-grip-vertical drag-handle" aria-hidden="true"></i>
+                <span class="card-rank">{{ i + 1 }}</span>
+                <span class="card-text" [title]="task.texto">{{ task.texto }}</span>
+                <span class="card-group-badge chip-dif">
+                  {{ difGroupMap().get(task._id) ?? 3 }}
+                </span>
+                <div class="card-arrows">
+                  <button class="arrow-btn"
+                          [disabled]="first"
+                          (click)="moveDif(task._id, -1)"
+                          aria-label="Subir">
+                    <i class="fa-solid fa-chevron-up"></i>
+                  </button>
+                  <button class="arrow-btn"
+                          [disabled]="last"
+                          (click)="moveDif(task._id, 1)"
+                          aria-label="Bajar">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
       </div>
 
       <div class="sort-footer">
