@@ -37,9 +37,6 @@
                 <i class="fa-solid fa-grip-vertical drag-handle" aria-hidden="true"></i>
                 <span class="card-rank">{{ i + 1 }}</span>
                 <span class="card-text" [title]="task.texto">{{ task.texto }}</span>
-                <span class="card-group-badge" [class]="impChipClass(impGroupMap().get(task._id) ?? 3)">
-                  {{ impGroupLabel(impGroupMap().get(task._id) ?? 3) }}
-                </span>
                 <div class="card-arrows">
                   <button class="arrow-btn"
                           [disabled]="first"
@@ -80,9 +77,6 @@
                 <i class="fa-solid fa-grip-vertical drag-handle" aria-hidden="true"></i>
                 <span class="card-rank">{{ i + 1 }}</span>
                 <span class="card-text" [title]="task.texto">{{ task.texto }}</span>
-                <span class="card-group-badge chip-dif">
-                  {{ difGroupMap().get(task._id) ?? 3 }}
-                </span>
                 <div class="card-arrows">
                   <button class="arrow-btn"
                           [disabled]="first"
