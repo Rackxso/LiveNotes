@@ -99,13 +99,14 @@ export class Home {
   });
 
   readonly proximosEventos = computed(() => {
-    const mananaInicio = new Date(
-      this._today.getFullYear(),
-      this._today.getMonth(),
-      this._today.getDate() + 1
+    const sel = this.diaSeleccionado();
+    const siguienteDia = new Date(
+      sel.getFullYear(),
+      sel.getMonth(),
+      sel.getDate() + 1
     );
     return this.eventos()
-      .filter(e => e.fecha >= mananaInicio)
+      .filter(e => e.fecha >= siguienteDia)
       .sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
       .slice(0, 4);
   });
