@@ -107,6 +107,7 @@ export class Settings implements OnInit {
         this.oldPassword.set('');
         this.newPassword.set('');
         this.showPasswordForm.set(false);
+        this.auth.clearPasswordUpdateFlag();
       },
       error: (err) => {
         this.passwordLoading.set(false);

@@ -14,11 +14,13 @@ interface LoginResponse {
   user: AuthUser;
   accessToken: string;
   refreshToken: string;
+  requiresPasswordUpdate?: boolean;
 }
 
-const STORAGE_KEY   = 'ln_user';
-const TOKEN_KEY     = 'ln_token';
-const REFRESH_KEY   = 'ln_refresh';
+const STORAGE_KEY      = 'ln_user';
+const TOKEN_KEY        = 'ln_token';
+const REFRESH_KEY      = 'ln_refresh';
+const PWD_UPDATE_KEY   = 'ln_pwd_update';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -32,12 +34,19 @@ export class AuthService {
   readonly isPremium = computed(() => (this._user()?.permisos ?? 1) >= 2);
   readonly isAdmin   = computed(() => this._user()?.permisos === 13579);
 
+  private readonly _requiresPasswordUpdate = signal<boolean>(localStorage.getItem(PWD_UPDATE_KEY) === '1');
+  readonly requiresPasswordUpdate = this._requiresPasswordUpdate.asReadonly();
+
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.base}/login`, { email, password }).pipe(
       tap(res => {
         this.setUser(res.user);
         localStorage.setItem(TOKEN_KEY, res.accessToken);
         localStorage.setItem(REFRESH_KEY, res.refreshToken);
+        const needsUpdate = res.requiresPasswordUpdate ?? false;
+        this._requiresPasswordUpdate.set(needsUpdate);
+        if (needsUpdate) localStorage.setItem(PWD_UPDATE_KEY, '1');
+        else localStorage.removeItem(PWD_UPDATE_KEY);
       })
     );
   }
@@ -81,11 +90,18 @@ export class AuthService {
     if (user) this._user.set({ ...user, permisos });
   }
 
+  clearPasswordUpdateFlag(): void {
+    this._requiresPasswordUpdate.set(false);
+    localStorage.removeItem(PWD_UPDATE_KEY);
+  }
+
   clearUser(): void {
     this._user.set(null);
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_KEY);
+    localStorage.removeItem(PWD_UPDATE_KEY);
+    this._requiresPasswordUpdate.set(false);
     this.financeService.resetState();
   }
 

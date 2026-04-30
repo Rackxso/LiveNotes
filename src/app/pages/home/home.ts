@@ -30,8 +30,9 @@ export class Home {
 
   readonly diaSeleccionado = signal<Date>(new Date());
 
-  readonly userName = computed(() => this.auth.user()?.name ?? '');
-  readonly eventos  = this.eventosService.eventos;
+  readonly userName                = computed(() => this.auth.user()?.name ?? '');
+  readonly requiresPasswordUpdate  = this.auth.requiresPasswordUpdate;
+  readonly eventos                 = this.eventosService.eventos;
 
   constructor() {
     this.eventosService.loadEventos();

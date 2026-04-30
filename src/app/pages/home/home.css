@@ -57,6 +57,29 @@
   &:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; border-radius: 2px; }
 }
 
+/* ── PASSWORD WARNING BANNER ─────────────────────────── */
+.pwd-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  background: color-mix(in srgb, #f59e0b 15%, transparent);
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  color: #b45309;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: background 0.15s;
+
+  &:hover { background: color-mix(in srgb, #f59e0b 25%, transparent); }
+  &:focus-visible { outline: 2px solid #f59e0b; outline-offset: 2px; border-radius: 8px; }
+
+  i { font-size: 14px; flex-shrink: 0; }
+}
+
 /* ── Q1: GREETING ────────────────────────────────────── */
 .greeting-date {
   font-size: 11px;
