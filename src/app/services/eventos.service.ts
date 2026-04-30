@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { retry, tap } from 'rxjs';
 import { Evento } from '../model/evento.model';
 import { environment } from '../../environments/environment';
 
@@ -28,8 +28,11 @@ export class EventosService {
     if (this._loaded) return;
     this._loaded = true;
     this.http.get<CalendarEventResponse[]>(this.base).pipe(
+      retry({ count: 3, delay: 1500 }),
       tap(data => this._eventos.set(data.map(e => this.mapToEvento(e))))
-    ).subscribe();
+    ).subscribe({
+      error: () => { this._loaded = false; }
+    });
   }
 
   addEvento(evento: Omit<Evento, 'id'>): void {
