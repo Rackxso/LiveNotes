@@ -22,6 +22,10 @@ export class FinanceSavings {
     this.modal().open();
   }
 
+  openEdit(goal: { id: string; name: string; target: number }): void {
+    this.modal().open(goal);
+  }
+
   private readonly maxMonthlySaved = computed(() =>
     Math.max(...this.finance.monthlyStats().map(s => s.saved), 1)
   );

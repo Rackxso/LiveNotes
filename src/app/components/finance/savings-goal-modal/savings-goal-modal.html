@@ -2,16 +2,25 @@
   <div class="modal-panel">
 
     <header class="modal-header">
-      <h2 class="modal-title">Nueva meta de ahorro</h2>
+      <h2 class="modal-title">{{ mode() === 'edit' ? 'Editar meta' : 'Nueva meta de ahorro' }}</h2>
       <button type="button" class="modal-close" (click)="close()" aria-label="Cerrar">×</button>
     </header>
 
     <form class="create-form" [formGroup]="form" (ngSubmit)="submit()">
 
-      <div class="field">
-        <label for="sg-name">Nombre</label>
-        <input id="sg-name" type="text" formControlName="name" placeholder="Ej: Viaje, Coche, Emergencias..." />
-      </div>
+      @if (mode() === 'create') {
+        <div class="field">
+          <label for="sg-name">Nombre</label>
+          <input id="sg-name" type="text" formControlName="name" placeholder="Ej: Viaje, Coche, Emergencias..." />
+        </div>
+      }
+
+      @if (mode() === 'edit') {
+        <div class="field">
+          <label>Nombre</label>
+          <p class="edit-name">{{ editingName() }}</p>
+        </div>
+      }
 
       <div class="field">
         <label for="sg-target">Objetivo (€)</label>
@@ -19,8 +28,11 @@
       </div>
 
       <div class="form-actions">
+        @if (mode() === 'edit') {
+          <button type="button" class="delete-btn" (click)="deleteGoal()">Eliminar</button>
+        }
         <app-secondary-button [config]="{texto: 'Cancelar'}" (clicked)="close()" />
-        <app-primary-button [config]="{texto: 'Crear meta', type: 'submit'}" [disabled]="form.invalid" />
+        <app-primary-button [config]="{texto: mode() === 'edit' ? 'Guardar' : 'Crear meta', type: 'submit'}" [disabled]="form.invalid" />
       </div>
 
     </form>

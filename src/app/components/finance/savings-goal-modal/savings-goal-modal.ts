@@ -4,6 +4,7 @@ import {
   ElementRef,
   inject,
   output,
+  signal,
   viewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,7 +22,12 @@ import { SecondaryButton } from '../../commons/secondary-button/secondary-button
 export class SavingsGoalModal {
   private readonly financeService = inject(FinanceService);
 
-  readonly saved = output<void>();
+  readonly saved   = output<void>();
+  readonly deleted = output<void>();
+
+  readonly mode       = signal<'create' | 'edit'>('create');
+  readonly editingId  = signal<string | null>(null);
+  readonly editingName = signal<string>('');
 
   private readonly dialogEl = viewChild.required<ElementRef<HTMLDialogElement>>('dialogEl');
 
@@ -30,8 +36,18 @@ export class SavingsGoalModal {
     target: new FormControl(0,  { validators: [Validators.required, Validators.min(0.01)], nonNullable: true }),
   });
 
-  open(): void {
-    this.form.reset({ name: '', target: 0 });
+  open(goal?: { id: string; name: string; target: number }): void {
+    if (goal) {
+      this.mode.set('edit');
+      this.editingId.set(goal.id);
+      this.editingName.set(goal.name);
+      this.form.reset({ name: goal.name, target: goal.target });
+    } else {
+      this.mode.set('create');
+      this.editingId.set(null);
+      this.editingName.set('');
+      this.form.reset({ name: '', target: 0 });
+    }
     this.dialogEl().nativeElement.showModal();
   }
 
@@ -46,9 +62,28 @@ export class SavingsGoalModal {
   submit(): void {
     if (this.form.invalid) return;
     const v = this.form.getRawValue();
-    const dto: ApiMetaDto = { name: v.name, meta: v.target };
-    this.financeService.createMeta(dto).subscribe(() => {
-      this.saved.emit();
+
+    if (this.mode() === 'edit') {
+      const id = this.editingId()!;
+      const dto: Partial<ApiMetaDto> = { meta: v.target };
+      this.financeService.updateMeta(id, dto).subscribe(() => {
+        this.saved.emit();
+        this.close();
+      });
+    } else {
+      const dto: ApiMetaDto = { name: v.name, meta: v.target };
+      this.financeService.createMeta(dto).subscribe(() => {
+        this.saved.emit();
+        this.close();
+      });
+    }
+  }
+
+  deleteGoal(): void {
+    const id = this.editingId();
+    if (!id) return;
+    this.financeService.deleteMeta(id).subscribe(() => {
+      this.deleted.emit();
       this.close();
     });
   }

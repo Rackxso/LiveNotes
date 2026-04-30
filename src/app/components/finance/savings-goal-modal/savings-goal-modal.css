@@ -92,3 +92,29 @@ input[type="number"] {
   gap: 10px;
   margin-top: 4px;
 }
+
+.edit-name {
+  font-family: var(--fuente-texto);
+  font-size: 14px;
+  color: var(--text-color);
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--secondary-background-color);
+}
+
+.delete-btn {
+  margin-right: auto;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--red);
+  background: transparent;
+  color: var(--red);
+  font-family: var(--fuente-texto);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover { background: color-mix(in srgb, var(--red) 10%, transparent); }
+  &:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+}
