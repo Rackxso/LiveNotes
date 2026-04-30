@@ -54,7 +54,7 @@
             <i class="fa-solid fa-crown" aria-hidden="true"></i>
             {{ upgradeLoading() ? t()('settings.subscription.btnRedirecting') : t()('settings.subscription.btnUpgrade') }}
           </button>
-        } @else {
+        } @else if (auth.hasStripeSubscription()) {
           <button
             type="button"
             class="btn-upgrade"

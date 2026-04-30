@@ -8,6 +8,7 @@ export interface AuthUser {
   email: string;
   name: string;
   permisos: number;
+  hasStripeSubscription?: boolean;
 }
 
 interface LoginResponse {
@@ -31,8 +32,9 @@ export class AuthService {
   private readonly _user = signal<AuthUser | null>(this.readStorage());
   readonly user = this._user.asReadonly();
   readonly isLoggedIn = computed(() => this._user() !== null);
-  readonly isPremium = computed(() => (this._user()?.permisos ?? 1) >= 2);
-  readonly isAdmin   = computed(() => this._user()?.permisos === 13579);
+  readonly isPremium             = computed(() => (this._user()?.permisos ?? 1) >= 2);
+  readonly isAdmin               = computed(() => this._user()?.permisos === 13579);
+  readonly hasStripeSubscription = computed(() => this._user()?.hasStripeSubscription ?? false);
 
   private readonly _requiresPasswordUpdate = signal<boolean>(localStorage.getItem(PWD_UPDATE_KEY) === '1');
   readonly requiresPasswordUpdate = this._requiresPasswordUpdate.asReadonly();
