@@ -51,9 +51,38 @@
   margin: 0;
 }
 
+.bt-item-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .bt-amounts {
   font-size: 11px;
   font-family: var(--fuente-texto);
+}
+
+.bt-edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-subcolor);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+  flex-shrink: 0;
+
+  &:hover { background: var(--secondary-background-color); color: var(--text-color); }
+  &:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 2px; opacity: 1; }
+}
+
+.bt-item:hover .bt-edit-btn {
+  opacity: 1;
 }
 
 .bt-spent {
