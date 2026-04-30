@@ -9,13 +9,13 @@
 
     <h2 id="paywall-title" class="modal-title">Hazte Premium</h2>
     <p id="paywall-desc" class="modal-subtitle">
-      Has alcanzado el límite de 3 presupuestos del plan gratuito.
+      Has alcanzado el límite de 3 {{ feature() }} del plan gratuito.
     </p>
 
     <ul class="features" aria-label="Ventajas del plan premium">
       <li>
         <i class="fa-solid fa-check feature-check" aria-hidden="true"></i>
-        Presupuestos ilimitados
+        {{ feature() | titlecase }} ilimitados
       </li>
       <li>
         <i class="fa-solid fa-check feature-check" aria-hidden="true"></i>
@@ -31,14 +31,21 @@
       </li>
     </ul>
 
-    <!-- [STRIPE] Descomenta cuando Stripe esté activo
-    <button type="button" class="btn-upgrade" (click)="upgrade()">
+    <button
+      type="button"
+      class="btn-upgrade"
+      (click)="upgrade()"
+      [disabled]="upgrading()"
+    >
       <i class="fa-solid fa-crown" aria-hidden="true"></i>
-      Activar Premium
+      @if (upgrading()) {
+        Redirigiendo…
+      } @else {
+        Mejorar plan
+      }
     </button>
 
     <div class="divider" role="separator"><span>o</span></div>
-    -->
 
     <button
       type="button"

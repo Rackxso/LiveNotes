@@ -1,25 +1,39 @@
 import { ChangeDetectionStrategy, Component, computed, inject, viewChild } from '@angular/core';
 import { FinanceService, SavingsGoal } from '../../services/finance.service';
 import { I18nService } from '../../services/i18n.service';
+import { AuthService } from '../../services/auth.service';
 import { SavingsGoalModal } from '../../components/finance/savings-goal-modal/savings-goal-modal';
+import { PaywallModal } from '../../components/commons/paywall-modal/paywall-modal';
+
+const FREE_SAVINGS_LIMIT = 3;
 
 @Component({
   selector: 'app-finance-savings',
-  imports: [SavingsGoalModal],
+  imports: [SavingsGoalModal, PaywallModal],
   templateUrl: './finance-savings.html',
   styleUrl: './finance-savings.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FinanceSavings {
   readonly finance = inject(FinanceService);
+  private readonly auth = inject(AuthService);
   private readonly i18n = inject(I18nService);
   readonly t = this.i18n.t;
   private readonly locale = this.i18n.locale;
 
   readonly modal = viewChild.required<SavingsGoalModal>('modal');
+  readonly paywall = viewChild.required<PaywallModal>('paywall');
+
+  readonly atLimit = computed(() =>
+    !this.auth.isPremium() && this.finance.savingsGoals().length >= FREE_SAVINGS_LIMIT
+  );
 
   openModal(): void {
-    this.modal().open();
+    if (this.atLimit()) {
+      this.paywall().open();
+    } else {
+      this.modal().open();
+    }
   }
 
   openEdit(goal: { id: string; name: string; target: number }): void {

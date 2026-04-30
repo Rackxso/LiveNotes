@@ -21,7 +21,7 @@
           (click)="mark(h._id)"
           [disabled]="isDoneToday(h)"
           [attr.aria-label]="h.name + ' – ' + (isDoneToday(h) ? t()('tracker.done') : t()('tracker.markDone'))">
-          <i class="fa-solid fa-dumbbell ht-today-icon" aria-hidden="true"></i>
+          <i [class]="(h.icon || 'fa-solid fa-dumbbell') + ' ht-today-icon'" aria-hidden="true"></i>
           <span class="ht-today-name">{{ h.name }}</span>
           <div class="ht-week-row">
             @for (d of currentWeekDays(); track $index; let i = $index) {

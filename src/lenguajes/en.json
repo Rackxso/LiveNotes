@@ -143,6 +143,7 @@
       "title": "New habit",
       "name": "Habit name",
       "namePlaceholder": "e.g. Run 30 min",
+      "icon": "Icon",
       "save": "Save",
       "cancel": "Cancel"
     }

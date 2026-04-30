@@ -24,6 +24,23 @@
         }
       </div>
 
+      <div class="field">
+        <label>{{ t()('tracker.modal.icon') }}</label>
+        <div class="icon-grid" role="radiogroup" [attr.aria-label]="t()('tracker.modal.icon')">
+          @for (icon of icons; track icon) {
+            <button
+              type="button"
+              class="icon-option"
+              [class.selected]="selectedIcon() === icon"
+              (click)="selectIcon(icon)"
+              [attr.aria-pressed]="selectedIcon() === icon"
+              [attr.aria-label]="icon">
+              <i [class]="icon" aria-hidden="true"></i>
+            </button>
+          }
+        </div>
+      </div>
+
       <div class="modal-footer">
         <app-secondary-button class="small" [config]="{texto: t()('tracker.modal.cancel')}" (clicked)="onCerrar()" />
         <app-primary-button class="small" [config]="{texto: t()('tracker.modal.save'), type: 'submit'}" />

@@ -3,15 +3,18 @@ import {
   Component,
   ElementRef,
   inject,
+  input,
   output,
   signal,
   viewChild,
 } from '@angular/core';
+import { TitleCasePipe } from '@angular/common';
 import { PremiumService } from '../../../services/premium.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-paywall-modal',
+  imports: [TitleCasePipe],
   templateUrl: './paywall-modal.html',
   styleUrl: './paywall-modal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,8 +23,11 @@ export class PaywallModal {
   private readonly premium = inject(PremiumService);
   readonly auth = inject(AuthService);
 
+  readonly feature = input<string>('presupuestos');
+
   readonly closed = output<void>();
 
+  readonly upgrading = signal(false);
   readonly toggling = signal(false);
 
   private readonly dialogEl = viewChild.required<ElementRef<HTMLDialogElement>>('dialogEl');
@@ -39,10 +45,14 @@ export class PaywallModal {
     if (event.target === this.dialogEl().nativeElement) this.close();
   }
 
-  // [STRIPE] Descomenta cuando Stripe esté activo
-  // upgrade(): void {
-  //   this.premium.createCheckoutSession();
-  // }
+  upgrade(): void {
+    if (this.upgrading()) return;
+    this.upgrading.set(true);
+    this.premium.createCheckoutSession().subscribe({
+      next: ({ url }) => window.location.href = url,
+      error: () => this.upgrading.set(false),
+    });
+  }
 
   simulateToggle(): void {
     if (this.toggling()) return;

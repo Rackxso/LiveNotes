@@ -96,6 +96,38 @@
   margin-top: 4px;
 }
 
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+}
+
+.icon-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--background-subcolor);
+  border: 1px solid var(--primary-subcolor);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-subcolor);
+  font-size: 14px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+
+  &:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+  }
+
+  &.selected {
+    border-color: var(--accent-color);
+    background: color-mix(in srgb, var(--accent-color) 12%, var(--background-subcolor));
+    color: var(--accent-color);
+  }
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;

@@ -143,6 +143,7 @@
       "title": "Nuevo hábito",
       "name": "Nombre del hábito",
       "namePlaceholder": "Ej. Correr 30 min",
+      "icon": "Icono",
       "save": "Guardar",
       "cancel": "Cancelar"
     }

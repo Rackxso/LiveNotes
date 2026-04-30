@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 export interface Habit {
   _id: string;
   name: string;
+  icon: string;
   rachaActual: number;
   rachaMasLarga: number;
   ultimoHecho: string | null;
@@ -14,6 +15,7 @@ export interface Habit {
 
 export interface HabitDto {
   name: string;
+  icon: string;
 }
 
 @Injectable({ providedIn: 'root' })
